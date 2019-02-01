@@ -1,0 +1,3 @@
+[submodule "MultiTermTBXMapper/Perl"]
+	path = MultiTermTBXMapper/Perl
+	url = https://github.com/byutrg/p5-mt2tbx.git

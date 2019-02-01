@@ -1,0 +1,1 @@
+﻿This program is provided as-is and is free to use.  This program is not affliated in any way with SDL.

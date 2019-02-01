@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="MultiTermTBXMapper.Menu.QueueDrainControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MultiTermTBXMapper.Menu"
+             mc:Ignorable="d" 
+             MinHeight="200" MinWidth="250">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height=".5*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Content="Add all queue bundling orders which are needed." VerticalAlignment="top" />
+        <ListBox Name="lb_queue_orders" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,0,0,14"/>
+        <Button Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,0,0,0" Content="Add" Width="60" Click="Button_Add_Click" IsDefault="True" />
+        <Button Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="80,0,0,0" Content="Remove" Width="60" Click="Button_Remove_Click" />
+        <Button Name="submit" Content="Next" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Width="100" Height="32" Click="submit_Click"/>
+    </Grid>
+</UserControl>

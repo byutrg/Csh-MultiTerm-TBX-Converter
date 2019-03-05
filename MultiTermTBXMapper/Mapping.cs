@@ -6,7 +6,58 @@ using System.Threading.Tasks;
 
 namespace MultiTermTBXMapper
 {
-    partial class Mapping
+    public static class SerializationHelper
+    {
+        /// <summary>
+        /// The SerializationHelper.Serialize method is a way to run Select method on an IEnumerable<T>, 
+        /// send the contents to a "," delimited string, and surround that string with brackets.
+        /// </summary>
+        /// <typeparam name="TSource">Any T</typeparam>
+        /// <typeparam name="TResult">Any T</typeparam>
+        /// <param name="bracketType">'()', '{}', '<>', or '[]'</param>
+        /// <param name="collection">An IEnumerable on which the Select() method can be run.</param>
+        /// <param name="selector">The Func<> which is to be used in the Select() method.</param>
+        /// <returns></returns>
+        public static string Serialize<TSource, TResult>(string bracketType, IEnumerable<TSource> collection, Func<TSource, TResult> selector)
+        {
+            string leftBracket;
+            string rightBracket;
+
+            Exception InvalidBracketException = new Exception("Parameter 'bracketType' must be one of '()', '{}', '<>', or '[]'");
+
+            switch (bracketType)
+            {
+                case "()":
+                    leftBracket = "(";
+                    rightBracket = ")";
+                    break;
+                case "[]":
+                    leftBracket = "[";
+                    rightBracket = "]";
+                    break;
+                case "{}":
+                    leftBracket = "{";
+                    rightBracket = "}";
+                    break;
+                case "<>":
+                    leftBracket = "<";
+                    rightBracket = ">";
+                    break;
+                default:
+                    throw InvalidBracketException;
+            }
+
+
+            var selection = collection.Select(selector);
+            StringBuilder s = new StringBuilder(leftBracket);
+            s.Append(String.Join(",", selection));
+            s.Append(rightBracket);
+
+            return s.ToString();
+        }
+    }
+
+    partial class Mapping : ISerializable
     {
         public string dialect = "";
         public string xcs = "";
@@ -21,10 +72,13 @@ namespace MultiTermTBXMapper
             this.xcs = xcs;
         }
 
+        #region ISerializable members
         public string Serialize()
         {
-            return string.Format("[\"{0}\", \"{1}\", {2}, {3}, {4}]", dialect, xcs, catMap.Serialize(), queueDrainOrders.Serialize(), "{}");
+            List<string> items = new List<string>() { $@"""{dialect}""", $@"""{xcs}""", catMap.Serialize(), queueDrainOrders.Serialize(), "{}" };
+            return SerializationHelper.Serialize("[]", items, x => x );
         }
+        #endregion
 
         //interior function for grabbing the correct target based on XML representation
         public string getTarget(string elt)
@@ -108,11 +162,11 @@ namespace MultiTermTBXMapper
         //function used to aide in constructing xml representations
         private static string getXMLnoContent(string elt, string type)
         {
-            return "<" + elt + " type='" + type + "' />";
+            return $"<{elt} type='{type}' />";
         }
     }
 
-    class CategoricalMapping : Dictionary<string, OneLevel>
+    class CategoricalMapping : Dictionary<string, OneLevel>, ISerializable
     {
         public CategoricalMapping()
         {
@@ -121,27 +175,16 @@ namespace MultiTermTBXMapper
             Add("term", new OneLevel("term"));
         }
 
+        #region ISerializable members
         public string Serialize()
         {
-            string s = "{";
-            int i = 0;
-            foreach (string key in Keys)
-            {
-                if (i > 0)
-                {
-                    s += ",";
-                }
-                s += string.Format("\"{0}\": {1}", key, this[key].Serialize());
-                i++;
-            }
-            s += "}";
-
-            return s;
+            return SerializationHelper.Serialize("{}", this, x => $@"""{x.Key}"": {x.Value.Serialize()}");
         }
+        #endregion
     }
 
     // a "OneLevel" is just a simple way to refer to the concept/language/term key sections of the JSON
-    class OneLevel : Dictionary<string, TemplateSet>
+    class OneLevel : Dictionary<string, TemplateSet>, ISerializable
     {
         private class InvalidLevelException : Exception
         {
@@ -156,28 +199,16 @@ namespace MultiTermTBXMapper
             }
         }
 
+        #region ISerializable members
         /// <summary>
         /// Serialize to JSON string
         /// </summary>
         /// <returns></returns>
         public string Serialize()
         {
-            string s = "{";
-            
-            int i = 0;
-            foreach(string k in Keys)
-            {
-                if (i > 0)
-                {
-                    s += ",";
-                }
-                s += string.Format("\"{0}\": {1}", k, this[k].Serialize());
-                i++;
-            }
-
-            s += "}";
-            return s;
+            return SerializationHelper.Serialize("{}", this, x => $@"""{x.Key}"": {x.Value.Serialize()}");
         }
+        #endregion
 
         //constructs the default OneLevel construction
         private void addDefault(string level)
@@ -402,31 +433,25 @@ namespace MultiTermTBXMapper
         }
     }
 
-    class TemplateSet : List<object>
+    class TemplateSet : List<object>, ISerializable
     {
         public TemplateSet()
         {
             Add(new KeyList());
         }
+
+        #region ISerializable members
         /// <summary>
         /// Serialize into JSON string
         /// </summary>
         public string Serialize()
         {
-            string s = string.Format("[{0}", (this[0] as KeyList).Serialize());
+            IEnumerable<string> items = from x in this
+                                        select (x as ISerializable).Serialize();
 
-            if (Count > 1)
-            {
-                foreach(Teasp teasp in GetRange(1, Count-1))
-                {
-                    s += string.Format(", {0}", teasp.Serialize());
-                }
-            }
-
-            s += "]";
-
-            return s;
+            return SerializationHelper.Serialize("[]", items, x => x);
         }
+        #endregion
 
         /// <summary>
         /// Add a lisp of special teasps to the TemplateSet
@@ -468,26 +493,22 @@ namespace MultiTermTBXMapper
         }
     }
 
-    class KeyList : List<object>
+    class KeyList : List<object>, ISerializable
     {
         public KeyList()
         {
             Add(new Teasp());
         }
 
+        #region ISerializable members
         public string Serialize()
         {
-            string s = string.Format("[{0}", (this[0] as Teasp).Serialize());
-            if (Count > 1)
-            {
-                foreach (ValueGroup vg in GetRange(1, Count-1))
-                {
-                    s += string.Format(",{0}", vg.Serialize());
-                }
-            }
-            s += "]";
-            return s;
+            IEnumerable<string> items = from item in this
+                                        select (item as ISerializable).Serialize();
+
+            return SerializationHelper.Serialize("[]", items, x => x);
         }
+        #endregion
 
         /// <summary>
         /// method for adding multiple value groups to the KeyList
@@ -511,14 +532,16 @@ namespace MultiTermTBXMapper
         }
     }
 
-    class Teasp
+    class Teasp : ISerializable
     {
-        public object[] teasp = new object[4];
+        public string[] teasp = new string[4];
 
+        #region ISerializable members
         public string Serialize()
         {
-            return string.Format("[\"{0}\",\"{1}\", {2},\"{3}\"]", teasp[0], teasp[1], teasp[2], teasp[3]);
+            return SerializationHelper.Serialize("[]", teasp, x => (Array.IndexOf(teasp, x) != 2) ? $@"""{x}""" : x);
         }
+        #endregion
 
         /// <summary>
         /// setAll overflow for TEASPs that contain substitutions
@@ -552,7 +575,7 @@ namespace MultiTermTBXMapper
 
         public void setTarget(string target)
         {
-            teasp[0] = "@" + target;
+            teasp[0] = $"@{target}";
         }
 
         public void setEltAtt(string xml)
@@ -564,20 +587,7 @@ namespace MultiTermTBXMapper
         {
             if (sub != null)
             {
-                //Newtonsoft.Json.JsonSerializerSettings settings = new Newtonsoft.Json.JsonSerializerSettings();
-                teasp[2] = "{";
-                //teasp[2] = Newtonsoft.Json.JsonConvert.SerializeObject(sub);
-                int i = 0;
-                foreach(string k in sub.Keys)
-                {
-                    if (i > 0)
-                    {
-                        teasp[2] += ",";
-                    }
-                    teasp[2] += string.Format("\"{0}\": \"{1}\"", k, sub[k]);
-                    i++;
-                }
-                teasp[2] += "}";
+                teasp[2] = SerializationHelper.Serialize("{}", sub, x => $@"""{x.Key}"": ""{x.Value}""");
             }
             else
             {
@@ -587,7 +597,7 @@ namespace MultiTermTBXMapper
 
         public void setSub(string sub = "null")
         {
-            teasp[2] = string.Format("\"{0}\"",sub);
+            teasp[2] = $@"""{sub}""";
         }
 
         public void setPlacement(string placement)
@@ -604,29 +614,18 @@ namespace MultiTermTBXMapper
     /// <summary>
     /// A ValueGroup is a list which contains contents of user data categories which are all mapped to the same TBX data category.
     /// </summary>
-    class ValueGroup : List<string>
+    class ValueGroup : List<string>, ISerializable
     {
+        #region ISerializable members
         public string Serialize()
         {
-            string s = "[";
-
-            for (int i = 0; i < Count; i++)
-            {
-                if (i > 0)
-                {
-                    s += ", ";
-                }
-
-                s += string.Format("\"{0}\"", this[i]);
-            }
-            s += "]";
-
-            return s;
+            return SerializationHelper.Serialize("[]", this, x => $@"""{x}""");
         }
+        #endregion
 
     }
 
-    public class QueueDrainOrders : Dictionary<string, QueueDrainLevel>
+    public class QueueDrainOrders : Dictionary<string, QueueDrainLevel>, ISerializable
     {
         public QueueDrainOrders()
         {
@@ -652,7 +651,8 @@ namespace MultiTermTBXMapper
                     break;
             }
         }
-        
+
+        #region ISerializable members
         public string Serialize()
         {
             if (this["conceptGrp"].Count < 1 && this["languageGrp"].Count < 1 && this["termGrp"].Count < 1)
@@ -660,31 +660,22 @@ namespace MultiTermTBXMapper
                 return "{}";
             }
 
-            return string.Format("{{\"conceptGrp\":{0}, \"languageGrp\":{1}, \"termGrp\":{2}}}", this["conceptGrp"].Serialize(), this["languageGrp"].Serialize(), this["termGrp"].Serialize());
+            return SerializationHelper.Serialize("{}", this, x => $@"""{x.Key}"": {x.Value.Serialize()}");
         }
+        #endregion
     }
 
-    public class QueueDrainLevel : List<QueueDrainOrder>
+    public class QueueDrainLevel : List<QueueDrainOrder>, ISerializable
     {
+        #region ISerializable members
         public string Serialize()
         {
-            string s = "[";
-
-            for(int i = 0; i < Count; i++)
-            {
-                if (i > 0)
-                {
-                    s += ",";
-                }
-                s += string.Format("{0}", this[i].Serialize());
-            }
-            s += "]";
-
-            return s;
+            return SerializationHelper.Serialize("[]", this, x => x.Serialize());
         }
+        #endregion
     }
 
-    public class QueueDrainOrder : List<string>
+    public class QueueDrainOrder : List<string>, ISerializable
     {
         public QueueDrainOrder(string[] values)
         {
@@ -693,17 +684,19 @@ namespace MultiTermTBXMapper
             Add(values[2]);
         }
 
+        #region ISerializable members
         public string Serialize()
         {
             if (Count > 0)
             {
-                return string.Format("[\"{0}\",\"{1}\",\"{2}\"]", this[0], this[1], this[2]);
+                return SerializationHelper.Serialize("[]", this, x => $@"""{x}""");
             }
             else
             {
                 return "[]";
             }
         }
+        #endregion
 
         //public bool addRule(int index, string rule)
         //{

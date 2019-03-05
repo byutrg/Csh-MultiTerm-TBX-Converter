@@ -1342,15 +1342,15 @@ namespace MultiTermTBXMapper
             }
         }
 
-        private void stripForCore(string pathBuilder)
+        private void stripForCore(string errorPath)
         {
             XmlProcessingInstruction rng = multiTermDoc.CreateProcessingInstruction("xml-model", "href=\"https://raw.githubusercontent.com/LTAC-Global/TBX-Core_dialect/master/Schemas/TBXcoreStructV03_TBX-Core_integrated.rng\" " +
              "type=\"application/xml\" schematypens=\"http://relaxng.org/ns/structure/1.0\"");
             XmlProcessingInstruction sch = multiTermDoc.CreateProcessingInstruction("xml-model", "href=\"https://raw.githubusercontent.com/LTAC-Global/TBX-Core_dialect/master/Schemas/TBX-Core.sch\" " +
                 "type=\"application/xml\" schematypens=\"http://purl.oclc.org/dsdl/schematron\"");
 
-            multiTermDoc.PrependChild(sch);
-            multiTermDoc.PrependChild(rng);
+            multiTermDoc.InsertBefore(sch, multiTermDoc.DocumentElement);
+            multiTermDoc.InsertBefore(rng, multiTermDoc.DocumentElement);
 
             XmlNodeList allNodes = multiTermDoc.SelectNodes("//*");
             List<XmlNode> nodesToRemove = new List<XmlNode>();
@@ -1366,8 +1366,8 @@ namespace MultiTermTBXMapper
             if (nodesToRemove.Count > 0)
             {
                 Dictionary<string, int> nodeOccuranceTracker = new Dictionary<string, int>();
-                string outputPath = pathBuilder.Replace("ConvertedTBX.tbx", "ExceptionLog.txt");
-                StreamWriter stream = new StreamWriter(outputPath, false);
+                //string outputPath = errorPath.Replace("ConvertedTBX.tbx", "ExceptionLog.txt");
+                StreamWriter stream = new StreamWriter(errorPath, false);
 
                 stream.WriteLine("Begin document analysis:");
                 stream.WriteLine();
@@ -1402,15 +1402,15 @@ namespace MultiTermTBXMapper
             }
         }
 
-        private void stripForMin(string pathBuilder)
+        private void stripForMin(string errorPath)
         {
             XmlProcessingInstruction rng = multiTermDoc.CreateProcessingInstruction("xml-model", "href=\"https://raw.githubusercontent.com/LTAC-Global/TBX-Min_dialect/master/DCA/TBXcoreStructV03_TBX-Min_integrated.rng\" " +
              "type=\"application/xml\" schematypens=\"http://relaxng.org/ns/structure/1.0\"");
             XmlProcessingInstruction sch = multiTermDoc.CreateProcessingInstruction("xml-model", "href=\"https://raw.githubusercontent.com/LTAC-Global/TBX-Min_dialect/master/DCA/TBX-Min_DCA.sch\" " +
                 "type=\"application/xml\" schematypens=\"http://purl.oclc.org/dsdl/schematron\"");
 
-            multiTermDoc.PrependChild(sch);
-            multiTermDoc.PrependChild(rng);
+            multiTermDoc.InsertBefore(sch, multiTermDoc.DocumentElement);
+            multiTermDoc.InsertBefore(rng, multiTermDoc.DocumentElement);
 
             XmlNodeList allNodes = multiTermDoc.SelectNodes("//*");
             List<XmlNode> nodesToRemove = new List<XmlNode>();
@@ -1429,8 +1429,8 @@ namespace MultiTermTBXMapper
             if (nodesToRemove.Count > 0)
             {
                 Dictionary<string, int> nodeOccuranceTracker = new Dictionary<string, int>();
-                string outputPath = pathBuilder.Replace("ConvertedTBX.tbx", "ExceptionLog.txt");
-                StreamWriter stream = new StreamWriter(outputPath, false);
+                //string outputPath = errorPath.Replace("ConvertedTBX.tbx", "ExceptionLog.txt");
+                StreamWriter stream = new StreamWriter(errorPath, false);
 
                 stream.WriteLine("Begin document analysis:");
                 stream.WriteLine();
@@ -1465,7 +1465,7 @@ namespace MultiTermTBXMapper
             }
         }
 
-        private void stripForBasic(string pathBuilder)
+        private void stripForBasic(string errorPath)
         {
             XmlProcessingInstruction rng = multiTermDoc.CreateProcessingInstruction("xml-model", "href=\"https://raw.githubusercontent.com/LTAC-Global/TBX-Basic_dialect/master/DCA/TBXcoreStructV03_TBX-Basic_integrated.rng\" " +
                 "type=\"application/xml\" schematypens=\"http://relaxng.org/ns/structure/1.0\"");
@@ -1485,7 +1485,7 @@ namespace MultiTermTBXMapper
             foreach (XmlNode node in allDefinitionDatCat)
             {
                 XmlNode parent = node.ParentNode;
-                XmlNode termSibling = parent.SelectSingleNode("term");
+                XmlNode termSibling = parent.SelectSingleNode("termSec");
                 string termValue = termSibling.InnerText;
 
                 XmlElement descripParent = multiTermDoc.CreateElement("descripGrp");
@@ -1522,8 +1522,8 @@ namespace MultiTermTBXMapper
             if (nodesToRemove.Count > 0)
             {
                 Dictionary<string, int> nodeOccuranceTracker = new Dictionary<string, int>();
-                string outputPath = pathBuilder.Replace("ConvertedTBX.tbx", "ExceptionLog.txt");
-                StreamWriter stream = new StreamWriter(outputPath, false);
+                //string outputPath = errorPath.Replace("ConvertedTBX.tbx", "ExceptionLog.txt");
+                StreamWriter stream = new StreamWriter(errorPath, false);
 
                 stream.WriteLine("Begin document analysis:");
                 stream.WriteLine();
@@ -1546,19 +1546,19 @@ namespace MultiTermTBXMapper
             }
         }
 
-        private void stripInvalidNodes(string tbxOutputDialect, string pathBuilder)
+        private void stripInvalidNodes(string tbxOutputDialect, string errorPath)
         {
             if (tbxOutputDialect == "TBX-Core")
             {
-                stripForCore(pathBuilder);
+                stripForCore(errorPath);
             }
             else if (tbxOutputDialect == "TBX-Min")
             {
-                stripForMin(pathBuilder);
+                stripForMin(errorPath);
             }
             else if (tbxOutputDialect == "TBX-Basic")
             {
-                stripForBasic(pathBuilder);
+                stripForBasic(errorPath);
             }
         }
 
@@ -1616,7 +1616,7 @@ namespace MultiTermTBXMapper
 
         private void prettyPrintFile(string printPath)
         {
-            multiTermDoc.DocumentElement.SetAttribute("xmlns", "urn:iso:std:iso:30042:ed:3.0");
+            multiTermDoc.DocumentElement.SetAttribute("xmlns", "urn:iso:std:iso:30042:ed-2");
             MemoryStream xmlStream = new MemoryStream();
             multiTermDoc.Save(xmlStream);
             xmlStream.Flush();
@@ -1630,6 +1630,7 @@ namespace MultiTermTBXMapper
             XmlWriter writer = XmlWriter.Create(printPath, settings);
             multiTermDoc.WriteTo(writer);
             writer.Flush();
+            writer.Close();
         }
 
         private void addNameSpace(XmlNode currentNode)
@@ -1640,7 +1641,7 @@ namespace MultiTermTBXMapper
             //multiTermDoc.DocumentElement.SetAttribute("xmlns", "urn:iso:std:iso:30042:ed:3.0");
         }
 
-        private void convertXML(FileStream xmlData, string outputPath, LevelOneClass initialJSON, string tbxOutputDialect, string pathBuilder)
+        private void convertXML(FileStream xmlData, string outputPath, LevelOneClass initialJSON, string tbxOutputDialect, string errorPath)
         {
             XmlReaderSettings readerSettings = new XmlReaderSettings();
 
@@ -1677,7 +1678,7 @@ namespace MultiTermTBXMapper
                 pairNodes();
 
                 // Strip away content that does not belong to the User-Specified output
-                stripInvalidNodes(tbxOutputDialect, pathBuilder);
+                stripInvalidNodes(tbxOutputDialect, errorPath);
 
                 // Recursively remove built up white space
                 removeWhitespaceChildren(multiTermDoc);
@@ -1693,7 +1694,7 @@ namespace MultiTermTBXMapper
             }
         }
 
-        public void deserializeFile(string mappingFile, string multiTermXML, string tbxOutputDialect, bool isCalledFromMappingWizard)
+        public (string,string) deserializeFile(string mappingFile, string multiTermXML, string tbxOutputDialect, bool isCalledFromMappingWizard)
         {
             JArray castedJSONData;
 
@@ -1721,10 +1722,29 @@ namespace MultiTermTBXMapper
             multiTermDoc = new XmlDocument();
             multiTermDoc.PreserveWhitespace = true;
             multiTermDoc.Load(multiTermXML);
-            string pathBuilder = System.IO.Path.GetFileName(multiTermXML);
-            string outputPath = multiTermXML.Replace(pathBuilder, "ConvertedTBX.tbx");
 
-            convertXML(xmlData, outputPath, initialJSON, tbxOutputDialect, outputPath);
+            SaveFileDialog dlg = new SaveFileDialog();
+
+            dlg.DefaultExt = ".tbx";
+            dlg.Filter = "TBX File *.tbx | *.tbx";
+            bool? result = dlg.ShowDialog();
+
+            string outputPath = "";
+            string pathBuilder = System.IO.Path.GetFileName(multiTermXML);
+            if (result == true)
+            {
+                outputPath = dlg.FileName;
+            }
+            else
+            {
+                outputPath = multiTermXML.Replace(pathBuilder, "ConvertedTBX.txt");
+            }
+
+            string errorPath = multiTermXML.Replace(pathBuilder, $"{Path.GetFileNameWithoutExtension(outputPath)}_ExceptionsLog_{DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")}.txt").Replace(".tbx", "");
+
+            convertXML(xmlData, outputPath, initialJSON, tbxOutputDialect, errorPath);
+
+            return (outputPath, errorPath);
         }
 
 

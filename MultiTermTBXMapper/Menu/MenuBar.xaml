@@ -8,8 +8,8 @@
     <DockPanel HorizontalAlignment="Left" Height="22" LastChildFill="False" VerticalAlignment="Top" Width="807" Grid.Row="0">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <!--<MenuItem Header="_Import"/>
-                <MenuItem Header="_Save" />
+                <MenuItem Header="_Import" Click="MenuItem_Click"/>
+                <!--<MenuItem Header="_Save" />
                 <MenuItem Header="_Export" />-->
                 <MenuItem Header="E_xit" Click="MenuItem_Exit_Click" />
             </MenuItem>

@@ -35,5 +35,10 @@ namespace MultiTermTBXMapper.Menu
         {
             App.Current.Shutdown();
         }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Switcher.Switch(new Welcome());
+        }
     }
 }

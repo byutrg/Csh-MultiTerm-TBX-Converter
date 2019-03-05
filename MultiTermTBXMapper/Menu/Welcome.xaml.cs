@@ -27,7 +27,17 @@ namespace MultiTermTBXMapper.Menu
 
         #region ISwitchable Members
 
-        public void UtilizeState(object state)
+        public void UtilizeState<T>(T state)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UtilizeState<T>(ref T r)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UtilizeState<T1, T2>(ref T1 r, T2 state)
         {
             throw new NotImplementedException();
         }
@@ -81,15 +91,15 @@ namespace MultiTermTBXMapper.Menu
                 Singleton.Instance.setDialect(dialect);
                 Singleton.Instance.setSaveOption(saveOption);
 
+                string filename = dlg.FileName;
+                Singleton.Instance.setPath(filename);
                 if (saveOption == 1 || saveOption == 3)
                 {
-                    string filename = dlg.FileName;
-                    Switcher.Switch(new DatCatHandler(filename));
+                    Switcher.Switch(new DatCatHandler(), filename);
                 }
                 else if (saveOption == 2) // Skip to Mapping upload window
                 {
-                    string filename = dlg.FileName;
-                    Switcher.Switch(new MappingUpload(filename));
+                    Switcher.Switch(new MappingUpload(), filename);
                 }
             }
         }

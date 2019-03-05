@@ -34,7 +34,7 @@ public class Singleton
 
     public string getPath()
     {
-        return dialect;
+        return pathToXML;
     }
 
     public void setPath(string path)

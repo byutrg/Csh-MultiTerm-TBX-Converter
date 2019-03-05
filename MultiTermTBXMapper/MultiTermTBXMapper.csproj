@@ -125,6 +125,7 @@
     </Compile>
     <Compile Include="ConverterApplication.cs" />
     <Compile Include="Globals.cs" />
+    <Compile Include="Interfaces\ISerializable.cs" />
     <Compile Include="Menu\MappingUpload.xaml.cs">
       <DependentUpon>MappingUpload.xaml</DependentUpon>
     </Compile>
@@ -164,7 +165,7 @@
       <DependentUpon>VariantPicklistMapControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="TBXDatabase.cs" />
-    <Compile Include="ISwitchable.cs" />
+    <Compile Include="Interfaces\ISwitchable.cs" />
     <Compile Include="Mapping.cs" />
     <Compile Include="Menu\Welcome.xaml.cs">
       <DependentUpon>Welcome.xaml</DependentUpon>
@@ -207,8 +208,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Menu\MappingUpload.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Menu\MenuBar.xaml">
       <SubType>Designer</SubType>

@@ -18,20 +18,35 @@ namespace MultiTermTBXMapper.Menu
     /// <summary>
     /// Interaction logic for QueueDrainHandler.xaml
     /// </summary>
-    public partial class QueueDrainHandler : UserControl
+    public partial class QueueDrainHandler : UserControl, ISwitchable
     {
-        public QueueDrainHandler(MappingDict mapping)
+        public QueueDrainHandler()
         {
             InitializeComponent();
-            mapControl.mapping = mapping;
-
-            mapControl.submitAction += Submit;
         }
 
         public void Submit()
         {
-            Switcher.Switch(new ConversionHandler(mapControl.mapping, mapControl.Orders));
+            Switcher.Switch(new ConversionHandler(), ref mapControl.mapping, mapControl.Orders);
         }
 
+        #region ISwitchable members
+        public void UtilizeState<T>(T state)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UtilizeState<T>(ref T r)
+        {
+            mapControl.mapping = r as MappingDict;
+
+            mapControl.submitAction += Submit;
+        }
+
+        public void UtilizeState<T1, T2>(ref T1 r, T2 state)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }

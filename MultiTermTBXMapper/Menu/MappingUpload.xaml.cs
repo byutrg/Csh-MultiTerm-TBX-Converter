@@ -22,16 +22,27 @@ namespace MultiTermTBXMapper.Menu
     {
         private string multiTermXMLFile;
 
-        public MappingUpload(string filename)
+        public MappingUpload()
         {
             InitializeComponent();
-            multiTermXMLFile = filename;
         }
 
-        public void UtilizeState(object state)
+        #region ISwitchable members
+        public void UtilizeState<T>(T state)
+        {
+            multiTermXMLFile = state as string;
+        }
+
+        public void UtilizeState<T>(ref T r)
         {
             throw new NotImplementedException();
         }
+
+        public void UtilizeState<T1, T2>(ref T1 r, T2 state)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
 
         private void btn_import_Click(object sender, RoutedEventArgs e)
         {
@@ -45,8 +56,9 @@ namespace MultiTermTBXMapper.Menu
             if (result == true)
             {
                 string jsonUpload = dlg.FileName;
-                ConverterApp mt2tbx = new ConverterApp();
-                mt2tbx.deserializeFile(jsonUpload, multiTermXMLFile, Singleton.Instance.getDialect(), false);
+                //ConverterApp mt2tbx = new ConverterApp();
+                //mt2tbx.deserializeFile(jsonUpload, multiTermXMLFile, Singleton.Instance.getDialect(), false);
+                Switcher.Switch(new ConversionHandler(), jsonUpload);
             }
         }
 

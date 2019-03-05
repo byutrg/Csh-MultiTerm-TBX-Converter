@@ -17,16 +17,31 @@ namespace MultiTermTBXMapper.Menu
 
         private int index = 0;
 
-        public PickListHandler(ref MappingDict mapping)
+        #region ISwitchable members
+        public void UtilizeState<T>(T state)
         {
-            InitializeComponent();
+            throw new NotImplementedException();
+        }
 
-            this.mapping = mapping;
+        public void UtilizeState<T>(ref T r)
+        {
+            this.mapping = r as MappingDict;
             dcs_with_picklists = mapping.getDCsWithPicklists();
 
             fillMappedPicklistsDict();
 
             display();
+        }
+
+        public void UtilizeState<T1, T2>(ref T1 r, T2 state)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        public PickListHandler()
+        {
+            InitializeComponent();
         }
 
         private void display()
@@ -186,7 +201,7 @@ namespace MultiTermTBXMapper.Menu
 
         private void submit_Click(object sender, RoutedEventArgs e)
         {
-            Switcher.Switch(new QueueDrainHandler(mapping));
+            Switcher.Switch(new QueueDrainHandler(), ref mapping);
         }
     }
 }

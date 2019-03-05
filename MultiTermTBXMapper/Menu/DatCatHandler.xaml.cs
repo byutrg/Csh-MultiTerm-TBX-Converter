@@ -20,11 +20,11 @@ namespace MultiTermTBXMapper.Menu
         private int index = 0;
         private string[] indexes_visited;
 
-        public DatCatHandler(string filename)
+        #region ISwitchable members
+        public void UtilizeState<T>(T state)
         {
-            InitializeComponent();
+            filename = state as string;
 
-            this.filename = filename;
             Globals.filename = filename;
 
             mapControl.ListBoxItems += value => setMapping(value);
@@ -35,6 +35,22 @@ namespace MultiTermTBXMapper.Menu
             cycleIndexes();
 
             display();
+        }
+
+        public void UtilizeState<T>(ref T r)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UtilizeState<T1, T2>(ref T1 r, T2 state)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        public DatCatHandler()
+        {
+            InitializeComponent();
         }
 
         private void cycleIndexes()
@@ -190,11 +206,6 @@ namespace MultiTermTBXMapper.Menu
             updatePercentage();
         }
 
-        public void UtilizeState(object state)
-        {
-            throw new NotImplementedException();
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Methods.incrementIndex(ref index, datcats.Count);
@@ -229,11 +240,11 @@ namespace MultiTermTBXMapper.Menu
 
             if (dcs_with_multi_map.Count > 0)
             {
-                Switcher.Switch(new VariantPicklistHandler(ref mapping, dcs_with_multi_map));
+                Switcher.Switch(new VariantPicklistHandler(), ref mapping, dcs_with_multi_map);
             }
             else
             {
-                Switcher.Switch(new PickListHandler(ref mapping));
+                Switcher.Switch(new PickListHandler(), ref mapping);
             }
         }
     }

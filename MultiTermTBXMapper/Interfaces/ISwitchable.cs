@@ -8,6 +8,8 @@ namespace MultiTermTBXMapper
 {
     public interface ISwitchable
     {
-        void UtilizeState(object state);
+        void UtilizeState<T>(T state);
+        void UtilizeState<T>(ref T r);
+        void UtilizeState<T1,T2>(ref T1 r, T2 state);
     }
 }

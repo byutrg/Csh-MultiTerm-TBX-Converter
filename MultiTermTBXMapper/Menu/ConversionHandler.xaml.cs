@@ -23,15 +23,26 @@ namespace MultiTermTBXMapper.Menu
             public InvalidLevelException() : base("Only levels 'concept', 'language', and 'term' are allowed as group values.") { }
         }
 
-        public ConversionHandler(MappingDict mapping, QueueDrainOrders Orders)
+        #region ISwitchable members
+        public void UtilizeState<T>(T state)
         {
-            InitializeComponent();
+            ConverterApp mt2tbx = new ConverterApp();
+            var (outputFile, errorFile) = mt2tbx.deserializeFile(state as string, Singleton.Instance.getPath(), Singleton.Instance.getDialect(), false);
+            FinishedConversion(outputFile, errorFile);
+        }
 
-            mappingDict = mapping;
+        public void UtilizeState<T>(ref T r)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UtilizeState<T1, T2>(ref T1 r, T2 state)
+        {
+            mappingDict = r as MappingDict;
 
             map();
 
-            fullMapping.queueDrainOrders = Orders;
+            fullMapping.queueDrainOrders = state as QueueDrainOrders;
 
             //Newtonsoft.Json.JsonSerializerSettings settings = new Newtonsoft.Json.JsonSerializerSettings();
 
@@ -40,14 +51,10 @@ namespace MultiTermTBXMapper.Menu
 
 
             string json = fullMapping.Serialize();
-            
+
             string mappingFile = Path.GetTempFileName();
 
             int saveOption = Singleton.Instance.getSaveOption();
-
-
-
-
 
             if (saveOption == 1) // Mapping and Conversion
             {
@@ -55,7 +62,7 @@ namespace MultiTermTBXMapper.Menu
 
                 Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
 
-                dlg.DefaultExt = ".tbx";
+                dlg.DefaultExt = ".json";
                 dlg.Filter = "JSON Files (*.json)|*.json";
 
                 bool? result = dlg.ShowDialog();
@@ -73,7 +80,8 @@ namespace MultiTermTBXMapper.Menu
                 }
 
                 ConverterApp mt2tbx = new ConverterApp();
-                mt2tbx.deserializeFile(json, Singleton.Instance.getPath(), Singleton.Instance.getDialect(), true);
+                var (outputFile, errorFile) = mt2tbx.deserializeFile(json, Singleton.Instance.getPath(), Singleton.Instance.getDialect(), true);
+                FinishedConversion(outputFile, errorFile);
             }
             else if (saveOption == 2) // Will be handled in a different Dialogue
             {
@@ -85,7 +93,7 @@ namespace MultiTermTBXMapper.Menu
 
                 Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
 
-                dlg.DefaultExt = ".tbx";
+                dlg.DefaultExt = ".json";
                 dlg.Filter = "JSON Files (*.json)|*.json";
 
                 bool? result = dlg.ShowDialog();
@@ -102,6 +110,18 @@ namespace MultiTermTBXMapper.Menu
                     File.Move(mappingFile, dlg.FileName);
                 }
             }
+        }
+        #endregion
+
+        public ConversionHandler()
+        {
+            InitializeComponent();
+        }
+
+
+        private void FinishedConversion(string outputFile, string errorFile)
+        {
+            textblock_conversionStatus.Text = $"Your mapping file has been created and can be found:\n {outputFile}\n\nExceptions to the mapping can be found:\n {errorFile}";
         }
 
         private void map()
@@ -352,11 +372,6 @@ namespace MultiTermTBXMapper.Menu
         {
             List<string> grp = mappingDict.levelMap["termGrp"];
             return (Methods.inList(ref grp, dc)) ? true : false;   
-        }
-
-        public void UtilizeState(object state)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace MultiTermTBXMapper.Menu
     /// <summary>
     /// Interaction logic for VariantPicklistHandler.xaml
     /// </summary>
-    public partial class VariantPicklistHandler : UserControl
+    public partial class VariantPicklistHandler : UserControl, ISwitchable
     {
         private MappingDict mapping;
         private List<string> datcats = new List<string>();
@@ -15,33 +15,9 @@ namespace MultiTermTBXMapper.Menu
 
         private int index = 0;
 
-        public VariantPicklistHandler(ref MappingDict mapping, List<string> datcats)
+        public VariantPicklistHandler()
         {
             InitializeComponent();
-
-            this.mapping = mapping;
-            this.datcats = datcats;
-
-            vpmc.map += value =>
-            {
-                string user_dc = datcats[index];
-                string user_pl = value[0];
-                string tbx_dc = value[1];
-
-                this.mapping.setTBXContentMap(user_dc, user_pl, tbx_dc);
-
-                checkCompletion();    
-            };
-
-            vpmc.next += value =>
-            {
-                if (value)
-                {
-                    nextPage();
-                }
-            };
-
-            display();
         }
 
         private void checkCompletion()
@@ -77,7 +53,49 @@ namespace MultiTermTBXMapper.Menu
 
         private void nextPage()
         {
-            Switcher.Switch(new PickListHandler(ref mapping));
+            Switcher.Switch(new PickListHandler(), ref mapping);
         }
+
+        #region ISwitchable members
+        public void UtilizeState<T>(T state)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void UtilizeState<T>(ref T r)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void UtilizeState<T1, T2>(ref T1 r, T2 state)
+        {
+            MappingDict mapping = r as MappingDict;
+            List<string> datcats = state as List<string>;
+
+            this.mapping = mapping;
+            this.datcats = datcats;
+
+            vpmc.map += value =>
+            {
+                string user_dc = datcats[index];
+                string user_pl = value[0];
+                string tbx_dc = value[1];
+
+                this.mapping.setTBXContentMap(user_dc, user_pl, tbx_dc);
+
+                checkCompletion();
+            };
+
+            vpmc.next += value =>
+            {
+                if (value)
+                {
+                    nextPage();
+                }
+            };
+
+            display();
+        }
+        #endregion
     }
 }

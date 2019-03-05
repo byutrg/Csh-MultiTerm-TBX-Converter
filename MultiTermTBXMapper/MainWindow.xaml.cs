@@ -24,7 +24,7 @@ namespace MultiTermTBXMapper
             Content = nextPage;
         }
 
-        public void Navigate(UserControl nextPage, object state)
+        public void Navigate<T1,T2>(T1 nextPage, T2 state) where T1 : UserControl
         {
             Content = nextPage;
             ISwitchable s = nextPage as ISwitchable;
@@ -32,7 +32,29 @@ namespace MultiTermTBXMapper
             if (s != null)
                 s.UtilizeState(state);
             else
-                throw new ArgumentException("nextPage is not ISwitchable! " + nextPage.Name.ToString());
+                throw new ArgumentException($"nextPage is not ISwitchable! {nextPage.Name}");
+        }
+
+        public void Navigate<T1, T2>(T1 nextPage, ref T2 r) where T1 : UserControl
+        {
+            Content = nextPage;
+            ISwitchable s = nextPage as ISwitchable;
+
+            if (s != null)
+                s.UtilizeState(ref r);
+            else
+                throw new ArgumentException($"nextPage is not ISwitchable! {nextPage.Name}");
+        }
+
+        public void Navigate<T1, T2, T3>(T1 nextPage, ref T2 r, T3 state) where T1 : UserControl
+        {
+            Content = nextPage;
+            ISwitchable s = nextPage as ISwitchable;
+
+            if (s != null)
+                s.UtilizeState(ref r, state);
+            else
+                throw new ArgumentException($"nextPage is not ISwitchable! {nextPage.Name}");
         }
 
         private void Window_Closed(object sender, EventArgs e)

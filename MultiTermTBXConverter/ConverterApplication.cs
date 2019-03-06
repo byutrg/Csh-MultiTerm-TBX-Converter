@@ -1627,10 +1627,11 @@ namespace MultiTermTBXMapper
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
             settings.IndentChars = "\t";
-            XmlWriter writer = XmlWriter.Create(printPath, settings);
-            multiTermDoc.WriteTo(writer);
-            writer.Flush();
-            writer.Close();
+            using (XmlWriter writer = XmlWriter.Create(printPath, settings))
+            {
+                multiTermDoc.WriteTo(writer);
+                writer.Flush();
+            }
         }
 
         private void addNameSpace(XmlNode currentNode)
@@ -1726,7 +1727,7 @@ namespace MultiTermTBXMapper
             SaveFileDialog dlg = new SaveFileDialog();
 
             dlg.DefaultExt = ".tbx";
-            dlg.Filter = "TBX File *.tbx | *.tbx";
+            dlg.Filter = "TBX File (*.tbx)|*.tbx";
             bool? result = dlg.ShowDialog();
 
             string outputPath = "";

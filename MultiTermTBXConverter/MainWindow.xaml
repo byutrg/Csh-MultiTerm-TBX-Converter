@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MultiTermTBXMapper"
         mc:Ignorable="d"
-        Title="MultiTerm Data Category Mapper" Height="482.353" Width="815.197" ResizeMode="CanResizeWithGrip" Closed="Window_Closed">
+        Title="MultiTerm to TBX Converter" Height="482.353" Width="815.197" ResizeMode="CanResizeWithGrip" Closed="Window_Closed" Icon="Resources/tbxLogo_asymmetricX_blue.png">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="161*"/>

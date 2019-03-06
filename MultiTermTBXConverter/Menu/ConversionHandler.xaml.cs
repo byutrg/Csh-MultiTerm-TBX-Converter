@@ -63,7 +63,7 @@ namespace MultiTermTBXMapper.Menu
                 Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
 
                 dlg.DefaultExt = ".json";
-                dlg.Filter = "JSON Files (*.json)|*.json";
+                dlg.Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*";
 
                 bool? result = dlg.ShowDialog();
 
@@ -94,7 +94,7 @@ namespace MultiTermTBXMapper.Menu
                 Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
 
                 dlg.DefaultExt = ".json";
-                dlg.Filter = "JSON Files (*.json)|*.json";
+                dlg.Filter = "JSON Files (*.json)|*.json|All files (*.*)|*.*";
 
                 bool? result = dlg.ShowDialog();
 

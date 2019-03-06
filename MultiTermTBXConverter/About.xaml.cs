@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Diagnostics;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -24,7 +25,11 @@ namespace MultiTermTBXMapper
         {
             InitializeComponent();
 
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
+            VersionLabel.Content = $"v{info.FileVersion.ToString()}";
             aboutText.Text = File.ReadAllText("Resources\\AboutInfo.txt");
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

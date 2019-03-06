@@ -66,8 +66,8 @@ namespace MultiTermTBXMapper.Menu
 
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
 
-            dlg.DefaultExt = ".tbx";
-            dlg.Filter = "XML Files (*.xml)|*.xml | TBX Files (*.tbx)|*.tbx | All files (*.*)|*.*";
+            dlg.DefaultExt = ".xml";
+            dlg.Filter = "XML Files (*.xml)|*.xml|TBX Files (*.tbx)|*.tbx|All files (*.*)|*.*";
 
             bool? result = dlg.ShowDialog();
 

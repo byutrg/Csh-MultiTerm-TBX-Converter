@@ -7,8 +7,8 @@
     <ProjectGuid>{AD821F96-2301-4191-AC5D-D02AA7869F5F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MultiTermTBXMapper</RootNamespace>
-    <AssemblyName>MultiTermTBXMapper</AssemblyName>
+    <RootNamespace>MultiTermTBXConverter</RootNamespace>
+    <AssemblyName>MultiTermTBXConverter</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -294,9 +294,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\arrow_skinny.png" />
-    <Content Include="Perl\mt2tbx.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Resource Include="Resources\tbxLogo_asymmetricX_blue.png" />
     <Content Include="Resources\tbx_data_categories_with_definitions_picklists.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -315,9 +313,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Perl\out\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
       <Visible>False</Visible>

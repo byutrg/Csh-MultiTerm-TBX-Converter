@@ -446,7 +446,7 @@ namespace MultiTermTBXMapper
         /// </summary>
         public string Serialize()
         {
-            IEnumerable<string> items = from x in this
+            IEnumerable<string> items = from x in this.AsParallel()
                                         select (x as ISerializable).Serialize();
 
             return SerializationHelper.Serialize("[]", items, x => x);
@@ -503,7 +503,7 @@ namespace MultiTermTBXMapper
         #region ISerializable members
         public string Serialize()
         {
-            IEnumerable<string> items = from item in this
+            IEnumerable<string> items = from item in this.AsParallel()
                                         select (item as ISerializable).Serialize();
 
             return SerializationHelper.Serialize("[]", items, x => x);

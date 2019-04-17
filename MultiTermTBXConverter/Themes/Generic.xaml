@@ -20,7 +20,7 @@
             <Setter Property="ContentTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/MultiTermTBXMapper;component/Resources/arrow.png"/>
+                        <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/MultiTermTBXConverter;component/Resources/arrow.png"/>
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
@@ -43,7 +43,7 @@
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/MultiTermTBXMapper;component/Resources/arrow.png">
+                    <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/MultiTermTBXConverter;component/Resources/arrow.png">
                         <Image.RenderTransform>
                             <RotateTransform Angle="180" CenterY="40" CenterX="45"/>
                         </Image.RenderTransform>

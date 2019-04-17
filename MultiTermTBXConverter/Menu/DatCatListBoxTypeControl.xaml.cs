@@ -64,6 +64,10 @@ namespace MultiTermTBXMapper.Menu
 
                 lb_tbx_dcs.Items.Add(tbx);
             }
+            else
+            {
+                findBest("note");
+            }
 
             updateItems();
         }

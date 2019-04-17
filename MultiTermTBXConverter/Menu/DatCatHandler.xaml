@@ -25,7 +25,7 @@
                 </Grid.ColumnDefinitions>
                 <Button Style="{StaticResource LeftArrowButton}" Grid.Column="0" Click="Button_Click_1"/>
                 <Button Style="{StaticResource RightArrowButton}" Grid.Column="2" Click="Button_Click"/>
-                <Image Grid.Column="1"  Grid.Row="0" Source="/MultiTermTBXMapper;component/Resources/forward_slash.png" Margin="18,10,467,10">
+                <Image Grid.Column="1"  Grid.Row="0" Source="/MultiTermTBXConverter;component/Resources/forward_slash.png" Margin="18,10,467,10">
                     <Image.Resources>
                         <Style TargetType="Image">
                             <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />

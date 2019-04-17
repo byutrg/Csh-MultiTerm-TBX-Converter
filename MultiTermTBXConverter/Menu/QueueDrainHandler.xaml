@@ -28,7 +28,7 @@
 
                 <Button x:Name="whats_this_btn" Grid.Column="1" HorizontalAlignment="Left" Margin="439,28,0,0" VerticalAlignment="Top" Width="48" Height="48" RenderTransformOrigin="0.431,0.243" BorderBrush="#00707070" ToolTip="Click me to learn about Queue Bundling">
                     <Button.Background>
-                        <ImageBrush ImageSource="/MultiTermTBXMapper;component/Resources/what's-this.png" Stretch="UniformToFill"/>
+                        <ImageBrush ImageSource="/MultiTermTBXConverter;component/Resources/what's-this.png" Stretch="UniformToFill"/>
                     </Button.Background>
                 </Button>
             </Grid>

@@ -65,14 +65,10 @@ namespace MultiTermTBXMapper.Menu
 
         private void dc_tbx_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            TBXDatCatWindow tbxWindow;
+            TBXDatCatWindow tbxWindow = TBXDatCatWindow.Instance;
             if (dc_tbx.Content.ToString() != "???")
             {
-                tbxWindow = new TBXDatCatWindow(dc_tbx.Content.ToString());
-            }
-            else
-            {
-                tbxWindow = new TBXDatCatWindow();
+                tbxWindow.selectItem(dc_tbx.Content.ToString());
             }
 
             tbxWindow.Show();

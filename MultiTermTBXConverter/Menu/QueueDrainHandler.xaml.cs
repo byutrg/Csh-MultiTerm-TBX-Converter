@@ -48,5 +48,11 @@ namespace MultiTermTBXMapper.Menu
             throw new NotImplementedException();
         }
         #endregion
+
+        private void Whats_this_btn_Click(object sender, RoutedEventArgs e)
+        {
+            QueueBundlingHelpWindow helpWindow = QueueBundlingHelpWindow.Instance;
+            helpWindow.Show();
+        }
     }
 }

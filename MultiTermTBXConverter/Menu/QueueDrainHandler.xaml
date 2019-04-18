@@ -26,7 +26,7 @@
                 <Label Name="lbl_user_dc" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Queue Bundling Orders" FontSize="28" />
                 <local:QueueDrainControl x:Name="mapControl" Grid.Row="1" Grid.Column="1" Margin="0,0,0,51" />
 
-                <Button x:Name="whats_this_btn" Grid.Column="1" HorizontalAlignment="Left" Margin="439,28,0,0" VerticalAlignment="Top" Width="48" Height="48" RenderTransformOrigin="0.431,0.243" BorderBrush="#00707070" ToolTip="Click me to learn about Queue Bundling">
+                <Button x:Name="whats_this_btn" Grid.Column="1" HorizontalAlignment="Left" Margin="439,28,0,0" VerticalAlignment="Top" Width="48" Height="48" RenderTransformOrigin="0.431,0.243" BorderBrush="#00707070" ToolTip="Click me to learn about Queue Bundling" Click="Whats_this_btn_Click">
                     <Button.Background>
                         <ImageBrush ImageSource="/MultiTermTBXConverter;component/Resources/what's-this.png" Stretch="UniformToFill"/>
                     </Button.Background>

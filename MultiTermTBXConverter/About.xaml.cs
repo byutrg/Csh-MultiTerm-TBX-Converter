@@ -21,6 +21,23 @@ namespace MultiTermTBXMapper
     /// </summary>
     public partial class About : Window
     {
+        /// <summary>
+        /// This will only allow one About window if called via singleton method
+        /// </summary>
+        private static About instance;
+
+        public static About Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new About();
+                }
+                return instance;
+            }
+        }
+
         public About()
         {
             InitializeComponent();
@@ -29,12 +46,16 @@ namespace MultiTermTBXMapper
             FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
             VersionLabel.Content = $"v{info.FileVersion.ToString()}";
             aboutText.Text = File.ReadAllText("Resources\\AboutInfo.txt");
-
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            instance = null;
         }
     }
 }

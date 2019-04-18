@@ -18,9 +18,23 @@ namespace MultiTermTBXMapper
         private DataRow[] sortedData;
         private DataTable dt = new DataTable();
 
+        private static TBXDatCatWindow instance;
+
+        public static TBXDatCatWindow Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new TBXDatCatWindow();
+                }
+                return instance;
+            }
+        }
+
         public event Action<string> selected;
 
-        public TBXDatCatWindow(string selected = "None: Do Not Map")
+        public TBXDatCatWindow()
         {
             InitializeComponent();
 
@@ -30,9 +44,14 @@ namespace MultiTermTBXMapper
             populateListBox();
             //if (selected != null)
             //{
+            selectItem("None: Do Not Map");
+            //}
+        }
+
+        public void selectItem(string selected = "None: Do Not Map")
+        {
             int index = getListItemIndex(selected);
             (dcs_tbx.Items[index] as ListBoxItem).IsSelected = true;
-            //}
         }
 
         private void cleanData()
@@ -153,6 +172,11 @@ namespace MultiTermTBXMapper
         private void ListBoxItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             select();
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            instance = null;
         }
     }
 }

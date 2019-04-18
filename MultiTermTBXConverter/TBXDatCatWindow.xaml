@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MultiTermTBXMapper"
         mc:Ignorable="d"
         Title="TBXDatCatWindow" Height="482.353" Width="815.197"
-        FocusManager.FocusedElement="{Binding ElementName=txtbox_search}">
+        FocusManager.FocusedElement="{Binding ElementName=txtbox_search}" Closed="Window_Closed">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1.25*"/>

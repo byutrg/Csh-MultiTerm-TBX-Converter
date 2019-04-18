@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MultiTermTBXMapper"
         mc:Ignorable="d"
-        Title="About" Height="300" Width="400" ResizeMode="NoResize">
+        Title="About" Height="300" Width="400" ResizeMode="NoResize" Closed="Window_Closed">
     <Grid>
         <TextBlock HorizontalAlignment="Center" Margin="0,22,0,0" TextWrapping="Wrap" Text="MultiTerm to TBX Converter" VerticalAlignment="Top"/>
         <Label Name="VersionLabel" HorizontalAlignment="Center" Margin="0,38,0,0" Content="[Version Number]" VerticalAlignment="Top"/>

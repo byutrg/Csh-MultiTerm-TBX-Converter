@@ -109,6 +109,7 @@ namespace MultiTermTBXMapper.Menu
                     //File.Move(tbxOutput.Replace("/", "\\"), dlg.FileName);
                     File.Move(mappingFile, dlg.FileName);
                 }
+                FinishedConversion(dlg.FileName);
             }
         }
         #endregion
@@ -118,10 +119,14 @@ namespace MultiTermTBXMapper.Menu
             InitializeComponent();
         }
 
+        private void FinishedConversion(string outputFile)
+        {
+            textblock_conversionStatus.Text = $"Your mapping file has been created and can be found:\n {outputFile}";
+        }
 
         private void FinishedConversion(string outputFile, string errorFile)
         {
-            textblock_conversionStatus.Text = $"Your mapping file has been created and can be found:\n {outputFile}\n\nExceptions to the mapping can be found:\n {errorFile}";
+            textblock_conversionStatus.Text = $"Your converted file has been created and can be found:\n {outputFile}\n\nExceptions to the conversion can be found:\n {errorFile}";
         }
 
         private void map()

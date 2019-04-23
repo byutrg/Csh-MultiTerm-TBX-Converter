@@ -503,7 +503,7 @@ namespace MultiTermTBXMapper
         #region ISerializable members
         public string Serialize()
         {
-            IEnumerable<string> items = from item in this.AsParallel()
+            IEnumerable<string> items = from item in this
                                         select (item as ISerializable).Serialize();
 
             return SerializationHelper.Serialize("[]", items, x => x);

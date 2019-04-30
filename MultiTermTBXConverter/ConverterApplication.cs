@@ -880,11 +880,57 @@ namespace MultiTermTBXMapper
 
             // Append text, which has the rest of the body
             tbx.AppendChild(text);
-
+            
             multiTermDoc.AppendChild(tbx);
         }
 
         // Reorder Internal Nodes
+        private void correctOrdering()
+        {
+            scanEntries(new string[] { "//termSec", "//langSec", "//conceptEntry"});
+        }
+
+        private void scanEntries(string[] XPaths)
+        {
+            foreach (string xPath in XPaths)
+            {
+                scanEntry(xPath);
+            }
+        }
+
+        private void scanEntry(string XPath)
+        {
+            XmlNodeList items = multiTermDoc.SelectNodes(XPath);
+            foreach (XmlNode item in items.AsParallel())
+            {
+                reorderLevelChildren(item);
+            }
+        }
+
+        private void reorderLevelChildren(XmlNode node)
+        {
+            string keyChildName = (node.Name == "conceptEntry") ? "langSec" : (node.Name == "langSec") ? "termSec" : "term";
+
+            if (keyChildName != "term")
+            {
+                XmlNodeList keyChildren = node.SelectNodes($"{keyChildName}");
+                foreach (XmlNode keyChild in keyChildren)
+                {
+                    node.RemoveChild(keyChild);
+                }
+
+                foreach (XmlNode keyChild in keyChildren)
+                {
+                    node.AppendChild(keyChild);
+                }
+            }
+            else
+            {
+                XmlNode keyChild = node.SelectSingleNode($"{keyChildName}");
+                node.RemoveChild(keyChild);
+                node.PrependChild(keyChild);
+            }
+        }
 
         private void placeOriginationElements()
         {
@@ -1680,6 +1726,9 @@ namespace MultiTermTBXMapper
 
                 // Strip away content that does not belong to the User-Specified output
                 stripInvalidNodes(tbxOutputDialect, errorPath);
+
+                // Correct ordering of elements
+                correctOrdering();
 
                 // Recursively remove built up white space
                 removeWhitespaceChildren(multiTermDoc);

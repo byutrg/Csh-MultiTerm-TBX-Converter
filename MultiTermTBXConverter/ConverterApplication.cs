@@ -1688,6 +1688,35 @@ namespace MultiTermTBXMapper
             //multiTermDoc.DocumentElement.SetAttribute("xmlns", "urn:iso:std:iso:30042:ed:3.0");
         }
 
+        private void checkXrefs()
+        {
+            XmlNodeList xrefs = multiTermDoc.SelectNodes("//xref");
+            foreach (XmlNode xref in xrefs.AsParallel())
+            {
+                if (xref.Attributes?["target"] != null) 
+                {
+                    string target = xref.Attributes["target"].Value;
+
+                    if (!Regex.IsMatch(target, "^https?://"))
+                    {
+                        commentifyNode(xref);
+                    }
+                }
+                else
+                {
+                    commentifyNode(xref);
+                }
+            }
+        }
+
+        private void commentifyNode(XmlNode node)
+        {
+            string commentContent = node.OuterXml;
+            XmlComment xmlComment = multiTermDoc.CreateComment(commentContent);
+            XmlNode parent = node.ParentNode;
+            parent.ReplaceChild(xmlComment, node);
+        }
+
         private void convertXML(FileStream xmlData, string outputPath, LevelOneClass initialJSON, string tbxOutputDialect, string errorPath)
         {
             XmlReaderSettings readerSettings = new XmlReaderSettings();
@@ -1729,6 +1758,9 @@ namespace MultiTermTBXMapper
 
                 // Correct ordering of elements
                 correctOrdering();
+
+                // Comment out <xref> elts with invalid target values
+                checkXrefs();
 
                 // Recursively remove built up white space
                 removeWhitespaceChildren(multiTermDoc);

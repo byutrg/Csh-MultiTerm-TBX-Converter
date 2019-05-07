@@ -38,7 +38,7 @@ namespace MultiTermTBXMapper
         {
             InitializeComponent();
 
-            datcats = TBXDatabase.getAll();
+            datcats = TBXDatabase.GetAll();
             cleanData();
 
             populateListBox();

@@ -22,7 +22,7 @@ namespace MultiTermTBXMapper.Menu
 
         public void clear()
         {
-            Methods.removeListBoxItems(ref lb_tbx_dcs);
+            Methods.RemoveListBoxItems(ref lb_tbx_dcs);
         }
 
         public void fillItems(List<string> tbx_dcs)
@@ -41,7 +41,7 @@ namespace MultiTermTBXMapper.Menu
 
         public void findBest(string dc)
         {
-            List<string[]> datcats = TBXDatabase.getNames();
+            List<string[]> datcats = TBXDatabase.GetNames();
             int bestDistance = 99999;
             int bestIndex = -1;
 
@@ -81,7 +81,8 @@ namespace MultiTermTBXMapper.Menu
             tbxWindow.selected += value =>
             {
                 ItemCollection itemCol = lb_tbx_dcs.Items;
-                if (!Methods.inListBoxItemCollection(ref itemCol, value))
+                
+                if (!itemCol.Contains(value))
                 {
 
                     ListBoxItem item = new ListBoxItem();

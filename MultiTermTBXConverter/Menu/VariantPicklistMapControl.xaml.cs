@@ -21,8 +21,8 @@ namespace MultiTermTBXMapper.Menu
 
         public void clear()
         {
-            Methods.removeListBoxItems(ref lb_tbx_dcs);
-            Methods.removeListBoxItems(ref lb_user_picklists);
+            Methods.RemoveListBoxItems(ref lb_tbx_dcs);
+            Methods.RemoveListBoxItems(ref lb_user_picklists);
         }
 
         public void fillListBoxes(List<string> tbx_dcs, List<string> values)

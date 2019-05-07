@@ -77,7 +77,7 @@ namespace MultiTermTBXMapper
             return note._value;
         }
 
-        public static implicit operator NoteXML(string n = null)
+        public static implicit operator NoteXML(string n)
         {
             return new NoteXML();
         }

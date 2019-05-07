@@ -32,19 +32,19 @@ namespace MultiTermTBXMapper.Menu
             throw new NotImplementedException();
         }
 
-        public void UtilizeState<T>(ref T r)
-        {
-            throw new NotImplementedException();
-        }
+        //public void UtilizeState<T>(ref T r)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public void UtilizeState<T1, T2>(ref T1 r, T2 state)
+        public void UtilizeState<T1, T2>(T1 r, T2 state)
         {
             throw new NotImplementedException();
         }
 
         #endregion
 
-        private void btn_import_Click(object sender, RoutedEventArgs e)
+        private void Btn_import_Click(object sender, RoutedEventArgs e)
         {
 
             // Check Sender
@@ -64,10 +64,11 @@ namespace MultiTermTBXMapper.Menu
                 saveOption = 3;
             }
 
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-
-            dlg.DefaultExt = ".xml";
-            dlg.Filter = "XML Files (*.xml)|*.xml|TBX Files (*.tbx)|*.tbx|All files (*.*)|*.*";
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog
+            {
+                DefaultExt = ".xml",
+                Filter = "XML Files (*.xml)|*.xml|TBX Files (*.tbx)|*.tbx|All files (*.*)|*.*"
+            };
 
             bool? result = dlg.ShowDialog();
 

@@ -29,30 +29,30 @@ namespace MultiTermTBXMapper
 
     public class ExtendedTeaspStorageManager
     {
-        public List<string[]> valueGroupCollection; // Each string[] will correspond with the teasp in the same position
-        public List<object> correspondingValGrpTeasps; // Every one of these will have substitutions, and therefore the default will not be in this list
-        public TeaspNoSubstitution defaultTeaspSub;
+        public List<string[]> ValueGroupCollection { get; set; } // Each string[] will correspond with the teasp in the same position
+        public List<object> CorrespondingValGrpTeasps { get; set; } // Every one of these will have substitutions, and therefore the default will not be in this list
+        public TeaspNoSubstitution DefaultTeaspSub { get; set; }
 
         public ExtendedTeaspStorageManager(List<string[]> ls, List<object> lt, TeaspNoSubstitution dt)
         {
-            valueGroupCollection = ls;
-            correspondingValGrpTeasps = lt;
-            defaultTeaspSub = dt;
+            ValueGroupCollection = ls;
+            CorrespondingValGrpTeasps = lt;
+            DefaultTeaspSub = dt;
         }
 
-        public List<string[]> getValueGroupCollection()
+        public List<string[]> GetValueGroupCollection()
         {
-            return valueGroupCollection;
+            return ValueGroupCollection;
         }
 
-        public List<object> getCorrespondingValGrpTeasps()
+        public List<object> GetCorrespondingValGrpTeasps()
         {
-            return correspondingValGrpTeasps;
+            return CorrespondingValGrpTeasps;
         }
 
-        public TeaspNoSubstitution getDefaultTeaspSub()
+        public TeaspNoSubstitution GetDefaultTeaspSub()
         {
-            return defaultTeaspSub;
+            return DefaultTeaspSub;
         }
     }
 
@@ -61,37 +61,37 @@ namespace MultiTermTBXMapper
 
     public class TeaspNoSubstitution
     {
-        public string target;
-        public string elementOrAttributes;
-        public string substitution;
-        public string placement;
+        public string Target { get; set; }
+        public string ElementOrAttributes { get; set; }
+        public string Substitution { get; set; }
+        public string Placement { get; set; }
 
         public TeaspNoSubstitution(string t, string ea, string s, string p)
         {
-            target = t;
-            elementOrAttributes = ea;
-            substitution = s;
-            placement = p;
+            Target = t;
+            ElementOrAttributes = ea;
+            Substitution = s;
+            Placement = p;
         }
 
-        public string getTarget()
+        public string GetTarget()
         {
-            return target;
+            return Target;
         }
 
-        public string getElementOrAttribute()
+        public string GetElementOrAttribute()
         {
-            return elementOrAttributes;
+            return ElementOrAttributes;
         }
 
-        public string getSubstitution()
+        public string GetSubstitution()
         {
-            return substitution;
+            return Substitution;
         }
 
-        public string getPlacement()
+        public string GetPlacement()
         {
-            return placement;
+            return Placement;
         }
 
     }
@@ -100,40 +100,40 @@ namespace MultiTermTBXMapper
 
     public class TeaspWithSubstitution
     {
-        public string target;
-        public string elementOrAttributes;
-        public Dictionary<string, string> substitution = new Dictionary<string, string>();
-        public string placement;
+        public string Target { get; set; }
+        public string ElementOrAttributes { get; set; }
+        public Dictionary<string, string> Substitution { get; set; } = new Dictionary<string, string>();
+        public string Placement { get; set; }
 
         public TeaspWithSubstitution(string t, string ea, Dictionary<string, string> s, string p)
         {
-            target = t;
-            elementOrAttributes = ea;
+            Target = t;
+            ElementOrAttributes = ea;
             foreach (KeyValuePair<string, string> entry in s)
             {
-                substitution.Add(entry.Key, entry.Value);
+                Substitution.Add(entry.Key, entry.Value);
             }
-            placement = p;
+            Placement = p;
         }
 
-        public string getTarget()
+        public string GetTarget()
         {
-            return target;
+            return Target;
         }
 
-        public string getElementOrAttribute()
+        public string GetElementOrAttribute()
         {
-            return elementOrAttributes;
+            return ElementOrAttributes;
         }
 
-        public Dictionary<string, string> getSubstitution()
+        public Dictionary<string, string> GetSubstitution()
         {
-            return substitution;
+            return Substitution;
         }
 
-        public string getPlacement()
+        public string GetPlacement()
         {
-            return placement;
+            return Placement;
         }
 
     }
@@ -143,87 +143,87 @@ namespace MultiTermTBXMapper
 
     public class TemplateSetApp
     {
-        public List<object> conceptMappingTemplates = new List<object>();
-        public List<string> conceptMappingTemplatesKeys = new List<string>();
-        public List<object> languageMappingTemplates = new List<object>();
-        public List<string> languageMappingTemplatesKeys = new List<string>();
-        public List<object> termMappingTemplates = new List<object>();
-        public List<string> termMappingTemplatesKeys = new List<string>();
-        public object[] castObjArray;
-        public string key;
-        public TeaspNoSubstitution teaspNS;
-        public TeaspWithSubstitution teaspWS;
-        public int handler = 0;
-        public int keyCounter = 0;
-        public int templateKeyTracker = 0;
-        public string[] valGrp;
+        public List<object> ConceptMappingTemplates { get; set; } = new List<object>();
+        public List<string> ConceptMappingTemplatesKeys { get; set; } = new List<string>();
+        public List<object> LanguageMappingTemplates { get; set; } = new List<object>();
+        public List<string> LanguageMappingTemplatesKeys { get; set; } = new List<string>();
+        public List<object> TermMappingTemplates { get; set; } = new List<object>();
+        public List<string> TermMappingTemplatesKeys { get; set; } = new List<string>();
+        public object[] CastObjArray { get; set; }
+        public string Key { get; set; }
+        public TeaspNoSubstitution TeaspNS { get; set; }
+        public TeaspWithSubstitution TeaspWS { get; set; }
+        public int Handler { get; set; } = 0;
+        public int KeyCounter { get; set; } = 0;
+        public int TemplateKeyTracker { get; set; } = 0;
+        public string[] ValGrp { get; set; }
 
         // // // //
 
         // This is the Dicitonary that will contain the Mapping Templates Strings and an object (Either a plain teasp or a extendedTeaspStorageManager object).
         // Regardless of what kind of object each Key-Value pair has, type will be determined at runtime and processing will be done then.
 
-        public Dictionary<string, object> grandMasterDictionary = new Dictionary<string, object>();
+        public Dictionary<string, object> GrandMasterDictionary { get; set; } = new Dictionary<string, object>();
 
         // // // //
 
-        public string t;
-        public string ea;
+        public string T { get; set; }
+        public string EA { get; set; }
         // Declare s at runtime
-        public string p;
+        public string P { get; set; }
 
         public TemplateSetApp(Dictionary<string, object> c, Dictionary<string, object> l, Dictionary<string, object> t)
         {
             foreach (var entry in c)
             {
                 object tempUNK1 = entry.Value;
-                conceptMappingTemplates.Add(tempUNK1);
+                ConceptMappingTemplates.Add(tempUNK1);
 
-                key = entry.Key;
-                conceptMappingTemplatesKeys.Add(key);
+                Key = entry.Key;
+                ConceptMappingTemplatesKeys.Add(Key);
             }
             foreach (var entry2 in l)
             {
                 object tempUNK2 = entry2.Value;
-                languageMappingTemplates.Add(tempUNK2);
+                LanguageMappingTemplates.Add(tempUNK2);
 
-                key = entry2.Key;
-                languageMappingTemplatesKeys.Add(key);
+                Key = entry2.Key;
+                LanguageMappingTemplatesKeys.Add(Key);
             }
             foreach (var entry3 in t)
             {
                 object tempUNK3 = entry3.Value;
-                termMappingTemplates.Add(tempUNK3);
+                TermMappingTemplates.Add(tempUNK3);
 
-                key = entry3.Key;
-                termMappingTemplatesKeys.Add(key);
+                Key = entry3.Key;
+                TermMappingTemplatesKeys.Add(Key);
             }
 
-            convertTemplateSets();
+            ConvertTemplateSets();
         }
 
-        public Dictionary<string, object> getGrandMasterDictionary()
+        public Dictionary<string, object> GetGrandMasterDictionary()
         {
-            return grandMasterDictionary;
+            return GrandMasterDictionary;
         }
 
-        private string keySelector()
+        private string KeySelector()
         {
             string returnKey = "";
 
-            if (templateKeyTracker == 1)
+            if (TemplateKeyTracker == 1)
             {
-                returnKey = conceptMappingTemplatesKeys[keyCounter];
+                returnKey = ConceptMappingTemplatesKeys[KeyCounter];
             }
-            else if (templateKeyTracker == 2)
+            else if (TemplateKeyTracker == 2)
             {
-                returnKey = languageMappingTemplatesKeys[keyCounter];
+                returnKey = LanguageMappingTemplatesKeys[KeyCounter];
             }
-            else if (templateKeyTracker == 3)
+            else if (TemplateKeyTracker == 3)
             {
-                returnKey = termMappingTemplatesKeys[keyCounter];
+                returnKey = TermMappingTemplatesKeys[KeyCounter];
             }
-            else if (templateKeyTracker == -1)
+            else if (TemplateKeyTracker == -1)
             {
                 throw new Exception("ERROR! Invalid Dictionary Key");
             }
@@ -231,33 +231,33 @@ namespace MultiTermTBXMapper
             return returnKey;
         }
 
-        private void addToMasterDictionaryAfterHandle(JArray plainTeasp)
+        private void AddToMasterDictionaryAfterHandle(JArray plainTeasp)
         {
-            if (handler == 0)
+            if (Handler == 0)
             {
                 Dictionary<string, string> exceptionSub = (Dictionary<string, string>)plainTeasp[2].ToObject(typeof(Dictionary<string, string>));
-                var teaspMy = new TeaspWithSubstitution(t, ea, exceptionSub, p);
+                var teaspMy = new TeaspWithSubstitution(T, EA, exceptionSub, P);
 
-                grandMasterDictionary.Add(keySelector(), teaspMy);
+                GrandMasterDictionary.Add(KeySelector(), teaspMy);
             }
-            else if (handler == 1)
+            else if (Handler == 1)
             {
                 string s = (string)plainTeasp[2].ToObject(typeof(string));
-                var teaspMy = new TeaspNoSubstitution(t, ea, s, p);
+                var teaspMy = new TeaspNoSubstitution(T, EA, s, P);
 
-                grandMasterDictionary.Add(keySelector(), teaspMy);
+                GrandMasterDictionary.Add(KeySelector(), teaspMy);
             }
         }
 
-        private void handlePlainTemplateSet()
+        private void HandlePlainTemplateSet()
         {
-            JArray tempJA = (JArray)castObjArray[0];
+            JArray tempJA = (JArray)CastObjArray[0];
             object[] teasp = (object[])tempJA.ToObject(typeof(object[]));
             JArray plainTeasp = (JArray)teasp[0];
 
-            t = (string)plainTeasp[0].ToObject(typeof(string));
-            ea = (string)plainTeasp[1].ToObject(typeof(string));
-            p = (string)plainTeasp[3].ToObject(typeof(string));
+            T = (string)plainTeasp[0].ToObject(typeof(string));
+            EA = (string)plainTeasp[1].ToObject(typeof(string));
+            P = (string)plainTeasp[3].ToObject(typeof(string));
 
             // // //
             JToken castTest = (JToken)plainTeasp[2].ToObject(typeof(JToken));
@@ -269,7 +269,7 @@ namespace MultiTermTBXMapper
             }
             catch (Exception e)
             {
-                handler = 0;
+                Handler = 0;
             }
 
             try
@@ -278,26 +278,26 @@ namespace MultiTermTBXMapper
             }
             catch (Exception e)
             {
-                handler = 1;
+                Handler = 1;
             }
 
-            addToMasterDictionaryAfterHandle(plainTeasp);
+            AddToMasterDictionaryAfterHandle(plainTeasp);
         }
 
-        private List<Object> addToLocalList(List<Object> lt0, JArray tsp, string s)
+        private List<Object> AddToLocalList(List<Object> lt0, JArray tsp, string s)
         {
-            if (handler == 0)
+            if (Handler == 0)
             {
                 Dictionary<string, string> exceptionSub = (Dictionary<string, string>)tsp[2].ToObject(typeof(Dictionary<string, string>));
-                var teaspMy = new TeaspWithSubstitution(t, ea, exceptionSub, p);
+                var teaspMy = new TeaspWithSubstitution(T, EA, exceptionSub, P);
 
                 lt0.Add(teaspMy);
                 return lt0;
             }
-            else if (handler == 1)
+            else if (Handler == 1)
             {
                 string str = (string)tsp[2].ToObject(typeof(string));
-                var teaspMy = new TeaspNoSubstitution(t, ea, s, p);
+                var teaspMy = new TeaspNoSubstitution(T, EA, s, P);
 
                 lt0.Add(teaspMy);
                 return lt0;
@@ -306,23 +306,23 @@ namespace MultiTermTBXMapper
             return null;
         }
 
-        private void prepareContentForTemplateWithValueGroups(int identifierForLevel)
+        private void PrepareContentForTemplateWithValueGroups(int identifierForLevel)
         {
             List<string[]> ls0 = new List<string[]>();
             List<object> lt0 = new List<object>();
             TeaspNoSubstitution defTeasp0;
 
-            JArray temp = (JArray)castObjArray[0]; // This will have the default Teasp and subsequent value groups
+            JArray temp = (JArray)CastObjArray[0]; // This will have the default Teasp and subsequent value groups
             object[] deftsp = (object[])temp.ToObject(typeof(object[])); // Grab the default teasp
             JArray defaultTsp = (JArray)deftsp[0];
 
-            t = (string)defaultTsp[0].ToObject(typeof(string));
-            ea = (string)defaultTsp[1].ToObject(typeof(string));
+            T = (string)defaultTsp[0].ToObject(typeof(string));
+            EA = (string)defaultTsp[1].ToObject(typeof(string));
             string s = (string)defaultTsp[2].ToObject(typeof(string));
-            p = (string)defaultTsp[3].ToObject(typeof(string));
+            P = (string)defaultTsp[3].ToObject(typeof(string));
 
-            teaspNS = new TeaspNoSubstitution(t, ea, s, p); // This is now ready to give to the extendedTeaspStorageManager
-            defTeasp0 = teaspNS;
+            TeaspNS = new TeaspNoSubstitution(T, EA, s, P); // This is now ready to give to the extendedTeaspStorageManager
+            defTeasp0 = TeaspNS;
 
             deftsp = deftsp.Skip(1).ToArray(); // We dont want the first array, it is its own teasp, this array now just has value groups
             foreach (JArray st in deftsp)
@@ -331,12 +331,12 @@ namespace MultiTermTBXMapper
                 ls0.Add(singleValGrp); // This populates the list of string[] for the extendedTeaspStorageManager with all value-groups
             }
 
-            castObjArray = castObjArray.Skip(1).ToArray(); // We dont want the first array, because it will be handled seperately (above)
-            foreach (JArray tsp in castObjArray) // This handles the teasps that correspond with each value-group
+            CastObjArray = CastObjArray.Skip(1).ToArray(); // We dont want the first array, because it will be handled seperately (above)
+            foreach (JArray tsp in CastObjArray) // This handles the teasps that correspond with each value-group
             {
-                t = (string)tsp[0].ToObject(typeof(string));
-                ea = (string)tsp[1].ToObject(typeof(string));
-                p = (string)tsp[3].ToObject(typeof(string));
+                T = (string)tsp[0].ToObject(typeof(string));
+                EA = (string)tsp[1].ToObject(typeof(string));
+                P = (string)tsp[3].ToObject(typeof(string));
 
                 // // //
                 JToken castTest = (JToken)tsp[2].ToObject(typeof(JToken));
@@ -348,7 +348,7 @@ namespace MultiTermTBXMapper
                 }
                 catch (Exception e)
                 {
-                    handler = 0;
+                    Handler = 0;
                 }
 
                 try
@@ -357,12 +357,12 @@ namespace MultiTermTBXMapper
                 }
                 catch (Exception e)
                 {
-                    handler = 1;
+                    Handler = 1;
                 }
 
                 // // // Check casting here
 
-                lt0 = addToLocalList(lt0, tsp, s);
+                lt0 = AddToLocalList(lt0, tsp, s);
 
             }
 
@@ -370,112 +370,112 @@ namespace MultiTermTBXMapper
 
             if (identifierForLevel == 0)
             {
-                handleConceptTemplateSetWithValueGroups(ls0, lt0, defTeasp0);
+                HandleConceptTemplateSetWithValueGroups(ls0, lt0, defTeasp0);
             }
             else if (identifierForLevel == 1)
             {
-                handleLanguageTemplateSetWithValueGroups(ls0, lt0, defTeasp0);
+                HandleLanguageTemplateSetWithValueGroups(ls0, lt0, defTeasp0);
             }
             else if (identifierForLevel == 2)
             {
-                handleTermTemplateSetWithValueGroups(ls0, lt0, defTeasp0);
+                HandleTermTemplateSetWithValueGroups(ls0, lt0, defTeasp0);
             }
         }
 
-        private void handleConceptTemplateSetWithValueGroups(List<string[]> ls0, List<Object> lt0, TeaspNoSubstitution defTeasp0)
+        private void HandleConceptTemplateSetWithValueGroups(List<string[]> ls0, List<Object> lt0, TeaspNoSubstitution defTeasp0)
         {
             // We are now ready to build the extendedTeaspStorageManager
             ExtendedTeaspStorageManager ETSM1 = new ExtendedTeaspStorageManager(ls0, lt0, defTeasp0);
 
             // Add it to the dictionary
-            grandMasterDictionary.Add(conceptMappingTemplatesKeys[keyCounter], ETSM1);
+            GrandMasterDictionary.Add(ConceptMappingTemplatesKeys[KeyCounter], ETSM1);
         }
 
-        private void handleLanguageTemplateSetWithValueGroups(List<string[]> ls2, List<Object> lt2, TeaspNoSubstitution defTeasp2)
+        private void HandleLanguageTemplateSetWithValueGroups(List<string[]> ls2, List<Object> lt2, TeaspNoSubstitution defTeasp2)
         {
             // We are now ready to build the extendedTeaspStorageManager
 
             ExtendedTeaspStorageManager ETSM2 = new ExtendedTeaspStorageManager(ls2, lt2, defTeasp2);
 
             // Add it to the dictionary
-            grandMasterDictionary.Add(languageMappingTemplatesKeys[keyCounter], ETSM2);
+            GrandMasterDictionary.Add(LanguageMappingTemplatesKeys[KeyCounter], ETSM2);
         }
 
-        private void handleTermTemplateSetWithValueGroups(List<string[]> ls3, List<Object> lt3, TeaspNoSubstitution defTeasp3)
+        private void HandleTermTemplateSetWithValueGroups(List<string[]> ls3, List<Object> lt3, TeaspNoSubstitution defTeasp3)
         {
             // We are now ready to build the extendedTeaspStorageManager
 
             ExtendedTeaspStorageManager ETSM3 = new ExtendedTeaspStorageManager(ls3, lt3, defTeasp3);
 
             // Add it to the dictionary
-            grandMasterDictionary.Add(termMappingTemplatesKeys[keyCounter], ETSM3);
+            GrandMasterDictionary.Add(TermMappingTemplatesKeys[KeyCounter], ETSM3);
         }
 
-        public void convertTemplateSets()
+        public void ConvertTemplateSets()
         {
             // Logic: A plain template-set will have only 1 internal array, where those that have value groups will have multiple internal arrays, and the first array will hold value groups
-            keyCounter = 0;
-            templateKeyTracker = 1;
+            KeyCounter = 0;
+            TemplateKeyTracker = 1;
 
-            foreach (JArray j in conceptMappingTemplates)
+            foreach (JArray j in ConceptMappingTemplates)
             {
-                castObjArray = (object[])j.ToObject(typeof(object[]));
+                CastObjArray = (object[])j.ToObject(typeof(object[]));
 
-                if (castObjArray.Length == 1) // This is "plain" template set
+                if (CastObjArray.Length == 1) // This is "plain" template set
                 {
-                    handlePlainTemplateSet();
-                    keyCounter++;
+                    HandlePlainTemplateSet();
+                    KeyCounter++;
                 }
-                else if (castObjArray.Length != 0 && castObjArray.Length > 1) // This is a template set with Value groups 
+                else if (CastObjArray.Length != 0 && CastObjArray.Length > 1) // This is a template set with Value groups 
                 {
-                    prepareContentForTemplateWithValueGroups(0);
-                    keyCounter++;
+                    PrepareContentForTemplateWithValueGroups(0);
+                    KeyCounter++;
                 }
             }
 
-            keyCounter = 0;
-            templateKeyTracker = 2;
+            KeyCounter = 0;
+            TemplateKeyTracker = 2;
 
-            foreach (JArray j in languageMappingTemplates)
+            foreach (JArray j in LanguageMappingTemplates)
             {
-                castObjArray = (object[])j.ToObject(typeof(object[]));
+                CastObjArray = (object[])j.ToObject(typeof(object[]));
 
-                if (castObjArray.Length == 1)
+                if (CastObjArray.Length == 1)
                 {
-                    handlePlainTemplateSet();
-                    keyCounter++;
+                    HandlePlainTemplateSet();
+                    KeyCounter++;
                 }
-                else if (castObjArray.Length != 0 && castObjArray.Length > 1)
+                else if (CastObjArray.Length != 0 && CastObjArray.Length > 1)
                 {
-                    prepareContentForTemplateWithValueGroups(1);
-                    keyCounter++;
-                }
-
-            }
-
-            keyCounter = 0;
-            templateKeyTracker = 3;
-
-            foreach (JArray j in termMappingTemplates)
-            {
-                castObjArray = (object[])j.ToObject(typeof(object[]));
-
-                if (castObjArray.Length == 1)
-                {
-                    handlePlainTemplateSet();
-                    keyCounter++;
-
-                }
-                else if (castObjArray.Length != 0 && castObjArray.Length > 1)
-                {
-                    prepareContentForTemplateWithValueGroups(2);
-                    keyCounter++;
+                    PrepareContentForTemplateWithValueGroups(1);
+                    KeyCounter++;
                 }
 
             }
 
-            keyCounter = 0;
-            templateKeyTracker = -1;
+            KeyCounter = 0;
+            TemplateKeyTracker = 3;
+
+            foreach (JArray j in TermMappingTemplates)
+            {
+                CastObjArray = (object[])j.ToObject(typeof(object[]));
+
+                if (CastObjArray.Length == 1)
+                {
+                    HandlePlainTemplateSet();
+                    KeyCounter++;
+
+                }
+                else if (CastObjArray.Length != 0 && CastObjArray.Length > 1)
+                {
+                    PrepareContentForTemplateWithValueGroups(2);
+                    KeyCounter++;
+                }
+
+            }
+
+            KeyCounter = 0;
+            TemplateKeyTracker = -1;
 
         }
 
@@ -485,27 +485,27 @@ namespace MultiTermTBXMapper
 
     public class OneLevelMapping
     {
-        public Dictionary<string, object> cOLvlDictionary = new Dictionary<string, object>();
-        public Dictionary<string, object> lOLvlDictionary = new Dictionary<string, object>();
-        public Dictionary<string, object> tOLvlDictionary = new Dictionary<string, object>();
-        public TemplateSetApp ts;
+        public Dictionary<string, object> ConceptOLvlDictionary { get; set; } = new Dictionary<string, object>();
+        public Dictionary<string, object> LanguageOLvlDictionary { get; set; } = new Dictionary<string, object>();
+        public Dictionary<string, object> TermOLvlDictionary { get; set; } = new Dictionary<string, object>();
+        public TemplateSetApp TS { get; set; }
 
         public OneLevelMapping(Dictionary<string, JObject> d)
         {
             JObject tempC = d["concept"];
-            cOLvlDictionary = tempC.ToObject<Dictionary<string, object>>();
+            ConceptOLvlDictionary = tempC.ToObject<Dictionary<string, object>>();
 
             JObject tempL = d["language"];
-            lOLvlDictionary = tempL.ToObject<Dictionary<string, object>>();
+            LanguageOLvlDictionary = tempL.ToObject<Dictionary<string, object>>();
 
             JObject tempT = d["term"];
-            tOLvlDictionary = tempT.ToObject<Dictionary<string, object>>();
+            TermOLvlDictionary = tempT.ToObject<Dictionary<string, object>>();
         }
 
-        public Dictionary<string, object> beginTemplate()
+        public Dictionary<string, object> BeginTemplate()
         {
-            ts = new TemplateSetApp(cOLvlDictionary, lOLvlDictionary, tOLvlDictionary);
-            return ts.getGrandMasterDictionary();
+            TS = new TemplateSetApp(ConceptOLvlDictionary, LanguageOLvlDictionary, TermOLvlDictionary);
+            return TS.GetGrandMasterDictionary();
         }
     }
 
@@ -513,22 +513,22 @@ namespace MultiTermTBXMapper
 
     public class CMapClass
     {
-        public Dictionary<string, JObject> cDefault = new Dictionary<string, JObject>();
-        public OneLevelMapping passDictionary;
-        public Dictionary<string, object> ds = new Dictionary<string, object>();
+        public Dictionary<string, JObject> ConceptDefault { get; set; } = new Dictionary<string, JObject>();
+        public OneLevelMapping PassDictionary { get; set; }
+        public Dictionary<string, object> DS { get; set; } = new Dictionary<string, object>();
 
         public CMapClass(JObject c, JObject l, JObject t)
         {
-            cDefault.Add("concept", c);
-            cDefault.Add("language", l);
-            cDefault.Add("term", t);
+            ConceptDefault.Add("concept", c);
+            ConceptDefault.Add("language", l);
+            ConceptDefault.Add("term", t);
         }
 
-        public Dictionary<string, object> parseOLvl() //Hand over dictionary to oneLevelMapping
+        public Dictionary<string, object> ParseOLvl() //Hand over dictionary to oneLevelMapping
         {
-            passDictionary = new OneLevelMapping(cDefault);
-            ds = passDictionary.beginTemplate();
-            return ds;
+            PassDictionary = new OneLevelMapping(ConceptDefault);
+            DS = PassDictionary.BeginTemplate();
+            return DS;
         }
 
     }
@@ -537,9 +537,9 @@ namespace MultiTermTBXMapper
 
     public class ListOfOrders
     {
-        List<string[]> concept = new List<string[]>();
-        List<string[]> language = new List<string[]>();
-        List<string[]> term = new List<string[]>();
+        public List<string[]> Concept { get; set; } = new List<string[]>();
+        public List<string[]> Language { get; set; } = new List<string[]>();
+        public List<string[]> Term { get; set; } = new List<string[]>();
 
         public ListOfOrders(Dictionary<string, JArray> k)
         {
@@ -550,7 +550,7 @@ namespace MultiTermTBXMapper
                 string[][] s = c.ToObject<string[][]>();
                 foreach (string[] a in s)
                 {
-                    concept.Add(a);
+                    Concept.Add(a);
                 }
             }
 
@@ -561,7 +561,7 @@ namespace MultiTermTBXMapper
                 string[][] s1 = l.ToObject<string[][]>();
                 foreach (string[] a in s1)
                 {
-                    language.Add(a);
+                    Language.Add(a);
                 }
             }
             
@@ -572,24 +572,24 @@ namespace MultiTermTBXMapper
                 string[][] s2 = t.ToObject<string[][]>();
                 foreach (string[] a in s2)
                 {
-                    term.Add(a);
+                    Term.Add(a);
                 }
             }
         }
 
-        public List<string[]> getConcerpt()
+        public List<string[]> GetConcept()
         {
-            return concept;
+            return Concept;
         }
 
-        public List<string[]> getLanugage()
+        public List<string[]> GetLanguage()
         {
-            return language;
+            return Language;
         }
 
-        public List<string[]> getTerm()
+        public List<string[]> GetTerm()
         {
-            return term;
+            return Term;
         }
     }
 
@@ -597,8 +597,8 @@ namespace MultiTermTBXMapper
 
     public class QueueOrders
     {
-        public Dictionary<string, JArray> qBOrders = new Dictionary<string, JArray>(); //Or just a regular object?? 
-        public ListOfOrders loo;
+        public Dictionary<string, JArray> QueueBOrders { get; set; } = new Dictionary<string, JArray>(); //Or just a regular object?? 
+        public ListOfOrders LoO { get; set; }
 
         public QueueOrders(JObject j)
         {
@@ -608,24 +608,24 @@ namespace MultiTermTBXMapper
 
             if (cGStrings == null && lGStrings == null && tGStrings == null)
             {
-                loo = null;
+                LoO = null;
             }
             else
             {
-                qBOrders.Add("conceptGrp", cGStrings);
-                qBOrders.Add("languageGrp", lGStrings);
-                qBOrders.Add("termGrp", tGStrings);
-                loo = new ListOfOrders(qBOrders);
+                QueueBOrders.Add("conceptGrp", cGStrings);
+                QueueBOrders.Add("languageGrp", lGStrings);
+                QueueBOrders.Add("termGrp", tGStrings);
+                LoO = new ListOfOrders(QueueBOrders);
             }
         }
 
-        public Dictionary<string, string[]> getOrders()
+        public Dictionary<string, string[]> GetOrders()
         {
-            if (loo == null) { return null; }
+            if (LoO == null) { return null; }
             Dictionary<string, string[]> combinedOrders = new Dictionary<string, string[]>();
-            List<string[]> c = loo.getConcerpt();
-            List<string[]> l = loo.getLanugage();
-            List<string[]> t = loo.getTerm();
+            List<string[]> c = LoO.GetConcept();
+            List<string[]> l = LoO.GetLanguage();
+            List<string[]> t = LoO.GetTerm();
 
             for (int i = 0; i < (c.Count()); i++)
             {
@@ -671,55 +671,55 @@ namespace MultiTermTBXMapper
 
     public class LevelOneClass
     {
-        public string dialect { get; set; }
-        public string xcsElement { get; set; }
-        public JArray objectStorage { get; set; }
-        public CMapClass parseCMP;
-        public QueueOrders QDO;
-        public Dictionary<string, object> dictionaryStorage = new Dictionary<string, object>();
+        public string Dialect { get; set; }
+        public string XcsElement { get; set; }
+        public JArray ObjectStorage { get; set; }
+        public CMapClass ParseCMP { get; set; }
+        public QueueOrders QDO { get; set; }
+        public Dictionary<string, object> DictionaryStorage { get; set; } = new Dictionary<string, object>();
 
         public LevelOneClass(string d, string x, JArray cmp)
         {
-            dialect = d;
-            xcsElement = x;
-            objectStorage = cmp;
+            Dialect = d;
+            XcsElement = x;
+            ObjectStorage = cmp;
         }
 
-        public string getDialect()
+        public string GetDialect()
         {
-            return dialect;
+            return Dialect;
         }
 
-        public string getXCS()
+        public string GetXCS()
         {
-            return xcsElement;
+            return XcsElement;
         }
 
-        public void parseCMap()
+        public void ParseCMap()
         {
-            JObject conceptLvl = (JObject)objectStorage[2]["concept"];
-            JObject languageLvl = (JObject)objectStorage[2]["language"];
-            JObject termLvl = (JObject)objectStorage[2]["term"];
+            JObject conceptLvl = (JObject)ObjectStorage[2]["concept"];
+            JObject languageLvl = (JObject)ObjectStorage[2]["language"];
+            JObject termLvl = (JObject)ObjectStorage[2]["term"];
 
-            parseCMP = new CMapClass(conceptLvl, languageLvl, termLvl);
-            dictionaryStorage = parseCMP.parseOLvl();
-            startQueue();
+            ParseCMP = new CMapClass(conceptLvl, languageLvl, termLvl);
+            DictionaryStorage = ParseCMP.ParseOLvl();
+            StartQueue();
         }
 
-        public void startQueue()
+        public void StartQueue()
         {
-            JObject j = (JObject)objectStorage[3];
+            JObject j = (JObject)ObjectStorage[3];
             QDO = new QueueOrders(j);
         }
 
-        public Dictionary<string, object> getMasterDictionary()
+        public Dictionary<string, object> GetMasterDictionary()
         {
-            return dictionaryStorage;
+            return DictionaryStorage;
         }
 
-        public Dictionary<string, string[]> getQueueOrders()
+        public Dictionary<string, string[]> GetQueueOrders()
         {
-            return QDO.getOrders();
+            return QDO.GetOrders();
         }
 
 
@@ -728,12 +728,12 @@ namespace MultiTermTBXMapper
     public class ConverterApp
     {
 
-        private int conceptCounter = 1;
-        private XmlDocument multiTermDoc;
+        private int ConceptCounter { get; set; } = 1;
+        private XmlDocument MultiTermDoc { get; set; }
 
         // Converter Utilities
 
-        private void placePreviousAttributes(XmlNode oldRoot, XmlElement newRoot)
+        private void PlacePreviousAttributes(XmlNode oldRoot, XmlElement newRoot)
         {
             if (oldRoot.Attributes != null)
             {
@@ -759,11 +759,11 @@ namespace MultiTermTBXMapper
             }
         }
 
-        public void renameXMLNode(XmlNode oldRoot, string newname)
+        public void RenameXMLNode(XmlNode oldRoot, string newname)
         {
-            XmlElement newRootElement = multiTermDoc.CreateElement(newname);
+            XmlElement newRootElement = MultiTermDoc.CreateElement(newname);
 
-            placePreviousAttributes(oldRoot, newRootElement);
+            PlacePreviousAttributes(oldRoot, newRootElement);
 
             XmlNode newRoot = newRootElement;
 
@@ -778,13 +778,13 @@ namespace MultiTermTBXMapper
             }
             else
             {
-                multiTermDoc.ReplaceChild(newRoot, multiTermDoc.DocumentElement);
+                MultiTermDoc.ReplaceChild(newRoot, MultiTermDoc.DocumentElement);
             }
         }
 
         // Queue-Bundling Orders
 
-        private void executeQueueBundlingOrders(Dictionary<string, string[]> queueOrders)
+        private void ExecuteQueueBundlingOrders(Dictionary<string, string[]> queueOrders)
         {
             if (queueOrders == null) { return; }
             foreach (KeyValuePair<string, string[]> pair in queueOrders)
@@ -792,7 +792,7 @@ namespace MultiTermTBXMapper
                 string queryItemOne = "//descrip[@type='";
                 queryItemOne = queryItemOne + pair.Value[0] + "']";
 
-                XmlNodeList pairItemOne = multiTermDoc.SelectNodes(queryItemOne);
+                XmlNodeList pairItemOne = MultiTermDoc.SelectNodes(queryItemOne);
 
                 for (int i = 0; i < pairItemOne.Count; i++)
                 {
@@ -815,42 +815,42 @@ namespace MultiTermTBXMapper
 
         // TBXHeader Addition
 
-        private void modifyTBXHeader(string xcs, XmlNode root, string tbxDialect)
+        private void ModifyTBXHeader(string xcs, XmlNode root, string tbxDialect)
         {
        
             // Surround the body in the <text> and <body> tags
-            XmlNode text = multiTermDoc.CreateElement("text");
-            renameXMLNode(root, "body");
-            root = multiTermDoc.SelectSingleNode("body");
+            XmlNode text = MultiTermDoc.CreateElement("text");
+            RenameXMLNode(root, "body");
+            root = MultiTermDoc.SelectSingleNode("body");
 
             // Whitespace cleanup
-            multiTermDoc.RemoveChild(root);
-            multiTermDoc.RemoveChild(multiTermDoc.LastChild);
+            MultiTermDoc.RemoveChild(root);
+            MultiTermDoc.RemoveChild(MultiTermDoc.LastChild);
 
             text.AppendChild(root);
-            multiTermDoc.AppendChild(text);
+            MultiTermDoc.AppendChild(text);
 
-            XmlElement tbxRoot = multiTermDoc.CreateElement("tbx");
+            XmlElement tbxRoot = MultiTermDoc.CreateElement("tbx");
             tbxRoot.SetAttribute("style", "dca");
             tbxRoot.SetAttribute("type", tbxDialect);
             tbxRoot.SetAttribute("xml:lang", "en");
             //tbxRoot.SetAttribute("xmlns", "urn:iso:std:iso:30042:ed:3.0");
             XmlNode tbx = tbxRoot;
 
-            XmlNode tbxHeader = multiTermDoc.CreateElement("tbxHeader");
+            XmlNode tbxHeader = MultiTermDoc.CreateElement("tbxHeader");
 
-            XmlNode fileDesc = multiTermDoc.CreateElement("fileDesc");
+            XmlNode fileDesc = MultiTermDoc.CreateElement("fileDesc");
 
-            XmlNode titleStmt = multiTermDoc.CreateElement("titleStmt");
+            XmlNode titleStmt = MultiTermDoc.CreateElement("titleStmt");
 
-            XmlNode title = multiTermDoc.CreateElement("title");
+            XmlNode title = MultiTermDoc.CreateElement("title");
             title.InnerText = "MultiTerm Termbase TBX File";
 
             titleStmt.AppendChild(title);
 
-            XmlNode sourceDesc = multiTermDoc.CreateElement("sourceDesc");
+            XmlNode sourceDesc = MultiTermDoc.CreateElement("sourceDesc");
 
-            XmlNode p = multiTermDoc.CreateElement("p");
+            XmlNode p = MultiTermDoc.CreateElement("p");
             p.InnerText = "Converted from MultiTerm XML";
 
             sourceDesc.AppendChild(p);
@@ -881,33 +881,33 @@ namespace MultiTermTBXMapper
             // Append text, which has the rest of the body
             tbx.AppendChild(text);
             
-            multiTermDoc.AppendChild(tbx);
+            MultiTermDoc.AppendChild(tbx);
         }
 
         // Reorder Internal Nodes
-        private void correctOrdering()
+        private void CorrectOrdering()
         {
-            scanEntries(new string[] { "//termSec", "//langSec", "//conceptEntry"});
+            ScanEntries(new string[] { "//termSec", "//langSec", "//conceptEntry"});
         }
 
-        private void scanEntries(string[] XPaths)
+        private void ScanEntries(string[] XPaths)
         {
             foreach (string xPath in XPaths)
             {
-                scanEntry(xPath);
+                ScanEntry(xPath);
             }
         }
 
-        private void scanEntry(string XPath)
+        private void ScanEntry(string XPath)
         {
-            XmlNodeList items = multiTermDoc.SelectNodes(XPath);
+            XmlNodeList items = MultiTermDoc.SelectNodes(XPath);
             foreach (XmlNode item in items.AsParallel())
             {
-                reorderLevelChildren(item);
+                ReorderLevelChildren(item);
             }
         }
 
-        private void reorderLevelChildren(XmlNode node)
+        private void ReorderLevelChildren(XmlNode node)
         {
             string keyChildName = (node.Name == "conceptEntry") ? "langSec" : (node.Name == "langSec") ? "termSec" : "term";
 
@@ -932,14 +932,14 @@ namespace MultiTermTBXMapper
             }
         }
 
-        private void placeOriginationElements()
+        private void PlaceOriginationElements()
         {
-            XmlNodeList origination = multiTermDoc.SelectNodes("//transac[@type='origination']");
+            XmlNodeList origination = MultiTermDoc.SelectNodes("//transac[@type='origination']");
 
             foreach (XmlNode node in origination)
             {
                 string textValue = node.InnerText;
-                XmlElement responsibility = multiTermDoc.CreateElement("transacNote");
+                XmlElement responsibility = MultiTermDoc.CreateElement("transacNote");
                 responsibility.SetAttribute("type", "responsibility");
                 responsibility.InnerText = node.InnerText;
                 node.ParentNode.InsertAfter(responsibility, node);
@@ -947,14 +947,14 @@ namespace MultiTermTBXMapper
             }
         }
 
-        private void placeModificationElements()
+        private void PlaceModificationElements()
         {
-            XmlNodeList modification = multiTermDoc.SelectNodes("//transac[@type='modification']");
+            XmlNodeList modification = MultiTermDoc.SelectNodes("//transac[@type='modification']");
 
             foreach (XmlNode node in modification)
             {
                 string textValue = node.InnerText;
-                XmlElement responsibility = multiTermDoc.CreateElement("transacNote");
+                XmlElement responsibility = MultiTermDoc.CreateElement("transacNote");
                 responsibility.SetAttribute("type", "responsibility");
                 responsibility.InnerText = node.InnerText;
                 node.ParentNode.InsertAfter(responsibility, node);
@@ -962,30 +962,30 @@ namespace MultiTermTBXMapper
             }
         }
 
-        private void createTransacGrpPairs()
+        private void CreateTransacGrpPairs()
         {
-            placeOriginationElements();
-            placeModificationElements();
+            PlaceOriginationElements();
+            PlaceModificationElements();
         }
 
-        private void extractLanguageInfo()
+        private void ExtractLanguageInfo()
         {
-            XmlNodeList languageNodeList = multiTermDoc.SelectNodes("//language");
+            XmlNodeList languageNodeList = MultiTermDoc.SelectNodes("//language");
             foreach (XmlNode node in languageNodeList)
             {
                 XmlNode parent = node.ParentNode;
                 string languageCode = node.Attributes["lang"].Value;
                 parent.RemoveChild(node);
-                XmlAttribute xmlLang = multiTermDoc.CreateAttribute("xml:lang");
+                XmlAttribute xmlLang = MultiTermDoc.CreateAttribute("xml:lang");
                 xmlLang.Value = languageCode;
                 parent.Attributes.Append(xmlLang);
-                renameXMLNode(parent, "langSec");
+                RenameXMLNode(parent, "langSec");
             }
         }
 
-        private void extractConceptInfo()
+        private void ExtractConceptInfo()
         {
-            XmlNodeList conceptNodeList = multiTermDoc.SelectNodes("//conceptGrp");
+            XmlNodeList conceptNodeList = MultiTermDoc.SelectNodes("//conceptGrp");
             foreach (XmlNode node in conceptNodeList)
             {
                 XmlNode conceptNode = node.SelectSingleNode("concept");
@@ -993,24 +993,24 @@ namespace MultiTermTBXMapper
                 {
                     string idValue = conceptNode.InnerText;
                     node.RemoveChild(conceptNode);
-                    XmlAttribute id = multiTermDoc.CreateAttribute("id");
+                    XmlAttribute id = MultiTermDoc.CreateAttribute("id");
                     id.Value = "_" + idValue;
                     node.Attributes.Append(id);
                 }
                 else
                 {
-                    XmlAttribute id = multiTermDoc.CreateAttribute("id");
-                    id.Value = "c" + conceptCounter;
+                    XmlAttribute id = MultiTermDoc.CreateAttribute("id");
+                    id.Value = "c" + ConceptCounter;
                     node.Attributes.Append(id);
-                    conceptCounter++;
+                    ConceptCounter++;
                 }
-                renameXMLNode(node, "conceptEntry");
+                RenameXMLNode(node, "conceptEntry");
             }
         }
 
-        private void extractSingleChildDescripGrp()
+        private void ExtractSingleChildDescripGrp()
         {
-            XmlNodeList descripGrpList = multiTermDoc.SelectNodes("//descripGrp");
+            XmlNodeList descripGrpList = MultiTermDoc.SelectNodes("//descripGrp");
 
             foreach (XmlNode node in descripGrpList)
             {
@@ -1028,7 +1028,7 @@ namespace MultiTermTBXMapper
             }
         }
 
-        private void replaceTermNoteLocations(XmlNode termGrp)
+        private void ReplaceTermNoteLocations(XmlNode termGrp)
         {
             foreach (XmlNode child in termGrp.ChildNodes)
             {
@@ -1041,7 +1041,7 @@ namespace MultiTermTBXMapper
             }
         }
 
-        private void replaceDescripGrpLocations(XmlNode termGrp)
+        private void ReplaceDescripGrpLocations(XmlNode termGrp)
         {
             XmlNodeList lastReferencedNode = termGrp.SelectNodes("termNote");
             if (lastReferencedNode == null || lastReferencedNode.Count == 0)
@@ -1060,7 +1060,7 @@ namespace MultiTermTBXMapper
             }
         }
 
-        private void replaceTransacGrpLocations(XmlNode termGrp)
+        private void ReplaceTransacGrpLocations(XmlNode termGrp)
         {
             XmlNodeList lastReferencedNode = termGrp.SelectNodes("transacGrp");
             if (lastReferencedNode == null || lastReferencedNode.Count == 0)
@@ -1084,47 +1084,47 @@ namespace MultiTermTBXMapper
             }
         }
 
-        private void termGrpReordering()
+        private void TermGrpReordering()
         {
-            XmlNodeList termGrpList = multiTermDoc.SelectNodes("tbx/text/body/conceptGrp/languageGrp/termGrp");
+            XmlNodeList termGrpList = MultiTermDoc.SelectNodes("tbx/text/body/conceptGrp/languageGrp/termGrp");
 
             foreach (XmlNode termGrp in termGrpList)
             {
 
-                replaceTermNoteLocations(termGrp);
+                ReplaceTermNoteLocations(termGrp);
 
-                replaceDescripGrpLocations(termGrp);
+                ReplaceDescripGrpLocations(termGrp);
 
-                replaceTransacGrpLocations(termGrp);
+                ReplaceTransacGrpLocations(termGrp);
 
-                renameXMLNode(termGrp, "termSec");
+                RenameXMLNode(termGrp, "termSec");
 
             }
         }
 
-        private void reorderXML(XmlNode root)
+        private void ReorderXML(XmlNode root)
         {
             // Process termGrp elements
-            termGrpReordering();
+            TermGrpReordering();
 
             // Extract single child descripGrps
-            extractSingleChildDescripGrp();
+            ExtractSingleChildDescripGrp();
 
             // Extract language information
-            extractLanguageInfo();
+            ExtractLanguageInfo();
 
             // Extract concept information
-            extractConceptInfo();
+            ExtractConceptInfo();
 
             // Create transacGrp pairs
-            createTransacGrpPairs();
+            CreateTransacGrpPairs();
         }
 
         // Node Removal
 
-        private void removeXref(XmlNode root)
+        private void RemoveXref(XmlNode root)
         {
-            XmlNodeList xref = multiTermDoc.SelectNodes("//xref");
+            XmlNodeList xref = MultiTermDoc.SelectNodes("//xref");
             foreach (XmlNode node in xref)
             {
                 if (node.ParentNode != null)
@@ -1139,7 +1139,7 @@ namespace MultiTermTBXMapper
 
         // Data Category Replacement Through Mapping
 
-        private int findTeaspIndex(List<string[]> ValGrpTemp, string currentContent)
+        private int FindTeaspIndex(List<string[]> ValGrpTemp, string currentContent)
         {
             for (int i = 0; i < ValGrpTemp.Count(); i++)
             {
@@ -1156,7 +1156,7 @@ namespace MultiTermTBXMapper
             return -1; // Did not find content in Value-Groups, indicate that default must be used 
         }
 
-        private void handleTeasp(object teasp, XmlNode node)
+        private void HandleTeasp(object teasp, XmlNode node)
         {
             // Shared members between both classes
 
@@ -1166,15 +1166,15 @@ namespace MultiTermTBXMapper
 
             if (teasp.GetType() == typeof(TeaspNoSubstitution))
             {
-                target = ((TeaspNoSubstitution)teasp).getTarget();
-                element = ((TeaspNoSubstitution)teasp).getElementOrAttribute();
-                placement = ((TeaspNoSubstitution)teasp).getPlacement();
+                target = ((TeaspNoSubstitution)teasp).GetTarget();
+                element = ((TeaspNoSubstitution)teasp).GetElementOrAttribute();
+                placement = ((TeaspNoSubstitution)teasp).GetPlacement();
             }
             else if (teasp.GetType() == typeof(TeaspWithSubstitution))
             {
-                target = ((TeaspWithSubstitution)teasp).getTarget();
-                element = ((TeaspWithSubstitution)teasp).getElementOrAttribute();
-                placement = ((TeaspWithSubstitution)teasp).getPlacement();
+                target = ((TeaspWithSubstitution)teasp).GetTarget();
+                element = ((TeaspWithSubstitution)teasp).GetElementOrAttribute();
+                placement = ((TeaspWithSubstitution)teasp).GetPlacement();
             }
 
             string currentNodeName = node.Name;
@@ -1195,7 +1195,7 @@ namespace MultiTermTBXMapper
 
             if ((node.Attributes == null || node.Attributes["type"] == null) && attribute != "")
             {
-                XmlAttribute type = multiTermDoc.CreateAttribute("type");
+                XmlAttribute type = MultiTermDoc.CreateAttribute("type");
                 type.Value = attribute;
                 node.Attributes.Append(type);
             }
@@ -1211,63 +1211,61 @@ namespace MultiTermTBXMapper
                 }
             }
 
-            renameXMLNode(node, currentNodeName);
+            RenameXMLNode(node, currentNodeName);
 
         }
 
-        private void handleTeaspNoSubstitution(TeaspNoSubstitution teasp, XmlNode node)
+        private void HandleTeaspNoSubstitution(TeaspNoSubstitution teasp, XmlNode node)
         {
-            handleTeasp(teasp, node);
+            HandleTeasp(teasp, node);
         }
 
-        private void handleTeaspWithSubstitution(TeaspWithSubstitution teasp, XmlNode node)
+        private void HandleTeaspWithSubstitution(TeaspWithSubstitution teasp, XmlNode node)
         {
             // Replace Substitution String
-            Dictionary<string, string> substitution = teasp.getSubstitution();
+            Dictionary<string, string> substitution = teasp.GetSubstitution();
             node.InnerText = substitution[node.InnerText];
 
-            handleTeasp(teasp, node);
+            HandleTeasp(teasp, node);
         }
 
-        private void handleIndexedTeasp(ExtendedTeaspStorageManager teasp, XmlNode node, List<object> valueGroupCorrespondingTeasps, int index)
+        private void HandleIndexedTeasp(ExtendedTeaspStorageManager teasp, XmlNode node, List<object> valueGroupCorrespondingTeasps, int index)
         {
             object neutralTeasp = valueGroupCorrespondingTeasps[index];
-            if (neutralTeasp is TeaspNoSubstitution)
+            if (neutralTeasp is TeaspNoSubstitution castedTeaspNoSub)
             {
-                TeaspNoSubstitution castedTeasp = (TeaspNoSubstitution)neutralTeasp;
-                handleTeaspNoSubstitution(castedTeasp, node);
+                HandleTeaspNoSubstitution(castedTeaspNoSub, node);
             }
-            else if (neutralTeasp is TeaspWithSubstitution)
+            else if (neutralTeasp is TeaspWithSubstitution castedTeaspWithSub)
             {
-                TeaspWithSubstitution castedTeasp = (TeaspWithSubstitution)neutralTeasp;
-                handleTeaspWithSubstitution(castedTeasp, node);
+                HandleTeaspWithSubstitution(castedTeaspWithSub, node);
             }
         }
 
-        private void handleDefaultTeasp(ExtendedTeaspStorageManager teasp, XmlNode node)
+        private void HandleDefaultTeasp(ExtendedTeaspStorageManager teasp, XmlNode node)
         {
-            TeaspNoSubstitution defaultTeasp = teasp.getDefaultTeaspSub();
-            handleTeasp(defaultTeasp, node);
+            TeaspNoSubstitution defaultTeasp = teasp.GetDefaultTeaspSub();
+            HandleTeasp(defaultTeasp, node);
         }
 
-        private void hanldeExtendedTeaspStorageManager(ExtendedTeaspStorageManager teasp, XmlNode node)
+        private void HandleExtendedTeaspStorageManager(ExtendedTeaspStorageManager teasp, XmlNode node)
         {
-            List<string[]> valueGroupList = teasp.getValueGroupCollection();
-            List<object> valueGroupCorrespondingTeasps = teasp.getCorrespondingValGrpTeasps();
+            List<string[]> valueGroupList = teasp.GetValueGroupCollection();
+            List<object> valueGroupCorrespondingTeasps = teasp.GetCorrespondingValGrpTeasps();
 
-            int relativeTeaspIndex = findTeaspIndex(valueGroupList, node.InnerText);
+            int relativeTeaspIndex = FindTeaspIndex(valueGroupList, node.InnerText);
 
             if (relativeTeaspIndex >= 0)
             {
-                handleIndexedTeasp(teasp, node, valueGroupCorrespondingTeasps, relativeTeaspIndex);
+                HandleIndexedTeasp(teasp, node, valueGroupCorrespondingTeasps, relativeTeaspIndex);
             }
             else if (relativeTeaspIndex == -1)
             {
-                handleDefaultTeasp(teasp, node);
+                HandleDefaultTeasp(teasp, node);
             }
         }
 
-        private void handleExecutionOfTeasps(XmlNode node, Dictionary<string, object> highLevelDictionaryStorage)
+        private void HandleExecutionOfTeasps(XmlNode node, Dictionary<string, object> highLevelDictionaryStorage)
         {
             if (node.Attributes != null && node.Attributes["type"] != null)
             {
@@ -1277,36 +1275,36 @@ namespace MultiTermTBXMapper
                     Object teaspObj = highLevelDictionaryStorage[currentAttributeValue];
                     if (teaspObj.GetType() == typeof(TeaspNoSubstitution))
                     {
-                        handleTeaspNoSubstitution((TeaspNoSubstitution)teaspObj, node);
+                        HandleTeaspNoSubstitution((TeaspNoSubstitution)teaspObj, node);
                     }
                     else if (teaspObj.GetType() == typeof(TeaspWithSubstitution))
                     {
-                        handleTeaspWithSubstitution((TeaspWithSubstitution)teaspObj, node);
+                        HandleTeaspWithSubstitution((TeaspWithSubstitution)teaspObj, node);
                     }
                     else if (teaspObj.GetType() == typeof(ExtendedTeaspStorageManager))
                     {
-                        hanldeExtendedTeaspStorageManager((ExtendedTeaspStorageManager)teaspObj, node);
+                        HandleExtendedTeaspStorageManager((ExtendedTeaspStorageManager)teaspObj, node);
                     }
                 }
             }
         }
 
-        private void parseForDataCategories(XmlNode root, Dictionary<string, object> highLevelDictionaryStorage)
+        private void ParseForDataCategories(XmlNode root, Dictionary<string, object> highLevelDictionaryStorage)
         {
-            handleExecutionOfTeasps(root, highLevelDictionaryStorage);
+            HandleExecutionOfTeasps(root, highLevelDictionaryStorage);
             XmlNodeList children = root.ChildNodes;
             for (int i = 0; i < children.Count; i++)
             {
                 if (children[i].NodeType == XmlNodeType.Whitespace) { continue; }
-                parseForDataCategories(children[i], highLevelDictionaryStorage);
+                ParseForDataCategories(children[i], highLevelDictionaryStorage);
             }
         }
 
         // Node Pairing
 
-        private void pairNodes()
+        private void PairNodes()
         {
-            XmlNodeList adminSource = multiTermDoc.SelectNodes("//admin[@type='source']");
+            XmlNodeList adminSource = MultiTermDoc.SelectNodes("//admin[@type='source']");
             foreach (XmlNode node in adminSource)
             {
                 if (node.ParentNode.Name == "termGrp")
@@ -1314,7 +1312,7 @@ namespace MultiTermTBXMapper
                     XmlNode pairingSibling = node.PreviousSibling;
                     XmlNode staticSibling = pairingSibling.PreviousSibling;
 
-                    XmlNode descripGrouper = multiTermDoc.CreateElement("descripGrp");
+                    XmlNode descripGrouper = MultiTermDoc.CreateElement("descripGrp");
                     descripGrouper.AppendChild(pairingSibling);
                     descripGrouper.AppendChild(node);
 
@@ -1325,7 +1323,7 @@ namespace MultiTermTBXMapper
 
         // TBX Dialect processing
 
-        private string findConceptId(XmlNode node)
+        private string FindConceptId(XmlNode node)
         {
             if (node.Name == "tbx")
             {
@@ -1335,7 +1333,7 @@ namespace MultiTermTBXMapper
 
             if (node.Name != "conceptEntry")
             {
-                findConceptId(node.ParentNode);
+                FindConceptId(node.ParentNode);
             }
             else
             {
@@ -1345,14 +1343,14 @@ namespace MultiTermTBXMapper
             return null;
         }
 
-        private void logStrippedInfo(List<XmlNode> nodesToRemove, StreamWriter stream, Dictionary<string, int> nodeOccuranceTracker, string dialect)
+        private void LogStrippedInfo(List<XmlNode> nodesToRemove, StreamWriter stream, Dictionary<string, int> nodeOccuranceTracker, string dialect)
         {
             foreach (XmlNode node in nodesToRemove)
             {
                 XmlNode parent = node.ParentNode;
                 parent.RemoveChild(node);
 
-                string idNumber = findConceptId(parent);
+                string idNumber = FindConceptId(parent);
 
                 string currentLine = node.Attributes["type"].Value + " discovered!";
                 stream.WriteLine(currentLine);
@@ -1388,17 +1386,17 @@ namespace MultiTermTBXMapper
             }
         }
 
-        private void stripForCore(string errorPath)
+        private void StripForCore(string errorPath)
         {
-            XmlProcessingInstruction rng = multiTermDoc.CreateProcessingInstruction("xml-model", "href=\"https://raw.githubusercontent.com/LTAC-Global/TBX-Core_dialect/master/Schemas/TBXcoreStructV03_TBX-Core_integrated.rng\" " +
+            XmlProcessingInstruction rng = MultiTermDoc.CreateProcessingInstruction("xml-model", "href=\"https://raw.githubusercontent.com/LTAC-Global/TBX-Core_dialect/master/Schemas/TBXcoreStructV03_TBX-Core_integrated.rng\" " +
              "type=\"application/xml\" schematypens=\"http://relaxng.org/ns/structure/1.0\"");
-            XmlProcessingInstruction sch = multiTermDoc.CreateProcessingInstruction("xml-model", "href=\"https://raw.githubusercontent.com/LTAC-Global/TBX-Core_dialect/master/Schemas/TBX-Core.sch\" " +
+            XmlProcessingInstruction sch = MultiTermDoc.CreateProcessingInstruction("xml-model", "href=\"https://raw.githubusercontent.com/LTAC-Global/TBX-Core_dialect/master/Schemas/TBX-Core.sch\" " +
                 "type=\"application/xml\" schematypens=\"http://purl.oclc.org/dsdl/schematron\"");
 
-            multiTermDoc.InsertBefore(sch, multiTermDoc.DocumentElement);
-            multiTermDoc.InsertBefore(rng, multiTermDoc.DocumentElement);
+            MultiTermDoc.InsertBefore(sch, MultiTermDoc.DocumentElement);
+            MultiTermDoc.InsertBefore(rng, MultiTermDoc.DocumentElement);
 
-            XmlNodeList allNodes = multiTermDoc.SelectNodes("//*");
+            XmlNodeList allNodes = MultiTermDoc.SelectNodes("//*");
             List<XmlNode> nodesToRemove = new List<XmlNode>();
 
             for (int i = 0; i < allNodes.Count; i++)
@@ -1419,15 +1417,15 @@ namespace MultiTermTBXMapper
                 stream.WriteLine();
                 stream.WriteLine();
 
-                logStrippedInfo(nodesToRemove, stream, nodeOccuranceTracker, "Core");
+                LogStrippedInfo(nodesToRemove, stream, nodeOccuranceTracker, "Core");
 
-                XmlNodeList emptyTransacGrp = multiTermDoc.SelectNodes("//transacGrp");
+                XmlNodeList emptyTransacGrp = MultiTermDoc.SelectNodes("//transacGrp");
                 foreach (XmlNode transacGrp in emptyTransacGrp)
                 {
                     transacGrp.ParentNode.RemoveChild(transacGrp);
                 }
 
-                XmlNodeList emptyDescripGrp = multiTermDoc.SelectNodes("//descripGrp");
+                XmlNodeList emptyDescripGrp = MultiTermDoc.SelectNodes("//descripGrp");
                 foreach (XmlNode descripGrp in emptyDescripGrp)
                 {
                     descripGrp.ParentNode.RemoveChild(descripGrp);
@@ -1448,17 +1446,17 @@ namespace MultiTermTBXMapper
             }
         }
 
-        private void stripForMin(string errorPath)
+        private void StripForMin(string errorPath)
         {
-            XmlProcessingInstruction rng = multiTermDoc.CreateProcessingInstruction("xml-model", "href=\"https://raw.githubusercontent.com/LTAC-Global/TBX-Min_dialect/master/DCA/TBXcoreStructV03_TBX-Min_integrated.rng\" " +
+            XmlProcessingInstruction rng = MultiTermDoc.CreateProcessingInstruction("xml-model", "href=\"https://raw.githubusercontent.com/LTAC-Global/TBX-Min_dialect/master/DCA/TBXcoreStructV03_TBX-Min_integrated.rng\" " +
              "type=\"application/xml\" schematypens=\"http://relaxng.org/ns/structure/1.0\"");
-            XmlProcessingInstruction sch = multiTermDoc.CreateProcessingInstruction("xml-model", "href=\"https://raw.githubusercontent.com/LTAC-Global/TBX-Min_dialect/master/DCA/TBX-Min_DCA.sch\" " +
+            XmlProcessingInstruction sch = MultiTermDoc.CreateProcessingInstruction("xml-model", "href=\"https://raw.githubusercontent.com/LTAC-Global/TBX-Min_dialect/master/DCA/TBX-Min_DCA.sch\" " +
                 "type=\"application/xml\" schematypens=\"http://purl.oclc.org/dsdl/schematron\"");
 
-            multiTermDoc.InsertBefore(sch, multiTermDoc.DocumentElement);
-            multiTermDoc.InsertBefore(rng, multiTermDoc.DocumentElement);
+            MultiTermDoc.InsertBefore(sch, MultiTermDoc.DocumentElement);
+            MultiTermDoc.InsertBefore(rng, MultiTermDoc.DocumentElement);
 
-            XmlNodeList allNodes = multiTermDoc.SelectNodes("//*");
+            XmlNodeList allNodes = MultiTermDoc.SelectNodes("//*");
             List<XmlNode> nodesToRemove = new List<XmlNode>();
 
             for (int i = 0; i < allNodes.Count; i++)
@@ -1482,15 +1480,15 @@ namespace MultiTermTBXMapper
                 stream.WriteLine();
                 stream.WriteLine();
 
-                logStrippedInfo(nodesToRemove, stream, nodeOccuranceTracker, "Min");
+                LogStrippedInfo(nodesToRemove, stream, nodeOccuranceTracker, "Min");
 
-                XmlNodeList emptyTransacGrp = multiTermDoc.SelectNodes("//transacGrp");
+                XmlNodeList emptyTransacGrp = MultiTermDoc.SelectNodes("//transacGrp");
                 foreach (XmlNode transacGrp in emptyTransacGrp)
                 {
                     transacGrp.ParentNode.RemoveChild(transacGrp);
                 }
 
-                XmlNodeList emptyDescripGrp = multiTermDoc.SelectNodes("//descripGrp");
+                XmlNodeList emptyDescripGrp = MultiTermDoc.SelectNodes("//descripGrp");
                 foreach (XmlNode descripGrp in emptyDescripGrp)
                 {
                     descripGrp.ParentNode.RemoveChild(descripGrp);
@@ -1511,33 +1509,33 @@ namespace MultiTermTBXMapper
             }
         }
 
-        private void stripForBasic(string errorPath)
+        private void StripForBasic(string errorPath)
         {
-            XmlProcessingInstruction rng = multiTermDoc.CreateProcessingInstruction("xml-model", "href=\"https://raw.githubusercontent.com/LTAC-Global/TBX-Basic_dialect/master/DCA/TBXcoreStructV03_TBX-Basic_integrated.rng\" " +
+            XmlProcessingInstruction rng = MultiTermDoc.CreateProcessingInstruction("xml-model", "href=\"https://raw.githubusercontent.com/LTAC-Global/TBX-Basic_dialect/master/DCA/TBXcoreStructV03_TBX-Basic_integrated.rng\" " +
                 "type=\"application/xml\" schematypens=\"http://relaxng.org/ns/structure/1.0\"");
-            XmlProcessingInstruction sch = multiTermDoc.CreateProcessingInstruction("xml-model", "href=\"https://raw.githubusercontent.com/LTAC-Global/TBX-Basic_dialect/master/DCA/TBX-Basic_DCA.sch\" " +
+            XmlProcessingInstruction sch = MultiTermDoc.CreateProcessingInstruction("xml-model", "href=\"https://raw.githubusercontent.com/LTAC-Global/TBX-Basic_dialect/master/DCA/TBX-Basic_DCA.sch\" " +
                 "type=\"application/xml\" schematypens=\"http://purl.oclc.org/dsdl/schematron\"");
 
-            multiTermDoc.InsertBefore(sch, multiTermDoc.DocumentElement);
-            multiTermDoc.InsertBefore(rng, multiTermDoc.DocumentElement);
+            MultiTermDoc.InsertBefore(sch, MultiTermDoc.DocumentElement);
+            MultiTermDoc.InsertBefore(rng, MultiTermDoc.DocumentElement);
 
-            XmlNodeList allNodes = multiTermDoc.SelectNodes("//*");
+            XmlNodeList allNodes = MultiTermDoc.SelectNodes("//*");
             List<XmlNode> nodesToRemove = new List<XmlNode>();
 
             // Important for TBX-Basic: We need to reposition "definition" data categories from inside the termSec to the LangSec level for valdiation
             // We will lose any idea of which term the definition pertained to, so a descrip group will be added with a note
 
-            XmlNodeList allDefinitionDatCat = multiTermDoc.SelectNodes("//descrip[@type='definition']");  
+            XmlNodeList allDefinitionDatCat = MultiTermDoc.SelectNodes("//descrip[@type='definition']");  
             foreach (XmlNode node in allDefinitionDatCat)
             {
                 XmlNode parent = node.ParentNode;
                 XmlNode termSibling = parent.SelectSingleNode("termSec");
                 string termValue = termSibling.InnerText;
 
-                XmlElement descripParent = multiTermDoc.CreateElement("descripGrp");
+                XmlElement descripParent = MultiTermDoc.CreateElement("descripGrp");
                 XmlNode grp = descripParent;
 
-                XmlElement note = multiTermDoc.CreateElement("note");
+                XmlElement note = MultiTermDoc.CreateElement("note");
                 note.InnerText = "This definition pertains to the following term: " + termValue;
                 XmlNode grpNote = note;
 
@@ -1575,7 +1573,7 @@ namespace MultiTermTBXMapper
                 stream.WriteLine();
                 stream.WriteLine();
 
-                logStrippedInfo(nodesToRemove, stream, nodeOccuranceTracker, "Basic");
+                LogStrippedInfo(nodesToRemove, stream, nodeOccuranceTracker, "Basic");
 
                 stream.WriteLine();
                 stream.WriteLine("Finished. Printing report:");
@@ -1592,25 +1590,25 @@ namespace MultiTermTBXMapper
             }
         }
 
-        private void stripInvalidNodes(string tbxOutputDialect, string errorPath)
+        private void StripInvalidNodes(string tbxOutputDialect, string errorPath)
         {
             if (tbxOutputDialect == "TBX-Core")
             {
-                stripForCore(errorPath);
+                StripForCore(errorPath);
             }
             else if (tbxOutputDialect == "TBX-Min")
             {
-                stripForMin(errorPath);
+                StripForMin(errorPath);
             }
             else if (tbxOutputDialect == "TBX-Basic")
             {
-                stripForBasic(errorPath);
+                StripForBasic(errorPath);
             }
         }
 
-        private void truncateDates()
+        private void TruncateDates()
         {
-            XmlNodeList dates = multiTermDoc.SelectNodes("//date");
+            XmlNodeList dates = MultiTermDoc.SelectNodes("//date");
             foreach (XmlNode date in dates)
             {
                 Match match = Regex.Match(date.InnerText, @"T[^<]*");
@@ -1621,7 +1619,7 @@ namespace MultiTermTBXMapper
 
         // Pretty Printing Steps
 
-        private void removeWhitespaceChildren(XmlNode root)
+        private void RemoveWhitespaceChildren(XmlNode root)
         {
             List<XmlNode> childrenToRemove = new List<XmlNode>();
 
@@ -1635,7 +1633,7 @@ namespace MultiTermTBXMapper
 
                 if (child.HasChildNodes)
                 {
-                    removeWhitespaceChildren(child);
+                    RemoveWhitespaceChildren(child);
                 }
             }
 
@@ -1647,7 +1645,7 @@ namespace MultiTermTBXMapper
 
         // XML Conversion
 
-        private XmlNode selectRoot(XmlReader reader)
+        private XmlNode SelectRoot(XmlReader reader)
         {
             XmlNode node;
 
@@ -1656,31 +1654,33 @@ namespace MultiTermTBXMapper
                 reader.Read();
             }
 
-            node = multiTermDoc.ReadNode(reader);
+            node = MultiTermDoc.ReadNode(reader);
             return node;
         }
 
-        private void prettyPrintFile(string printPath)
+        private void PrettyPrintFile(string printPath)
         {
-            multiTermDoc.DocumentElement.SetAttribute("xmlns", "urn:iso:std:iso:30042:ed-2");
+            MultiTermDoc.DocumentElement.SetAttribute("xmlns", "urn:iso:std:iso:30042:ed-2");
             MemoryStream xmlStream = new MemoryStream();
-            multiTermDoc.Save(xmlStream);
+            MultiTermDoc.Save(xmlStream);
             xmlStream.Flush();
             xmlStream.Position = 0;
-            multiTermDoc.Load(xmlStream);
+            MultiTermDoc.Load(xmlStream);
 
 
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
-            settings.IndentChars = "\t";
+            XmlWriterSettings settings = new XmlWriterSettings
+            {
+                Indent = true,
+                IndentChars = "\t"
+            };
             using (XmlWriter writer = XmlWriter.Create(printPath, settings))
             {
-                multiTermDoc.WriteTo(writer);
+                MultiTermDoc.WriteTo(writer);
                 writer.Flush();
             }
         }
 
-        private void addNameSpace(XmlNode currentNode)
+        private void AddNameSpace(XmlNode currentNode)
         {
             XmlDocument transferDoc = new XmlDocument();
             //transferDoc.DocumentElement.SetAttribute("xmlns", "urn:iso:std:iso:30042:ed:3.0");
@@ -1688,9 +1688,9 @@ namespace MultiTermTBXMapper
             //multiTermDoc.DocumentElement.SetAttribute("xmlns", "urn:iso:std:iso:30042:ed:3.0");
         }
 
-        private void checkXrefs()
+        private void CheckXrefs()
         {
-            XmlNodeList xrefs = multiTermDoc.SelectNodes("//xref");
+            XmlNodeList xrefs = MultiTermDoc.SelectNodes("//xref");
             foreach (XmlNode xref in xrefs.AsParallel())
             {
                 if (xref.Attributes?["target"] != null) 
@@ -1699,84 +1699,84 @@ namespace MultiTermTBXMapper
 
                     if (!Regex.IsMatch(target, "^https?://"))
                     {
-                        commentifyNode(xref);
+                        CommentifyNode(xref);
                     }
                 }
                 else
                 {
-                    commentifyNode(xref);
+                    CommentifyNode(xref);
                 }
             }
         }
 
-        private void commentifyNode(XmlNode node)
+        private void CommentifyNode(XmlNode node)
         {
             string commentContent = node.OuterXml;
-            XmlComment xmlComment = multiTermDoc.CreateComment(commentContent);
+            XmlComment xmlComment = MultiTermDoc.CreateComment(commentContent);
             XmlNode parent = node.ParentNode;
             parent.ReplaceChild(xmlComment, node);
         }
 
-        private void convertXML(FileStream xmlData, string outputPath, LevelOneClass initialJSON, string tbxOutputDialect, string errorPath)
+        private void ConvertXML(FileStream xmlData, string outputPath, LevelOneClass initialJSON, string tbxOutputDialect, string errorPath)
         {
             XmlReaderSettings readerSettings = new XmlReaderSettings();
 
-            string dialect = initialJSON.getDialect();
-            string xcs = initialJSON.getXCS();
+            string dialect = initialJSON.GetDialect();
+            string xcs = initialJSON.GetXCS();
 
             Dictionary<string, object> highLevelDictionaryStorage = new Dictionary<string, object>();
-            highLevelDictionaryStorage = initialJSON.getMasterDictionary();
+            highLevelDictionaryStorage = initialJSON.GetMasterDictionary();
 
             Dictionary<string, string[]> queueOrders = new Dictionary<string, string[]>();
-            queueOrders = initialJSON.getQueueOrders();
+            queueOrders = initialJSON.GetQueueOrders();
 
             using (XmlReader reader = XmlReader.Create(xmlData, readerSettings))
             {
-                XmlNode root = selectRoot(reader);
+                XmlNode root = SelectRoot(reader);
 
                 // Reorder Queue Bundling Pairs
-                executeQueueBundlingOrders(queueOrders);
+                ExecuteQueueBundlingOrders(queueOrders);
 
                 // Output root and header for TBX V03
-                modifyTBXHeader(xcs, root, tbxOutputDialect);
-                root = multiTermDoc.LastChild;
+                ModifyTBXHeader(xcs, root, tbxOutputDialect);
+                root = MultiTermDoc.LastChild;
 
                 // Remove superfluous tab characters
-                removeXref(root);
+                RemoveXref(root);
 
                 // Reorder elements before parsing
-                reorderXML(root);
+                ReorderXML(root);
 
                 // Parse with the highLevelDictionaryStorage for invalid Data Categories
-                parseForDataCategories(root, highLevelDictionaryStorage);
+                ParseForDataCategories(root, highLevelDictionaryStorage);
 
                 // Pair necessary Node that may have been created during Data category parsing
-                pairNodes();
+                PairNodes();
 
                 // Strip away content that does not belong to the User-Specified output
-                stripInvalidNodes(tbxOutputDialect, errorPath);
+                StripInvalidNodes(tbxOutputDialect, errorPath);
 
                 // Correct ordering of elements
-                correctOrdering();
+                CorrectOrdering();
 
                 // Comment out <xref> elts with invalid target values
-                checkXrefs();
+                CheckXrefs();
 
                 // Recursively remove built up white space
-                removeWhitespaceChildren(multiTermDoc);
+                RemoveWhitespaceChildren(MultiTermDoc);
 
                 // Truncate dates for XML Validation
-                truncateDates();
+                TruncateDates();
 
                 // Apply new XMLNS to finished file
-                addNameSpace(multiTermDoc);
+                AddNameSpace(MultiTermDoc);
 
                 // Output our constructed file
-                prettyPrintFile(outputPath);
+                PrettyPrintFile(outputPath);
             }
         }
 
-        public (string,string) deserializeFile(string mappingFile, string multiTermXML, string tbxOutputDialect, bool isCalledFromMappingWizard)
+        public (string,string) DeserializeFile(string mappingFile, string multiTermXML, string tbxOutputDialect, bool isCalledFromMappingWizard)
         {
             JArray castedJSONData;
 
@@ -1797,22 +1797,26 @@ namespace MultiTermTBXMapper
             LevelOneClass initialJSON = new LevelOneClass(dialect, xcs, castedJSONData);
 
             // Parses the file from the concept-map down to the bottom
-            initialJSON.parseCMap();
+            initialJSON.ParseCMap();
 
             // Import XML
             FileStream xmlData = File.OpenRead(multiTermXML);
-            multiTermDoc = new XmlDocument();
-            multiTermDoc.PreserveWhitespace = true;
-            multiTermDoc.Load(multiTermXML);
+            MultiTermDoc = new XmlDocument
+            {
+                PreserveWhitespace = true
+            };
+            MultiTermDoc.Load(multiTermXML);
 
-            SaveFileDialog dlg = new SaveFileDialog();
+            SaveFileDialog dlg = new SaveFileDialog
+            {
+                DefaultExt = ".tbx",
+                Filter = "TBX File (*.tbx)|*.tbx"
+            };
 
-            dlg.DefaultExt = ".tbx";
-            dlg.Filter = "TBX File (*.tbx)|*.tbx";
             bool? result = dlg.ShowDialog();
 
             string outputPath = "";
-            string pathBuilder = System.IO.Path.GetFileName(multiTermXML);
+            string pathBuilder = Path.GetFileName(multiTermXML);
             if (result == true)
             {
                 outputPath = dlg.FileName;
@@ -1824,19 +1828,20 @@ namespace MultiTermTBXMapper
 
             string errorPath = multiTermXML.Replace(pathBuilder, $"{Path.GetFileNameWithoutExtension(outputPath)}_ExceptionsLog_{DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")}.txt").Replace(".tbx", "");
 
-            convertXML(xmlData, outputPath, initialJSON, tbxOutputDialect, errorPath);
+            ConvertXML(xmlData, outputPath, initialJSON, tbxOutputDialect, errorPath);
 
             return (outputPath, errorPath);
         }
 
 
-        public static string readFile(string type)
+        public static string ReadFile(string type)
         {
             string fn = "";
 
-            OpenFileDialog dlg = new OpenFileDialog();
-
-            dlg.Title = "Please select your " + type + " file.";
+            OpenFileDialog dlg = new OpenFileDialog
+            {
+                Title = "Please select your " + type + " file."
+            };
 
             bool? result = dlg.ShowDialog();
 
@@ -1850,6 +1855,3 @@ namespace MultiTermTBXMapper
 
     }
 }
-
-
-

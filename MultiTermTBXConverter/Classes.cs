@@ -12,7 +12,7 @@ namespace MultiTermTBXMapper
 {
     public class MappingDict : Dictionary<string, object[]>
     {
-        public Dictionary<string, List<string>> levelMap = new Dictionary<string, List<string>>() { { "conceptGrp", new List<string>() },{ "languageGrp", new List<string>() },{ "termGrp", new List<string>() } };
+        public Dictionary<string, List<string>> LevelMap { get; set; } = new Dictionary<string, List<string>>() { { "conceptGrp", new List<string>() }, { "languageGrp", new List<string>() }, { "termGrp", new List<string>() } };
         //public Dictionary<string, List<string>> queueBundlingMap = new Dictionary<string, List<string>>() { { "conceptGrp", new List<string>() }, { "languageGrp", new List<string>() }, { "termGrp", new List<string>() } };
 
         public void Add(string key)
@@ -20,9 +20,9 @@ namespace MultiTermTBXMapper
             Add(key, new object[4] { new TBXMappingList(), new UserDatCatContentList(), new TBXContentMap(), new PicklistMap() });
         }
 
-        public bool hasPicklist(string key)
+        public bool HasPicklist(string key)
         {
-            return (getPicklistMap(key)?.Keys.Count > 0) ? true : false;
+            return (GetPicklistMap(key)?.Keys.Count > 0) ? true : false;
         }
 
         /// <summary>
@@ -30,31 +30,31 @@ namespace MultiTermTBXMapper
         /// </summary>
         /// <param name="key">The name of the user data category</param>
         /// <returns>Boolean</returns>
-        public bool hasSplitContents(string key)
+        public bool HasSplitContents(string key)
         {
-            return (getTBXContentMap(key)?.Keys.Count > 1) ? true : false;
+            return (GetTBXContentMap(key)?.Keys.Count > 1) ? true : false;
         }
 
-        public PicklistMap setPicklistMap(string key, string content_key, string value)
+        public PicklistMap SetPicklistMap(string key, string content_key, string value)
         {
-            return getPicklistMap(key)?.Set(content_key, value);
+            return GetPicklistMap(key)?.Set(content_key, value);
         }
 
-        public PicklistMap getPicklistMap(string key)
+        public PicklistMap GetPicklistMap(string key)
         {
             return ContainsKey(key) ? this[key][3] as PicklistMap : null;
         }
 
-        public string getPicklistMapValue(string key, string user_pl)
+        public string GetPicklistMapValue(string key, string user_pl)
         {
             return ContainsKey(key) ? (this[key][3] as PicklistMap).Get(user_pl) : null;
         }
 
-        public bool isTBXMapped()
+        public bool IsTBXMapped()
         {
             foreach (string key in Keys)
             {
-                if (!isKeyMappedToTBX(key))
+                if (!IsKeyMappedToTBX(key))
                 {
                     return false;
                 }
@@ -63,11 +63,11 @@ namespace MultiTermTBXMapper
             return true;
         }
 
-        public bool isTBXPicklistMapped()
+        public bool IsTBXPicklistMapped()
         {
             foreach (string key in Keys)
             {
-                if (!isKeyMappedToTBXPicklist(key))
+                if (!IsKeyMappedToTBXPicklist(key))
                 {
                     return false;
                 }
@@ -76,11 +76,11 @@ namespace MultiTermTBXMapper
             return true;
         }
 
-        public bool isKeyMappedToTBX(string key)
+        public bool IsKeyMappedToTBX(string key)
         {
-            foreach (string k in getTBXContentMap(key).Keys)
+            foreach (string k in GetTBXContentMap(key).Keys)
             {
-                if (!getTBXContentMap(key).isMappedToTBX(k))
+                if (!GetTBXContentMap(key).IsMappedToTBX(k))
                 {
                     return false;
                 }
@@ -89,11 +89,11 @@ namespace MultiTermTBXMapper
             return true;
         }
 
-        public bool isKeyMappedToTBXPicklist(string key)
+        public bool IsKeyMappedToTBXPicklist(string key)
         {
-            foreach (string k in getPicklistMap(key).Keys)
+            foreach (string k in GetPicklistMap(key).Keys)
             {
-                if (!getPicklistMap(key).isMappedToTBXPicklist(k))
+                if (!GetPicklistMap(key).IsMappedToTBXPicklist(k))
                 {
                     return false;
                 }
@@ -102,23 +102,23 @@ namespace MultiTermTBXMapper
             return true;
         }
 
-        public bool isGroupMappedToTBX(ref List<string> user_dcs)
-        {
-            foreach (string dc in user_dcs)
-            {
-                if(!isKeyMappedToTBX(dc))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public bool isGroupMappedToTBXPicklist(ref List<string> user_dcs)
+        public bool IsGroupMappedToTBX(List<string> user_dcs)
         {
             foreach (string dc in user_dcs)
             {
-                if (!isKeyMappedToTBXPicklist(dc))
+                if(!IsKeyMappedToTBX(dc))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public bool IsGroupMappedToTBXPicklist(List<string> user_dcs)
+        {
+            foreach (string dc in user_dcs)
+            {
+                if (!IsKeyMappedToTBXPicklist(dc))
                 {
                     return false;
                 }
@@ -127,15 +127,15 @@ namespace MultiTermTBXMapper
             return true;
         }
 
-        public List<string> getDCsWithPicklists()
+        public List<string> GetDCsWithPicklists()
         {
             List<string> dcs = new List<string>();
-            TBXDatabase.getDCsWithPicklists().ForEach(delegate (string tbx_dc) {
+            TBXDatabase.GetDCsWithPicklists().ForEach(delegate (string tbx_dc) {
                 
                 foreach(string user_dc in Keys)
                 {
-                    List<string> tml = getTBXMappingList(user_dc);
-                    if (Methods.inList(ref tml, tbx_dc))
+                    List<string> tml = GetTBXMappingList(user_dc);
+                    if (tml.Contains(tbx_dc))
                     {
                         dcs.Add(user_dc);
                     }
@@ -146,13 +146,13 @@ namespace MultiTermTBXMapper
         }
 
 
-        public List<string> getDCsWithContent()
+        public List<string> GetDCsWithContent()
         {
             List<string> dcs = new List<string>();
 
             foreach (string key in Keys)
             {
-                if(getContentList(key)?.Count > 0)
+                if(GetContentList(key)?.Count > 0)
                 {
                     dcs.Add(key);
                 }
@@ -161,16 +161,16 @@ namespace MultiTermTBXMapper
             return dcs;
         }
 
-        public TBXMappingList getTBXMappingList(string key)
+        public TBXMappingList GetTBXMappingList(string key)
         {
             return (Count > 0) ? this[key][0] as TBXMappingList : null;
         }
 
-        public MappingDict setTBXMappingList(string key, TBXMappingList value = null)
+        public MappingDict SetTBXMappingList(string key, TBXMappingList value = null)
         {
             if (ContainsKey(key))
             {
-                this[key][0] = (value != null) ? value : new TBXMappingList();
+                this[key][0] = value ?? new TBXMappingList();
             }
             else
             {
@@ -186,7 +186,7 @@ namespace MultiTermTBXMapper
         /// <param name="key">user data category</param>
         /// <param name="value">content value</param>
         /// <returns></returns>
-        public MappingDict setContentList(string key, UserDatCatContentList value)
+        public MappingDict SetContentList(string key, UserDatCatContentList value)
         {
             if (ContainsKey(key))
             {
@@ -203,18 +203,18 @@ namespace MultiTermTBXMapper
             return this;
         }
 
-        public UserDatCatContentList getContentList(string key)
+        public UserDatCatContentList GetContentList(string key)
         {
             return ContainsKey(key) ? this[key][1] as UserDatCatContentList : null;
         }
 
-        public MappingDict addContentMap(string dc_key, string content_key, string tbx_dc = null)
+        public MappingDict AddContentMap(string dc_key, string content_key, string tbx_dc = null)
         {
             if (ContainsKey(dc_key))
             {
-                if (getTBXContentMap(dc_key).ContainsKey(content_key))
+                if (GetTBXContentMap(dc_key).ContainsKey(content_key))
                 {
-                    getTBXContentMap(dc_key)?.Add(content_key, tbx_dc);
+                    GetTBXContentMap(dc_key)?.Add(content_key, tbx_dc);
                 }
             }
 
@@ -228,24 +228,24 @@ namespace MultiTermTBXMapper
         /// <param name="content_key">A content value of a certain user data category</param>
         /// <param name="tbx_dc">The TBX data category to which the content will be mapped</param>
         /// <returns>The MappingDict instance</returns>
-        public MappingDict setTBXContentMap(string dc_key, string content_key, string tbx_dc = null)
+        public MappingDict SetTBXContentMap(string dc_key, string content_key, string tbx_dc = null)
         {
             if (ContainsKey(dc_key))
             {
-                if (getTBXContentMap(dc_key).ContainsKey(content_key))
+                if (GetTBXContentMap(dc_key).ContainsKey(content_key))
                 {
-                    getTBXContentMap(dc_key)?.Set(content_key, tbx_dc);
+                    GetTBXContentMap(dc_key)?.Set(content_key, tbx_dc);
                 }
                 else
                 {
-                    getTBXContentMap(dc_key)?.Add(content_key, tbx_dc);
+                    GetTBXContentMap(dc_key)?.Add(content_key, tbx_dc);
                 }
             }
 
             return this;
         }
 
-        public TBXContentMap getTBXContentMap(string key)
+        public TBXContentMap GetTBXContentMap(string key)
         {
             return ContainsKey(key) ? this[key][2] as TBXContentMap: null;
         }
@@ -279,7 +279,7 @@ namespace MultiTermTBXMapper
     /// </summary>
     public class TBXContentMap : Dictionary<string, string>
     {
-        public bool isMappedToTBX(string key)
+        public bool IsMappedToTBX(string key)
         {
             if (ContainsKey(key) && this[key] != null)
             {
@@ -317,7 +317,7 @@ namespace MultiTermTBXMapper
     /// </summary>
     public class PicklistMap : Dictionary<string, string>
     {
-        public bool isMappedToTBXPicklist(string key)
+        public bool IsMappedToTBXPicklist(string key)
         {
             if (ContainsKey(key) && this[key] != null)
             {

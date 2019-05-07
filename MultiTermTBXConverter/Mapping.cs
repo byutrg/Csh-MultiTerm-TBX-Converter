@@ -59,29 +59,29 @@ namespace MultiTermTBXMapper
 
     partial class Mapping : ISerializable
     {
-        public string dialect = "";
-        public string xcs = "";
-        public CategoricalMapping catMap = new CategoricalMapping();
-        public QueueDrainOrders queueDrainOrders = new QueueDrainOrders();
-        public object empty = new object();
+        public string Dialect { get; set; } = "";
+        public string XCS { get; set; } = "";
+        public CategoricalMapping CatMap { get; set; } = new CategoricalMapping();
+        public QueueDrainOrders QueueDrainOrders { get; set; } = new QueueDrainOrders();
+        public object Empty { get; set; } = new object();
 
         //initialize Mapping object
         public Mapping(string dialect = "TBX-Default", string xcs = "TBXXCSV02.xcs")
         {
-            this.dialect = dialect;
-            this.xcs = xcs;
+            Dialect = dialect;
+            XCS = xcs;
         }
 
         #region ISerializable members
         public string Serialize()
         {
-            List<string> items = new List<string>() { $@"""{dialect}""", $@"""{xcs}""", catMap.Serialize(), queueDrainOrders.Serialize(), "{}" };
+            List<string> items = new List<string>() { $@"""{Dialect}""", $@"""{XCS}""", CatMap.Serialize(), QueueDrainOrders.Serialize(), "{}" };
             return SerializationHelper.Serialize("[]", items, x => x );
         }
         #endregion
 
         //interior function for grabbing the correct target based on XML representation
-        public string getTarget(string elt)
+        public string GetTarget(string elt)
         {
             switch (elt)
             {
@@ -114,22 +114,22 @@ namespace MultiTermTBXMapper
         }
 
         //function for constructing XML representation
-        public string getEltAtt(string elt, string type)
+        public string GetEltAtt(string elt, string type)
         {
             switch(elt)
             {
                 case "<adminNote>":
-                    return getXMLnoContent("adminNote", type);
+                    return GetXMLnoContent("adminNote", type);
                 case "<transac>":
-                    return getXMLnoContent("transac", type);
+                    return GetXMLnoContent("transac", type);
                 case "<transacNote>":
-                    return getXMLnoContent("transacNote", type);
+                    return GetXMLnoContent("transacNote", type);
                 case "<xref>":
                     return "<xref type='" + type + "' >see target</xref>";
                 case "<ref>":
-                    return getXMLnoContent("ref", type);
+                    return GetXMLnoContent("ref", type);
                 case "<hi>":
-                    return getXMLnoContent("hi", type);
+                    return GetXMLnoContent("hi", type);
                 case "<bpt>":
                     return "<bpt />";
                 case "<date>":
@@ -143,24 +143,24 @@ namespace MultiTermTBXMapper
                 case "<term>":
                     return "<term />";
                 case "<descrip>":
-                    return getXMLnoContent("descrip", type);
+                    return GetXMLnoContent("descrip", type);
                 case "<descripNote>":
-                    return getXMLnoContent("descripNote", type);
+                    return GetXMLnoContent("descripNote", type);
                 case "<admin>":
-                    return getXMLnoContent("admin", type);
+                    return GetXMLnoContent("admin", type);
                 case "<termNote>":
-                    return getXMLnoContent("termNote", type);
+                    return GetXMLnoContent("termNote", type);
                 case "<termCompList>":
-                    return getXMLnoContent("termCompList", type);
+                    return GetXMLnoContent("termCompList", type);
                 case "<note>":
                     return "<note />";
                 default:
-                    return getXMLnoContent("unhandled", type);
+                    return GetXMLnoContent("unhandled", type);
             }
         }
 
         //function used to aide in constructing xml representations
-        private static string getXMLnoContent(string elt, string type)
+        private static string GetXMLnoContent(string elt, string type)
         {
             return $"<{elt} type='{type}' />";
         }
@@ -176,10 +176,7 @@ namespace MultiTermTBXMapper
         }
 
         #region ISerializable members
-        public string Serialize()
-        {
-            return SerializationHelper.Serialize("{}", this, x => $@"""{x.Key}"": {x.Value.Serialize()}");
-        }
+        public string Serialize() => SerializationHelper.Serialize("{}", this, x => $@"""{x.Key}"": {x.Value.Serialize()}");
         #endregion
     }
 
@@ -204,110 +201,107 @@ namespace MultiTermTBXMapper
         /// Serialize to JSON string
         /// </summary>
         /// <returns></returns>
-        public string Serialize()
-        {
-            return SerializationHelper.Serialize("{}", this, x => $@"""{x.Key}"": {x.Value.Serialize()}");
-        }
+        public string Serialize() => SerializationHelper.Serialize("{}", this, x => $@"""{x.Key}"": {x.Value.Serialize()}");
         #endregion
 
         //constructs the default OneLevel construction
-        private void addDefault(string level)
+        private void AddDefault(string level)
         {
             switch(level)
             {
                 case "concept":
-                    Add("Subject", addSubject());
-                    Add("Status", addStatus());
-                    Add("Source", addSource());
-                    Add("Note", addNote());
+                    Add("Subject", AddSubject());
+                    Add("Status", AddStatus());
+                    Add("Source", AddSource());
+                    Add("Note", AddNote());
                     break;
                 case "language":
-                    Add("Definition", addDefinition());
-                    Add("Note", addNote());
+                    Add("Definition", AddDefinition());
+                    Add("Note", AddNote());
                     break;
                 case "term":
-                    Add("Status", addTermStatus());
-                    Add("Note", addNote());
-                    Add("Context", addContext());
-                    Add("Grammatical Gender", addGrammaticalGender());
-                    Add("Grammatical Number", addGrammaticalNumber());
-                    Add("Usage Regiser", addUsageRegister());
-                    Add("Part of Speech", addPartOfSpeech());
-                    Add("Source", addSource());
-                    Add("Category", addCategory());
+                    Add("Status", AddTermStatus());
+                    Add("Note", AddNote());
+                    Add("Context", AddContext());
+                    Add("Grammatical Gender", AddGrammaticalGender());
+                    Add("Grammatical Number", AddGrammaticalNumber());
+                    Add("Usage Regiser", AddUsageRegister());
+                    Add("Part of Speech", AddPartOfSpeech());
+                    Add("Source", AddSource());
+                    Add("Category", AddCategory());
                     break;
             }
         }
 
-        private static string getAuxInfo()
+        private static string GetAuxInfo()
         {
             return "auxInfo";
         }
 
-        private static string getTermNote()
+        private static string GetTermNote()
         {
             return "termNote";
         }
 
-        private static string getAdmin()
+        private static string GetAdmin()
         {
             return "admin";
         }
 
-        private static string getUnhandled()
+        private static string GetUnhandled()
         {
             return "unhandled";
         }
 
 
         // shortcuts for adding typical MultiTerm fields
-        private TemplateSet addSubject()
+        private TemplateSet AddSubject()
         {
             TemplateSet ts = new TemplateSet();
-            ((ts[0] as KeyList)[0] as Teasp).setAll(getAuxInfo(), new DescripXML("subjectField"));
+            ((ts[0] as KeyList)[0] as Teasp).SetAll(GetAuxInfo(), new DescripXML("subjectField"));
             return ts;
         }
 
-        private TemplateSet addStatus()
+        private TemplateSet AddStatus()
         {
             TemplateSet ts = new TemplateSet();
-            ((ts[0] as KeyList)[0] as Teasp).setAll(getAuxInfo(), new NoteXML(), "category tag");
+            ((ts[0] as KeyList)[0] as Teasp).SetAll(GetAuxInfo(), new NoteXML(), "category tag");
             return ts;
         }
 
-        private TemplateSet addSource()
+        private TemplateSet AddSource()
         {
             TemplateSet ts = new TemplateSet();
-            ((ts[0] as KeyList)[0] as Teasp).setAll(getAuxInfo(), new AdminXML("source"));
+            ((ts[0] as KeyList)[0] as Teasp).SetAll(GetAuxInfo(), new AdminXML("source"));
             return ts;
         }
 
-        private TemplateSet addNote()
+        private TemplateSet AddNote()
         {
             TemplateSet ts = new TemplateSet();
-            ((ts[0] as KeyList)[0] as Teasp).setAll(getAuxInfo(), new NoteXML());
+            ((ts[0] as KeyList)[0] as Teasp).SetAll(GetAuxInfo(), new NoteXML());
             return ts;
         }
 
-        private TemplateSet addDefinition()
+        private TemplateSet AddDefinition()
         {
             TemplateSet ts = new TemplateSet();
-            ((ts[0] as KeyList)[0] as Teasp).setAll(getAuxInfo(), new DescripXML("definition"));
+            ((ts[0] as KeyList)[0] as Teasp).SetAll(GetAuxInfo(), new DescripXML("definition"));
             return ts;
         }
 
-        private TemplateSet addTermStatus()
+        private TemplateSet AddTermStatus()
         {
             TemplateSet ts = new TemplateSet();
-            ((ts[0] as KeyList)[0] as Teasp).setAll(getUnhandled(), new AdminXML("Status"));
+            ((ts[0] as KeyList)[0] as Teasp).SetAll(GetUnhandled(), new AdminXML("Status"));
 
             ValueGroup vg1 = new ValueGroup() { "new", "nonstandardized", "proposed", "recommended" };
             ValueGroup vg2 = new ValueGroup() { "admitted", "deprecated", "legal", "preferred", "regulated", "standardized", "superseded" };
-            (ts[0] as KeyList).addValueGroup(vg1);
-            (ts[0] as KeyList).addValueGroup(vg2);
+            (ts[0] as KeyList).AddValueGroup(vg1);
+            (ts[0] as KeyList).AddValueGroup(vg2);
 
             Teasp specialTeasp1 = new Teasp();
-            specialTeasp1.setAll("termNote", new TermNoteXML("language-planningQualifier"), 
+            specialTeasp1.SetAll("termNote", new TermNoteXML("language-planningQualifier"), 
                 new Dictionary<string, string>()
                 {
                     { "nonstandardized", "nonstandardizedTerm" },
@@ -317,7 +311,7 @@ namespace MultiTermTBXMapper
                 }
             );
             Teasp specialTeasp2 = new Teasp();
-            specialTeasp2.setAll("termNote", new TermNoteXML("administrativeStatus"),
+            specialTeasp2.SetAll("termNote", new TermNoteXML("administrativeStatus"),
                 new Dictionary<string, string>()
                 {
                     { "deprecated", "deprecatedTerm-admn-sts" },
@@ -330,23 +324,23 @@ namespace MultiTermTBXMapper
                 }
             );
 
-            ts.addSpecialTeasp(specialTeasp1);
-            ts.addSpecialTeasp(specialTeasp2);
+            ts.AddSpecialTeasp(specialTeasp1);
+            ts.AddSpecialTeasp(specialTeasp2);
 
             return ts;
         }
 
-        private TemplateSet addContext()
+        private TemplateSet AddContext()
         {
             TemplateSet ts = new TemplateSet();
-            ((ts[0] as KeyList)[0] as Teasp).setAll(getAuxInfo(), new DescripXML("context"));
+            ((ts[0] as KeyList)[0] as Teasp).SetAll(GetAuxInfo(), new DescripXML("context"));
             return ts;
         }
 
-        private TemplateSet addGrammaticalGender()
+        private TemplateSet AddGrammaticalGender()
         {
             TemplateSet ts = new TemplateSet();
-            ((ts[0] as KeyList)[0] as Teasp).setAll(getTermNote(), new TermNoteXML("grammaticalGender"), 
+            ((ts[0] as KeyList)[0] as Teasp).SetAll(GetTermNote(), new TermNoteXML("grammaticalGender"), 
                 new Dictionary<string, string>()
                 {
                     { "other", "otherGender" }
@@ -355,10 +349,10 @@ namespace MultiTermTBXMapper
             return ts;
         }
 
-        private TemplateSet addGrammaticalNumber()
+        private TemplateSet AddGrammaticalNumber()
         {
             TemplateSet ts = new TemplateSet();
-            ((ts[0] as KeyList)[0] as Teasp).setAll(getTermNote(), new TermNoteXML("grammaticalNumber"), 
+            ((ts[0] as KeyList)[0] as Teasp).SetAll(GetTermNote(), new TermNoteXML("grammaticalNumber"), 
                 new Dictionary<string, string>()
                 {
                     { "other", "otherNumber" }
@@ -367,10 +361,10 @@ namespace MultiTermTBXMapper
             return ts;
         }
 
-        private TemplateSet addUsageRegister()
+        private TemplateSet AddUsageRegister()
         {
             TemplateSet ts = new TemplateSet();
-            ((ts[0] as KeyList)[0] as Teasp).setAll(getTermNote(), new TermNoteXML("register"),
+            ((ts[0] as KeyList)[0] as Teasp).SetAll(GetTermNote(), new TermNoteXML("register"),
                 new Dictionary<string, string>()
                 {
                     { "slang", "slangRegister" },
@@ -385,35 +379,35 @@ namespace MultiTermTBXMapper
             return ts;
         }
 
-        private TemplateSet addPartOfSpeech()
+        private TemplateSet AddPartOfSpeech()
         {
             TemplateSet ts = new TemplateSet();
-            ((ts[0] as KeyList)[0] as Teasp).setAll(getTermNote(), new TermNoteXML("partOfSpeech"));
+            ((ts[0] as KeyList)[0] as Teasp).SetAll(GetTermNote(), new TermNoteXML("partOfSpeech"));
             return ts;
         }
 
-        private TemplateSet addCategory()
+        private TemplateSet AddCategory()
         {
             TemplateSet ts = new TemplateSet();
-            ((ts[0] as KeyList)[0] as Teasp).setAll(getUnhandled(), new TermNoteXML("unknownTermType"));
+            ((ts[0] as KeyList)[0] as Teasp).SetAll(GetUnhandled(), new TermNoteXML("unknownTermType"));
 
             ValueGroup vg1 = new ValueGroup() { "abbreviation","acronym","equation","formula","internationalism","symbol"};
             ValueGroup vg2 = new ValueGroup() { "common name", "full form", "international scientific term", "part number", "short form", "transcribed form", "transliterated form" };
             ValueGroup vg3 = new ValueGroup() { "phraseologism", "stock keeping unit", "orthographical variant" };
             ValueGroup vg4 = new ValueGroup() { "antonym" };
-            (ts[0] as KeyList).addValueGroup(vg1);
-            (ts[0] as KeyList).addValueGroup(vg2);
-            (ts[0] as KeyList).addValueGroup(vg3);
-            (ts[0] as KeyList).addValueGroup(vg4);
+            (ts[0] as KeyList).AddValueGroup(vg1);
+            (ts[0] as KeyList).AddValueGroup(vg2);
+            (ts[0] as KeyList).AddValueGroup(vg3);
+            (ts[0] as KeyList).AddValueGroup(vg4);
 
             TermNoteXML xml = new TermNoteXML("termType");
 
             Teasp specialTeasp1 = new Teasp();
-            specialTeasp1.setAll(getTermNote(), xml);
+            specialTeasp1.SetAll(GetTermNote(), xml);
             Teasp specialTeasp2 = new Teasp();
-            specialTeasp2.setAll(getTermNote(), xml, "camel case");
+            specialTeasp2.SetAll(GetTermNote(), xml, "camel case");
             Teasp specialTeasp3 = new Teasp();
-            specialTeasp3.setAll(getTermNote(), xml,
+            specialTeasp3.SetAll(GetTermNote(), xml,
                 new Dictionary<string, string>()
                 {
                     { "stock keeping unit", "sku" },
@@ -422,12 +416,12 @@ namespace MultiTermTBXMapper
                 }
             );
             Teasp specialTeasp4 = new Teasp();
-            specialTeasp4.setAll(getTermNote(), new TermNoteXML("antonymTerm"), placement: "null");
+            specialTeasp4.SetAll(GetTermNote(), new TermNoteXML("antonymTerm"), placement: "null");
 
-            ts.addSpecialTeasp(specialTeasp1);
-            ts.addSpecialTeasp(specialTeasp2);
-            ts.addSpecialTeasp(specialTeasp3);
-            ts.addSpecialTeasp(specialTeasp4);
+            ts.AddSpecialTeasp(specialTeasp1);
+            ts.AddSpecialTeasp(specialTeasp2);
+            ts.AddSpecialTeasp(specialTeasp3);
+            ts.AddSpecialTeasp(specialTeasp4);
 
             return ts;
         }
@@ -457,11 +451,11 @@ namespace MultiTermTBXMapper
         /// Add a lisp of special teasps to the TemplateSet
         /// </summary>
         /// <param name="teasps">List of Teasps</param>
-        public void addSpecialTeasps(List<Teasp> teasps)
+        public void AddSpecialTeasps(List<Teasp> teasps)
         {
             foreach(Teasp t in teasps)
             {
-                addSpecialTeasp(t);
+                AddSpecialTeasp(t);
             }
         }
 
@@ -469,7 +463,7 @@ namespace MultiTermTBXMapper
         /// Add a special Teasp to the TemplateSet
         /// </summary>
         /// <param name="teasp">A Teasp object</param>
-        public void addSpecialTeasp(Teasp teasp)
+        public void AddSpecialTeasp(Teasp teasp)
         {
             Add(teasp);
         }
@@ -478,18 +472,18 @@ namespace MultiTermTBXMapper
         /// Shortcut method for adding multiple value groups to the KeyList in a TemplateSet
         /// </summary>
         /// <param name="vgs"></param>
-        public void addValueGroups(List<ValueGroup> vgs)
+        public void AddValueGroups(List<ValueGroup> vgs)
         {
-            (this[0] as KeyList).addValueGroups(vgs);
+            (this[0] as KeyList).AddValueGroups(vgs);
         }
 
         /// <summary>
         /// Shortcut method for adding ValueGroups to the Keylist in a TemplateSet
         /// </summary>
         /// <param name="group">ValueGroup object</param>
-        public void addValueGroup(ValueGroup vg)
+        public void AddValueGroup(ValueGroup vg)
         {
-            (this[0] as KeyList).addValueGroup(vg);
+            (this[0] as KeyList).AddValueGroup(vg);
         }
     }
 
@@ -514,11 +508,11 @@ namespace MultiTermTBXMapper
         /// method for adding multiple value groups to the KeyList
         /// </summary>
         /// <param name="vgs"></param>
-        public void addValueGroups(List<ValueGroup> vgs)
+        public void AddValueGroups(List<ValueGroup> vgs)
         {
             foreach (ValueGroup vg in vgs)
             {
-                addValueGroup(vg);
+                AddValueGroup(vg);
             }
         }
 
@@ -526,7 +520,7 @@ namespace MultiTermTBXMapper
         /// method for adding individual ValueGroups to the Keylist
         /// </summary>
         /// <param name="group">ValueGroup object</param>
-        public void addValueGroup(ValueGroup vg)
+        public void AddValueGroup(ValueGroup vg)
         {
             Add(vg);
         }
@@ -534,13 +528,10 @@ namespace MultiTermTBXMapper
 
     class Teasp : ISerializable
     {
-        public string[] teasp = new string[4];
+        public string[] TEASP { get; set; } = new string[4];
 
         #region ISerializable members
-        public string Serialize()
-        {
-            return SerializationHelper.Serialize("[]", teasp, x => (Array.IndexOf(teasp, x) != 2) ? $@"""{x}""" : x);
-        }
+        public string Serialize () => SerializationHelper.Serialize("[]", TEASP, x => (Array.IndexOf(TEASP, x) != 2) ? $@"""{x}""" : x);
         #endregion
 
         /// <summary>
@@ -550,12 +541,12 @@ namespace MultiTermTBXMapper
         /// <param name="xml"></param>
         /// <param name="sub"></param>
         /// <param name="placement"></param>
-        public void setAll(string target, string xml, Dictionary<string,string> sub, string placement = "content")
+        public void SetAll(string target, string xml, Dictionary<string,string> sub, string placement = "content")
         {
-            setTarget(target);
-            setEltAtt(xml);
-            setSub(sub);
-            setPlacement(placement);
+            SetTarget(target);
+            SetEltAtt(xml);
+            SetSub(sub);
+            SetPlacement(placement);
         }
 
         /// <summary>
@@ -565,49 +556,49 @@ namespace MultiTermTBXMapper
         /// <param name="xml"></param>
         /// <param name="sub"></param>
         /// <param name="placement"></param>
-        public void setAll(string target, string xml, string sub = "null", string placement = "content")
+        public void SetAll(string target, string xml, string sub = "null", string placement = "content")
         {
-            setTarget(target);
-            setEltAtt(xml);
-            setSub(sub);
-            setPlacement(placement);
+            SetTarget(target);
+            SetEltAtt(xml);
+            SetSub(sub);
+            SetPlacement(placement);
         }
 
-        public void setTarget(string target)
+        public void SetTarget(string target)
         {
-            teasp[0] = $"@{target}";
+            TEASP[0] = $"@{target}";
         }
 
-        public void setEltAtt(string xml)
+        public void SetEltAtt(string xml)
         {
-            teasp[1] = xml;
+            TEASP[1] = xml;
         }
 
-        public void setSub(Dictionary<string,string> sub)
+        public void SetSub(Dictionary<string,string> sub)
         {
             if (sub != null)
             {
-                teasp[2] = SerializationHelper.Serialize("{}", sub, x => $@"""{x.Key}"": ""{x.Value}""");
+                TEASP[2] = SerializationHelper.Serialize("{}", sub, x => $@"""{x.Key}"": ""{x.Value}""");
             }
             else
             {
-                teasp[2] = "\"null\"";
+                TEASP[2] = "\"null\"";
             }
         }
 
-        public void setSub(string sub = "null")
+        public void SetSub(string sub = "null")
         {
-            teasp[2] = $@"""{sub}""";
+            TEASP[2] = $@"""{sub}""";
         }
 
-        public void setPlacement(string placement)
+        public void SetPlacement(string placement)
         {
-            teasp[3] = placement;
+            TEASP[3] = placement;
         }
 
-        public void setUnhandled()
+        public void SetUnhandled()
         {
-            setAll("unhandled", new TermNoteXML("unknownTermType"));
+            SetAll("unhandled", new TermNoteXML("unknownTermType"));
         }
     }
 
@@ -697,23 +688,5 @@ namespace MultiTermTBXMapper
             }
         }
         #endregion
-
-        //public bool addRule(int index, string rule)
-        //{
-        //    if (-1 < index && index > 2)
-        //    {
-        //        return false;
-        //    }
-
-        //    this[index] = rule;
-        //    return true;
-        //}
-
-        //public void addRules(string rule1, string rule2, string rule3)
-        //{
-        //    this[0] = rule1;
-        //    this[1] = rule2;
-        //    this[2] = rule3;
-        //}
     }
 }

@@ -13,27 +13,27 @@ namespace MultiTermTBXMapper.Menu
         private MappingDict mapping = new MappingDict();
         private List<string> dcs_with_picklists = new List<string>();
         private Dictionary<string, bool> mappedPicklists = new Dictionary<string,bool>();
-        private Dictionary<string, List<string[]>> tbx_picklists = TBXDatabase.getPicklists();
+        private Dictionary<string, List<string[]>> tbx_picklists = TBXDatabase.GetPicklists();
 
         private int index = 0;
 
         #region ISwitchable members
         public void UtilizeState<T>(T state)
         {
-            throw new NotImplementedException();
+            this.mapping = state as MappingDict;
+            dcs_with_picklists = mapping.GetDCsWithPicklists();
+
+            FillMappedPicklistsDict();
+
+            Display();
         }
 
-        public void UtilizeState<T>(ref T r)
-        {
-            this.mapping = r as MappingDict;
-            dcs_with_picklists = mapping.getDCsWithPicklists();
+        //public void UtilizeState<T>(ref T r)
+        //{
+            
+        //}
 
-            fillMappedPicklistsDict();
-
-            display();
-        }
-
-        public void UtilizeState<T1, T2>(ref T1 r, T2 state)
+        public void UtilizeState<T1, T2>(T1 r, T2 state)
         {
             throw new NotImplementedException();
         }
@@ -44,21 +44,21 @@ namespace MultiTermTBXMapper.Menu
             InitializeComponent();
         }
 
-        private void display()
+        private void Display()
         {
-            clearGrid();
-            fillGrid();
+            ClearGrid();
+            FillGrid();
             textblock_head.Text = "Picklists for " + dcs_with_picklists[index].ToString();
-            editHead();
+            EditHead();
         }
 
-        private void editHead()
+        private void EditHead()
         {
             string headText = "Picklist values for " + dcs_with_picklists[index];
             textblock_head.Text = headText;
         }
 
-        private void clearGrid()
+        private void ClearGrid()
         {
             canvas_pls.Children.RemoveRange(0, canvas_pls.Children.Count);
             
@@ -76,14 +76,14 @@ namespace MultiTermTBXMapper.Menu
         /// This means that the content "noun" of "part of speech" has not been mapped to a TBX picklist value yet.
         /// </para>
         /// </summary>
-        private void fillMappedPicklistsDict()
+        private void FillMappedPicklistsDict()
         {
             dcs_with_picklists.ForEach(delegate (string dc)
             {
-                foreach (string val in mapping.getContentList(dc))
+                foreach (string val in mapping.GetContentList(dc))
                 {
-                    string[] keys = Methods.getKeyArray(tbx_picklists.Keys);
-                    if (mapping.getTBXMappingList(dc).Count < 2 ||  Methods.inArray(ref keys, mapping.getTBXContentMap(dc)?.Get(val)))
+                    string[] keys = Methods.GetKeyArray(tbx_picklists.Keys);
+                    if (mapping.GetTBXMappingList(dc).Count < 2 ||  Array.Exists(keys, item => item == mapping.GetTBXContentMap(dc)?.Get(val)))
                     {
                         try
                         {
@@ -98,59 +98,63 @@ namespace MultiTermTBXMapper.Menu
             });
         }
 
-        private void fillGrid()
+        private void FillGrid()
         {
-            Grid grid = new Grid();
-            grid.HorizontalAlignment = HorizontalAlignment.Stretch;
-            grid.VerticalAlignment = VerticalAlignment.Stretch;
+            Grid grid = new Grid{
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch
+            };
             canvas_pls.Children.Add(grid);
             //Cycle through each Picklist
 
 
-            mapping.getContentList(dcs_with_picklists[index])?.ForEach(delegate (string content)
+            mapping.GetContentList(dcs_with_picklists[index])?.ForEach(delegate (string content)
             {
-                string[] keys = Methods.getKeyArray(tbx_picklists.Keys);
-                if (mapping.getTBXMappingList(dcs_with_picklists[index]).Count < 2 || Methods.inArray(ref keys, mapping.getTBXContentMap(dcs_with_picklists[index])?.Get(content)))
+                string[] keys = Methods.GetKeyArray(tbx_picklists.Keys);
+                if (mapping.GetTBXMappingList(dcs_with_picklists[index]).Count < 2 || Array.Exists(keys, item => item == mapping.GetTBXContentMap(dcs_with_picklists[index])?.Get(content)))
                 {
-                    createPicklistMapControl(dcs_with_picklists[index], content, ref grid);
+                    CreatePicklistMapControl(dcs_with_picklists[index], content, ref grid);
                 }
             });
             
         }
 
-        private void createPicklistMapControl(string user_dc, string pl_content, ref Grid grid)
+        private void CreatePicklistMapControl(string user_dc, string pl_content, ref Grid grid)
         {
             PickListMapControl plmc = new PickListMapControl(pl_content);
 
-            plmc.select += value => setMapping(value[0], value[1]);
+            plmc.select += value => SetMapping(value[0], value[1]);
 
-            string tbx_dc = mapping.getTBXContentMap(user_dc)?.Get(pl_content);
+            string tbx_dc = mapping.GetTBXContentMap(user_dc)?.Get(pl_content);
 
             if (tbx_dc == null)
             {
-                tbx_dc = mapping.getTBXMappingList(user_dc)[0];
-                mapping.getTBXContentMap(user_dc).Add(pl_content, tbx_dc);
+                tbx_dc = mapping.GetTBXMappingList(user_dc)[0];
+                mapping.GetTBXContentMap(user_dc).Add(pl_content, tbx_dc);
             }
 
-            string tbx_selected = mapping.getPicklistMapValue(user_dc, pl_content);
+            string tbx_selected = mapping.GetPicklistMapValue(user_dc, pl_content);
 
-            fillTBXComboBox(ref plmc.combo_tbx_picklist, mapping.getTBXContentMap(user_dc)?.Get(pl_content), tbx_selected);
+            FillTBXComboBox(ref plmc.combo_tbx_picklist, mapping.GetTBXContentMap(user_dc)?.Get(pl_content), tbx_selected);
 
             grid.Children.Add(plmc);
 
-            RowDefinition rd = new RowDefinition();
-            rd.Height = new GridLength(30);
+            RowDefinition rd = new RowDefinition{
+                Height = new GridLength(30)
+            };
             grid.RowDefinitions.Add(rd);
 
             plmc.SetValue(Grid.RowProperty, grid.RowDefinitions.Count - 1);
         }
 
-        private void fillTBXComboBox(ref ComboBox box, string tbx_dc_key, string tbx_selected = null)
+        private void FillTBXComboBox(ref ComboBox box, string tbx_dc_key, string tbx_selected = null)
         {
             for (int i = 0; i < tbx_picklists[tbx_dc_key]?.Count; i++)
             {
-                ComboBoxItem item = new ComboBoxItem();
-                item.Content = tbx_picklists[tbx_dc_key][i][0];
+                ComboBoxItem item = new ComboBoxItem{
+                    Content = tbx_picklists[tbx_dc_key][i][0]
+                };
+                
 
                 if (tbx_selected == tbx_picklists[tbx_dc_key][i][0])
                 {
@@ -160,16 +164,16 @@ namespace MultiTermTBXMapper.Menu
             }
         }
 
-        private void setMapping(string user_pl, string tbx_pl)
+        private void SetMapping(string user_pl, string tbx_pl)
         {
             string dc = dcs_with_picklists[index];
 
-            mapping.setPicklistMap(dc, user_pl, tbx_pl);
+            mapping.SetPicklistMap(dc, user_pl, tbx_pl);
             mappedPicklists[dc + "_" + user_pl] = true;
-            checkCompletion();
+            CheckCompletion();
         }
 
-        private void checkCompletion()
+        private void CheckCompletion()
         {
             foreach (bool val in mappedPicklists.Values)
             {
@@ -189,19 +193,19 @@ namespace MultiTermTBXMapper.Menu
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Methods.incrementIndex(ref index, dcs_with_picklists.Count);
-            display();
+            Methods.IncrementIndex(ref index, dcs_with_picklists.Count);
+            Display();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            Methods.decrementIndex(ref index);
-            display();
+            Methods.DecrementIndex(ref index);
+            Display();
         }
 
-        private void submit_Click(object sender, RoutedEventArgs e)
+        private void Submit_Click(object sender, RoutedEventArgs e)
         {
-            Switcher.Switch(new QueueDrainHandler(), ref mapping);
+            Switcher.Switch(new QueueDrainHandler(), mapping);
         }
     }
 }

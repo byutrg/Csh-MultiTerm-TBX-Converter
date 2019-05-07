@@ -21,14 +21,14 @@ namespace MultiTermTBXMapper
             pageSwitcher.Navigate(newPage, state);
         }
 
-        public static void Switch<T1, T2>(T1 newPage, ref T2 r) where T1 : UserControl
-        {
-            pageSwitcher.Navigate(newPage, ref r);
-        }
+        //public static void Switch<T1, T2>(T1 newPage, T2 r) where T1 : UserControl
+        //{
+        //    pageSwitcher.Navigate(newPage, ref r);
+        //}
 
-        public static void Switch<T1,T2,T3>(T1 newPage, ref T2 r, T3 state) where T1 : UserControl
+        public static void Switch<T1,T2,T3>(T1 newPage, T2 r, T3 state) where T1 : UserControl
         {
-            pageSwitcher.Navigate(newPage, ref r, state);
+            pageSwitcher.Navigate(newPage, r, state);
         }
     }
 }

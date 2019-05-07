@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
         <TextBlock x:Name="dc_user" Grid.Row="0" Text="User DC" FontSize="22" TextAlignment="Center" VerticalAlignment="Center" />
         <Button FontSize="24" Padding="10,0" HorizontalAlignment="Center" VerticalAlignment="Stretch" MinWidth="180" x:Name="dc_tbx" Grid.Row="2" Content="???" Click="dc_tbx_Click" Background="#FFFF9999" />
-        <Image HorizontalAlignment="Stretch" Margin="0,4,0,12" Grid.Row="1" VerticalAlignment="Stretch" MinWidth="24" Source="/MultiTermTBXMapper;component/Resources/slurp_arrows.png" />
+        <Image HorizontalAlignment="Stretch" Margin="0,4,0,12" Grid.Row="1" VerticalAlignment="Stretch" MinWidth="24" Source="/MultiTermTBXConverter;component/Resources/slurp_arrows.png" />
         <Button x:Name="button_convert" Grid.Row="3" Content="Next" Height="25" Width="100" HorizontalAlignment="Center" IsEnabled="False" Click="button_convert_Click" />
     </Grid>
 </UserControl>

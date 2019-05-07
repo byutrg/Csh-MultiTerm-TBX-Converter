@@ -8,7 +8,7 @@
         Height="450" Width="800">
     <Grid>
         <TextBlock HorizontalAlignment="Left" Margin="214,109,0,0" TextWrapping="Wrap" Text="Please select your mapping file to continue..." VerticalAlignment="Top" Height="54" Width="412" FontSize="20"/>
-        <Button Content="Upload JSON Mapping file" HorizontalAlignment="Left" Margin="310,163,0,0" VerticalAlignment="Top" Width="180" Height="42" RenderTransformOrigin="-0.659,3.857" Click="btn_import_Click"/>
+        <Button Content="Upload JSON Mapping file" HorizontalAlignment="Left" Margin="310,163,0,0" VerticalAlignment="Top" Width="180" Height="42" RenderTransformOrigin="-0.659,3.857" Click="Btn_import_Click"/>
         <Rectangle HorizontalAlignment="Left" Height="145" Margin="120,88,0,0" Stroke="Black" VerticalAlignment="Top" Width="560"/>
 
     </Grid>

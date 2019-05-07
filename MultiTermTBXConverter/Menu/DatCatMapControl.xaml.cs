@@ -37,7 +37,7 @@ namespace MultiTermTBXMapper.Menu
 
         private void findBest(string dc)
         {
-            List<string[]> datcats = TBXDatabase.getNames();
+            List<string[]> datcats = TBXDatabase.GetNames();
             int bestDistance = 99999;
             int bestIndex = -1;
 

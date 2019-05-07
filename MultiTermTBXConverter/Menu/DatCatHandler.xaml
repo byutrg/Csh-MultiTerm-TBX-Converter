@@ -37,7 +37,7 @@
                 <Label Name="lbl_user_dc" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="User DC" FontSize="28" />
                 <TextBlock Name="textPercent" TextWrapping="Wrap" Text="0%" Grid.Column="1" Grid.Row="0" FontSize="30" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,32,17,32" />
                 <local:DatCatListBoxTypeControl x:Name="mapControl" Grid.Row="1" Grid.Column="1" Margin="0,0,0,51" />
-                <Button Name="submit" Content="Next" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="100" Height="32" IsEnabled="False" Click="submit_Click" Margin="0,0,0,51" />
+                <Button Name="submit" Content="Next" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="100" Height="32" IsEnabled="False" Click="Submit_Click" Margin="0,0,0,51" />
             </Grid>
         </Canvas>
     </Grid>

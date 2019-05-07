@@ -48,17 +48,17 @@ namespace MultiTermTBXMapper
             command.ExecuteNonQuery();
         }
 
-        public static void close()
+        public static void Close()
         {
             con.Close();
         }
 
-        public static void open()
+        public static void Open()
         {
             con.Open();
         }
 
-        public static List<string[]> getAll()
+        public static List<string[]> GetAll()
         {
             string query = "select name,element,description from categories";
 
@@ -77,7 +77,7 @@ namespace MultiTermTBXMapper
             return datcats;
         }
 
-        public static List<string[]> getNames()
+        public static List<string[]> GetNames()
         {
             string query = "select name from categories";
 
@@ -96,7 +96,7 @@ namespace MultiTermTBXMapper
             return datcats;
         }
 
-        public static Dictionary<string, List<string[]>> getPicklists()
+        public static Dictionary<string, List<string[]>> GetPicklists()
         {
             string query = "select categories.name, picklists.value, picklists.description from picklists left join categories on picklists.category_id = categories.id";
 
@@ -125,7 +125,7 @@ namespace MultiTermTBXMapper
             return picklists;
         }
 
-        public static List<string> getDCsWithPicklists()
+        public static List<string> GetDCsWithPicklists()
         {
             string query = "select categories.name from picklists left join categories on picklists.category_id = categories.id";
 
@@ -136,7 +136,7 @@ namespace MultiTermTBXMapper
 
             while (reader.Read())
             {
-                if (!Methods.inList(ref tbx_dcs, reader["name"].ToString()))
+                if (!tbx_dcs.Contains(reader["name"].ToString()))
                 {
                     tbx_dcs.Add(reader["name"].ToString());
                 }
@@ -145,7 +145,7 @@ namespace MultiTermTBXMapper
             return tbx_dcs;
         }
 
-        public static Dictionary<string, Dictionary<string, string>> getDCInfo()
+        public static Dictionary<string, Dictionary<string, string>> GetDCInfo()
         {
             string query = "select name, element, level from categories";
 

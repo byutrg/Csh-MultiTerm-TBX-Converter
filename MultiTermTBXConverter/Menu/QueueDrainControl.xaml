@@ -16,6 +16,6 @@
         <ListBox Name="lb_queue_orders" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,0,0,14"/>
         <Button Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,0,0,0" Content="Add" Width="60" Click="Button_Add_Click" IsDefault="True" />
         <Button Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="80,0,0,0" Content="Remove" Width="60" Click="Button_Remove_Click" />
-        <Button Name="submit" Content="Next" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Width="100" Height="32" Click="submit_Click"/>
+        <Button Name="submit" Content="Next" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Width="100" Height="32" Click="Submit_Click"/>
     </Grid>
 </UserControl>

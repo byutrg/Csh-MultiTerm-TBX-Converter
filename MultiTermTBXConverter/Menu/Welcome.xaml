@@ -13,9 +13,9 @@
         </Grid.RowDefinitions>
         <local:MenuBar/>
         <Canvas x:Name="canvas_welcome" Grid.Row="1" Background="White" Margin="0,5,0,-5">
-            <Button x:Name="btn_import" Content="Generate Mapping and Convert" Canvas.Left="330" Canvas.Top="209" Width="198" Height="48" Click="btn_import_Click" FontSize="13"/>
-            <Button x:Name="btn_has_Map" Content="Convert with my Mapping File" Canvas.Left="330" Canvas.Top="262" Width="198" Height="48" Click="btn_import_Click" FontSize="13"/>
-            <Button x:Name="btn_just_Map" Content="Generate only a Mapping File" Canvas.Left="330" Canvas.Top="315" Width="198" Height="48" Click="btn_import_Click" FontSize="13"/>
+            <Button x:Name="btn_import" Content="Generate Mapping and Convert" Canvas.Left="330" Canvas.Top="209" Width="198" Height="48" Click="Btn_import_Click" FontSize="13"/>
+            <Button x:Name="btn_has_Map" Content="Convert with my Mapping File" Canvas.Left="330" Canvas.Top="262" Width="198" Height="48" Click="Btn_import_Click" FontSize="13"/>
+            <Button x:Name="btn_just_Map" Content="Generate only a Mapping File" Canvas.Left="330" Canvas.Top="315" Width="198" Height="48" Click="Btn_import_Click" FontSize="13"/>
             <TextBlock x:Name="textBlock" Margin="109,81,109,263" TextWrapping="Wrap"><Run Background="White" Foreground="Blue" FontSize="24" FontFamily="Times New Roman" Text="&#x9;&#x9;"/><Run Background="White" FontSize="24" FontFamily="Times New Roman" Text="Welcome to the Multiterm Mapping Utility!"/><LineBreak/><Span Background="White" Foreground="Blue" FontSize="12.6666666666667" FontFamily="Consolas"><Run/></Span><LineBreak/><Run Background="White" Foreground="Blue" FontSize="12.6666666666667" FontFamily="Consolas"/><LineBreak/><Run Background="White" FontSize="12.6666666666667" FontFamily="Consolas" Text="Please select the dialect you wish to convert to, then click 'Import Termbase' to begin."/></TextBlock>
             <GroupBox Header="Dialect" Canvas.Left="144" Canvas.Top="204" Height="159" Width="164" FontSize="18" Padding="9">
                 <StackPanel>

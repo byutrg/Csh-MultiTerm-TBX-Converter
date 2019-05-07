@@ -27,23 +27,23 @@ namespace MultiTermTBXMapper.Menu
 
         public void Submit()
         {
-            Switcher.Switch(new ConversionHandler(), ref mapControl.mapping, mapControl.Orders);
+            Switcher.Switch(new ConversionHandler(), mapControl.mapping, mapControl.Orders);
         }
 
         #region ISwitchable members
         public void UtilizeState<T>(T state)
         {
-            throw new NotImplementedException();
-        }
-
-        public void UtilizeState<T>(ref T r)
-        {
-            mapControl.mapping = r as MappingDict;
+            mapControl.mapping = state as MappingDict;
 
             mapControl.submitAction += Submit;
         }
 
-        public void UtilizeState<T1, T2>(ref T1 r, T2 state)
+        //public void UtilizeState<T>(ref T r)
+        //{
+            
+        //}
+
+        public void UtilizeState<T1, T2>(T1 r, T2 state)
         {
             throw new NotImplementedException();
         }

@@ -27,22 +27,22 @@ namespace MultiTermTBXMapper.Menu
 
             Globals.filename = filename;
 
-            mapControl.ListBoxItems += value => setMapping(value);
+            mapControl.ListBoxItems += value => SetMapping(value);
 
-            loadDatCats();
+            LoadDatCats();
             indexes_visited = new string[datcats.Count];
 
-            cycleIndexes();
+            CycleIndexes();
 
-            display();
+            Display();
         }
 
-        public void UtilizeState<T>(ref T r)
-        {
-            throw new NotImplementedException();
-        }
+        //public void UtilizeState<T>(ref T r)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public void UtilizeState<T1, T2>(ref T1 r, T2 state)
+        public void UtilizeState<T1, T2>(T1 r, T2 state)
         {
             throw new NotImplementedException();
         }
@@ -53,23 +53,25 @@ namespace MultiTermTBXMapper.Menu
             InitializeComponent();
         }
 
-        private void cycleIndexes()
+        private void CycleIndexes()
         {
             primary_canvas.Visibility = Visibility.Hidden;
             for (int i = 0; i < indexes_visited.Length; i++)
             {
-                Methods.incrementIndex(ref index, indexes_visited.Length);
-                display();
+                Methods.IncrementIndex(ref index, indexes_visited.Length);
+                Display();
             }
             index = 0;
-            display();
+            Display();
             primary_canvas.Visibility = Visibility.Visible;
         }
 
-        private void loadDatCats()
+        private void LoadDatCats()
         {
-            XmlReaderSettings settings = new XmlReaderSettings();
-            settings.DtdProcessing = DtdProcessing.Ignore;
+            XmlReaderSettings settings = new XmlReaderSettings
+            {
+                DtdProcessing = DtdProcessing.Ignore
+            };
             XmlReader reader = XmlReader.Create(filename, settings);
 
             bool start = false;
@@ -115,7 +117,7 @@ namespace MultiTermTBXMapper.Menu
                     if (reader.NodeType == XmlNodeType.Element && reader.HasAttributes && null != reader.GetAttribute("type") && reader.Name != "language")
                     {
                         string dc = reader.GetAttribute("type");
-                        if (!Methods.inList(ref datcats, dc))
+                        if (!datcats.Contains(dc))
                         {
                             datcats.Add(dc);
                             mapping.Add(dc);
@@ -123,13 +125,13 @@ namespace MultiTermTBXMapper.Menu
                             switch(level)
                             {
                                 case 1:
-                                    mapping.levelMap["conceptGrp"].Add(dc);
+                                    mapping.LevelMap["conceptGrp"].Add(dc);
                                     break;
                                 case 2:
-                                    mapping.levelMap["languageGrp"].Add(dc);
+                                    mapping.LevelMap["languageGrp"].Add(dc);
                                     break;
                                 case 3:
-                                    mapping.levelMap["termGrp"].Add(dc);
+                                    mapping.LevelMap["termGrp"].Add(dc);
                                     break;
                             }
                         }
@@ -141,10 +143,10 @@ namespace MultiTermTBXMapper.Menu
                         {
                             if (textReader.NodeType == XmlNodeType.Text)
                             {
-                                List<string> values = mapping.getContentList(dc) as List<string>;
-                                if (!Methods.inList(ref values, reader.Value))
+                                List<string> values = mapping.GetContentList(dc) as List<string>;
+                                if (!values.Contains(reader.Value))
                                 {
-                                    mapping.getContentList(dc).Add(textReader.Value);
+                                    mapping.GetContentList(dc).Add(textReader.Value);
                                 }
                             }
                         }
@@ -157,32 +159,32 @@ namespace MultiTermTBXMapper.Menu
             textTotal.Text = datcats.Count().ToString();
         }
 
-        private void display()
+        private void Display()
         {
             lbl_user_dc.Content = datcats[index];
             mapControl.clear();
 
-            if (mapping.getTBXMappingList(datcats[index])?.Count > 0)
+            if (mapping.GetTBXMappingList(datcats[index])?.Count > 0)
             {
-                mapControl.fillItems(mapping.getTBXMappingList(datcats[index]));
+                mapControl.fillItems(mapping.GetTBXMappingList(datcats[index]));
             }
 
-            if(!Methods.inArray(ref indexes_visited,index.ToString()))
+            if(!Array.Exists(indexes_visited, item => item == index.ToString()))
             {
                 mapControl.findBest(datcats[index]);
                 indexes_visited[index] = index.ToString();
             }
 
-            updateCounter();
+            UpdateCounter();
         }
 
-        private void updatePercentage()
+        private void UpdatePercentage()
         {
             double mapped = 0;
 
             foreach (string key in mapping.Keys)
             {
-                if (mapping.getTBXMappingList(key)?.Count > 0)
+                if (mapping.GetTBXMappingList(key)?.Count > 0)
                 {
                     mapped++;
                 }
@@ -195,36 +197,36 @@ namespace MultiTermTBXMapper.Menu
             textPercent.Text = percent.ToString() + "%";
         }
 
-        private void updateCounter()
+        private void UpdateCounter()
         {
             textIndex.Text = (index+1).ToString();
         }
 
-        private void setMapping(TBXMappingList datcat_tbx)
+        private void SetMapping(TBXMappingList datcat_tbx)
         {
-            mapping.setTBXMappingList(datcats[index], datcat_tbx );
-            updatePercentage();
+            mapping.SetTBXMappingList(datcats[index], datcat_tbx );
+            UpdatePercentage();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Methods.incrementIndex(ref index, datcats.Count);
-            display();
+            Methods.IncrementIndex(ref index, datcats.Count);
+            Display();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            Methods.decrementIndex(ref index);
-            display();
+            Methods.DecrementIndex(ref index);
+            Display();
         }
 
-        private List<string> getDatCatsWithMultiMap()
+        private List<string> GetDatCatsWithMultiMap()
         {
             List<string> dcs_with_multi_map = new List<string>();
 
             foreach (string key in mapping.Keys)
             {
-                if (mapping.getTBXMappingList(key)?.Count > 1)
+                if (mapping.GetTBXMappingList(key)?.Count > 1)
                 {
                     dcs_with_multi_map.Add(key);
                 }
@@ -234,17 +236,17 @@ namespace MultiTermTBXMapper.Menu
         }
 
 
-        private void submit_Click(object sender, RoutedEventArgs e)
+        private void Submit_Click(object sender, RoutedEventArgs e)
         {
-            List<string> dcs_with_multi_map = getDatCatsWithMultiMap();
+            List<string> dcs_with_multi_map = GetDatCatsWithMultiMap();
 
             if (dcs_with_multi_map.Count > 0)
             {
-                Switcher.Switch(new VariantPicklistHandler(), ref mapping, dcs_with_multi_map);
+                Switcher.Switch(new VariantPicklistHandler(), mapping, dcs_with_multi_map);
             }
             else
             {
-                Switcher.Switch(new PickListHandler(), ref mapping);
+                Switcher.Switch(new PickListHandler(), mapping);
             }
         }
     }

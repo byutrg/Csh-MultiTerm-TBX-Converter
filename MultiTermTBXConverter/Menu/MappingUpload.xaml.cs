@@ -33,23 +33,24 @@ namespace MultiTermTBXMapper.Menu
             multiTermXMLFile = state as string;
         }
 
-        public void UtilizeState<T>(ref T r)
-        {
-            throw new NotImplementedException();
-        }
+        //public void UtilizeState<T>(ref T r)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public void UtilizeState<T1, T2>(ref T1 r, T2 state)
+        public void UtilizeState<T1, T2>(T1 r, T2 state)
         {
             throw new NotImplementedException();
         }
         #endregion
 
-        private void btn_import_Click(object sender, RoutedEventArgs e)
+        private void Btn_import_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-
-            dlg.DefaultExt = ".json";
-            dlg.Filter = "JSON Files (*.json)|*.json|All files (*.*)|*.*";
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog
+            {
+                DefaultExt = ".json",
+                Filter = "JSON Files (*.json)|*.json|All files (*.*)|*.*"
+            };
 
             bool? result = dlg.ShowDialog();
 

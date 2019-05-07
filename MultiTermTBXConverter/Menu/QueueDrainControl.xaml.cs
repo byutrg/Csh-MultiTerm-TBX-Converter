@@ -65,13 +65,19 @@ namespace MultiTermTBXMapper.Menu
         /// <param name="e"></param>
         private void Button_Remove_Click(object sender, RoutedEventArgs e)
         {
-            string content = lb_queue_orders.SelectedItem.ToString();
-            OrderDict.Remove(content);
+            try
+            {
+                string content = lb_queue_orders.SelectedItem.ToString();
+                OrderDict.Remove(content);
 
-            lb_queue_orders.Items.Remove(lb_queue_orders.SelectedItem);
+                lb_queue_orders.Items.Remove(lb_queue_orders.SelectedItem);
+            } catch (NullReferenceException)
+            {
+                return;
+            }
         }
         
-        private void submit_Click(object sender, RoutedEventArgs e)
+        private void Submit_Click(object sender, RoutedEventArgs e)
         {
             foreach (string[] order in OrderDict.Values)
             {

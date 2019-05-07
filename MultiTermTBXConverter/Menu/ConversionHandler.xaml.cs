@@ -15,8 +15,8 @@ namespace MultiTermTBXMapper.Menu
     {
         private Mapping fullMapping = new Mapping();
         private MappingDict mappingDict;
-        private Dictionary<string, Dictionary<string, string>> tbxInfo = TBXDatabase.getDCInfo();
-        private Dictionary<string, List<string[]>> tbx_picklists = TBXDatabase.getPicklists();
+        private Dictionary<string, Dictionary<string, string>> tbxInfo = TBXDatabase.GetDCInfo();
+        private Dictionary<string, List<string[]>> tbx_picklists = TBXDatabase.GetPicklists();
 
         private class InvalidLevelException : Exception
         {
@@ -27,22 +27,22 @@ namespace MultiTermTBXMapper.Menu
         public void UtilizeState<T>(T state)
         {
             ConverterApp mt2tbx = new ConverterApp();
-            var (outputFile, errorFile) = mt2tbx.deserializeFile(state as string, Singleton.Instance.getPath(), Singleton.Instance.getDialect(), false);
+            var (outputFile, errorFile) = mt2tbx.DeserializeFile(state as string, Singleton.Instance.getPath(), Singleton.Instance.getDialect(), false);
             FinishedConversion(outputFile, errorFile);
         }
 
-        public void UtilizeState<T>(ref T r)
-        {
-            throw new NotImplementedException();
-        }
+        //public void UtilizeState<T>(ref T r)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public void UtilizeState<T1, T2>(ref T1 r, T2 state)
+        public void UtilizeState<T1, T2>(T1 r, T2 state)
         {
             mappingDict = r as MappingDict;
 
-            map();
+            Map();
 
-            fullMapping.queueDrainOrders = state as QueueDrainOrders;
+            fullMapping.QueueDrainOrders = state as QueueDrainOrders;
 
             //Newtonsoft.Json.JsonSerializerSettings settings = new Newtonsoft.Json.JsonSerializerSettings();
 
@@ -60,10 +60,11 @@ namespace MultiTermTBXMapper.Menu
             {
                 File.WriteAllText(mappingFile, json);
 
-                Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-
-                dlg.DefaultExt = ".json";
-                dlg.Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*";
+                Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog
+                { 
+                    DefaultExt = ".json",
+                    Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*"
+                };
 
                 bool? result = dlg.ShowDialog();
 
@@ -80,7 +81,7 @@ namespace MultiTermTBXMapper.Menu
                 }
 
                 ConverterApp mt2tbx = new ConverterApp();
-                var (outputFile, errorFile) = mt2tbx.deserializeFile(json, Singleton.Instance.getPath(), Singleton.Instance.getDialect(), true);
+                var (outputFile, errorFile) = mt2tbx.DeserializeFile(json, Singleton.Instance.getPath(), Singleton.Instance.getDialect(), true);
                 FinishedConversion(outputFile, errorFile);
             }
             else if (saveOption == 2) // Will be handled in a different Dialogue
@@ -91,10 +92,11 @@ namespace MultiTermTBXMapper.Menu
             {
                 File.WriteAllText(mappingFile, json);
 
-                Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-
-                dlg.DefaultExt = ".json";
-                dlg.Filter = "JSON Files (*.json)|*.json|All files (*.*)|*.*";
+                Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog
+                {
+                    DefaultExt = ".json",
+                    Filter = "JSON Files (*.json)|*.json|All files (*.*)|*.*"
+                };
 
                 bool? result = dlg.ShowDialog();
 
@@ -129,30 +131,30 @@ namespace MultiTermTBXMapper.Menu
             textblock_conversionStatus.Text = $"Your converted file has been created and can be found:\n {outputFile}\n\nExceptions to the conversion can be found:\n {errorFile}";
         }
 
-        private void map()
+        private void Map()
         {
             foreach (string dc in mappingDict.Keys)
             {
-                if (isConceptGrp(dc))
+                if (IsConceptGrp(dc))
                 {
-                    handleGrp(dc, "concept");
+                    HandleGrp(dc, "concept");
                 }
 
-                if (isLanguageGrp(dc))
+                if (IsLanguageGrp(dc))
                 {
-                    handleGrp(dc, "language");
+                    HandleGrp(dc, "language");
                 }
 
-                if (isTermGrp(dc))
+                if (IsTermGrp(dc))
                 {
-                    handleGrp(dc, "term");
+                    HandleGrp(dc, "term");
                 }
             }
 
 
         }
 
-        private static string fixJSON(string json)
+        private static string FixJSON(string json)
         { 
             //json = Methods.rgxReplace("^\\{", "[", json);
             //json = Methods.rgxReplace("\\}(?!.+?)", "]", json);
@@ -167,7 +169,7 @@ namespace MultiTermTBXMapper.Menu
         /// </summary>
         /// <param name="dc">User data category name</param>
         /// <param name="group">concept|language|term</param>
-        private void handleGrp(string dc, string group)
+        private void HandleGrp(string dc, string group)
         {
             if (group != "concept" && group != "language" && group != "term")
             { 
@@ -178,37 +180,37 @@ namespace MultiTermTBXMapper.Menu
 
             
             //Handle data category with split contents and picklists
-            if (mappingDict.hasPicklist(dc) && mappingDict.hasSplitContents(dc))
+            if (mappingDict.HasPicklist(dc) && mappingDict.HasSplitContents(dc))
             {
-                ts = createTemplateSet(dc, true);
+                ts = CreateTemplateSet(dc, true);
 
-                (List<ValueGroup> vgs, List<Teasp> teasps) = handleSplitContents(dc, true);
-                ts.addValueGroups(vgs);
-                ts.addSpecialTeasps(teasps);
+                (List<ValueGroup> vgs, List<Teasp> teasps) = HandleSplitContents(dc, true);
+                ts.AddValueGroups(vgs);
+                ts.AddSpecialTeasps(teasps);
             }
             //Handle single tbx datcat with picklists
-            else if (mappingDict.hasPicklist(dc) && !mappingDict.hasSplitContents(dc))
+            else if (mappingDict.HasPicklist(dc) && !mappingDict.HasSplitContents(dc))
             {
-                string tbx_dc = getTBXdc(dc);
-                ts = createTemplateSet(dc, tbx_dc);
+                string tbx_dc = GetTBXdc(dc);
+                ts = CreateTemplateSet(dc, tbx_dc);
             }
             //Handle data category with split contents (no picklists)
-            else if (!mappingDict.hasPicklist(dc) && mappingDict.hasSplitContents(dc))
+            else if (!mappingDict.HasPicklist(dc) && mappingDict.HasSplitContents(dc))
             {
-                ts = createTemplateSet(dc, true);
+                ts = CreateTemplateSet(dc, true);
 
-                (List<ValueGroup> vgs, List<Teasp> teasps) = handleSplitContents(dc);
-                ts.addValueGroups(vgs);
-                ts.addSpecialTeasps(teasps);
+                (List<ValueGroup> vgs, List<Teasp> teasps) = HandleSplitContents(dc);
+                ts.AddValueGroups(vgs);
+                ts.AddSpecialTeasps(teasps);
             }
             //Handle all simple cases: no multiple tbx datcats, no picklists
             else
             {
-                ts = createTemplateSet(dc);
+                ts = CreateTemplateSet(dc);
             }
 
 
-            fullMapping.catMap[group].Add(dc, ts);
+            fullMapping.CatMap[group].Add(dc, ts);
         }
 
         /// <summary>
@@ -216,29 +218,29 @@ namespace MultiTermTBXMapper.Menu
         /// </summary>
         /// <param name="dc">user data category</param>
         /// <returns>List of Value Groups</returns>
-        private (List<ValueGroup>, List<Teasp>) handleSplitContents(string dc, bool hasPicklist = false)
+        private (List<ValueGroup>, List<Teasp>) HandleSplitContents(string dc, bool hasPicklist = false)
         {
-            TBXContentMap cm = mappingDict.getTBXContentMap(dc);
-            string[] tbx_keys = Methods.getKeyArray(tbx_picklists.Keys);
+            TBXContentMap cm = mappingDict.GetTBXContentMap(dc);
+            string[] tbx_keys = Methods.GetKeyArray(tbx_picklists.Keys);
 
             List<ValueGroup> vgs = new List<ValueGroup>();
             List<Teasp> teasps = new List<Teasp>();
 
-            foreach (string tbx_dc in mappingDict.getTBXMappingList(dc))
+            foreach (string tbx_dc in mappingDict.GetTBXMappingList(dc))
             {
-                if (Methods.inArray(ref tbx_keys, tbx_dc))
+                if (Array.Exists(tbx_keys, item => item == tbx_dc))
                 {
                     Teasp teasp = new Teasp();
 
-                    (string target, string eltAtt) = getEltTgtEltAtt(tbx_dc);
+                    (string target, string eltAtt) = GetEltTgtEltAtt(tbx_dc);
 
                     if (hasPicklist)
                     {
-                        teasp.setAll(target, eltAtt, mappingDict.getPicklistMap(dc));
+                        teasp.SetAll(target, eltAtt, mappingDict.GetPicklistMap(dc));
                     }
                     else
                     {
-                        teasp.setAll(target, eltAtt);
+                        teasp.SetAll(target, eltAtt);
                     }
 
                     ValueGroup vg = new ValueGroup();
@@ -256,8 +258,8 @@ namespace MultiTermTBXMapper.Menu
                 else
                 {
                     Teasp teasp = new Teasp();
-                    (string target, string eltAtt) = getEltTgtEltAtt(tbx_dc);
-                    teasp.setAll(target, eltAtt);
+                    (string target, string eltAtt) = GetEltTgtEltAtt(tbx_dc);
+                    teasp.SetAll(target, eltAtt);
                     ValueGroup vg = new ValueGroup();
                     foreach(string content in cm.Keys)
                     {
@@ -280,17 +282,17 @@ namespace MultiTermTBXMapper.Menu
         /// <param name="dc">Name of the User Data Category</param>
         /// <param name="content_key">Optional Content of Data Category (default = null)</param>
         /// <returns>TBX data category name</returns>
-        private string getTBXdc(string dc, string content_key = null)
+        private string GetTBXdc(string dc, string content_key = null)
         {
             string tbx_dc = null;
 
             if (content_key == null)
             {
-                tbx_dc = mappingDict.getTBXMappingList(dc)?[0];
+                tbx_dc = mappingDict.GetTBXMappingList(dc)?[0];
             }
             else
             {
-                tbx_dc = mappingDict.getTBXContentMap(dc)?[content_key];
+                tbx_dc = mappingDict.GetTBXContentMap(dc)?[content_key];
             }
 
             return tbx_dc;
@@ -303,14 +305,14 @@ namespace MultiTermTBXMapper.Menu
         /// <param name="tbx_dc">TBX data category name</param>
         /// <param name="unhandled">Is this an unhandled data category</param>
         /// <returns></returns>
-        private TemplateSet createTemplateSet(string user_dc, bool unhandled = false)
+        private TemplateSet CreateTemplateSet(string user_dc, bool unhandled = false)
         {
             (string target, string eltAtt, TemplateSet ts) = ("", "", new TemplateSet());
 
-            string tbx_dc = (unhandled) ? "unhandled" : getTBXdc(user_dc);
+            string tbx_dc = (unhandled) ? "unhandled" : GetTBXdc(user_dc);
 
-            (target, eltAtt) = getEltTgtEltAtt(tbx_dc);
-            ((ts[0] as KeyList)[0] as Teasp).setAll(target, eltAtt);
+            (target, eltAtt) = GetEltTgtEltAtt(tbx_dc);
+            ((ts[0] as KeyList)[0] as Teasp).SetAll(target, eltAtt);
 
             return ts;
         }
@@ -321,15 +323,15 @@ namespace MultiTermTBXMapper.Menu
         /// <param name="user_dc">User data category name</param>
         /// <param name="tbx_dc">User data category name</param>
         /// <returns>Template Set with Picklist values</returns>
-        private TemplateSet createTemplateSet(string user_dc, string tbx_dc)
+        private TemplateSet CreateTemplateSet(string user_dc, string tbx_dc)
         {
-            (string target, string eltAtt) = getEltTgtEltAtt(tbx_dc);
+            (string target, string eltAtt) = GetEltTgtEltAtt(tbx_dc);
 
             TemplateSet ts = new TemplateSet();
             Dictionary<string, string> sub = new Dictionary<string, string>();
 
-            TBXContentMap cm = mappingDict.getTBXContentMap(user_dc);
-            PicklistMap pm = mappingDict.getPicklistMap(user_dc);
+            TBXContentMap cm = mappingDict.GetTBXContentMap(user_dc);
+            PicklistMap pm = mappingDict.GetPicklistMap(user_dc);
 
             foreach (string content in cm?.Keys)
             {
@@ -339,11 +341,11 @@ namespace MultiTermTBXMapper.Menu
                 }
             }
 
-            ((ts[0] as KeyList)[0] as Teasp).setAll(target, eltAtt, sub);
+            ((ts[0] as KeyList)[0] as Teasp).SetAll(target, eltAtt, sub);
             return ts;
         }
 
-        private (string, string) getEltTgtEltAtt(string tbx_dc)
+        private (string, string) GetEltTgtEltAtt(string tbx_dc)
         {
             string elt = "";
             if (tbx_dc == "unhandled" || tbx_dc == "None: Do Not Map")
@@ -355,28 +357,28 @@ namespace MultiTermTBXMapper.Menu
                 elt = tbxInfo[tbx_dc]?["element"];
             }
 
-            string target = fullMapping.getTarget(elt);
-            string eltAtt = fullMapping.getEltAtt(elt, tbx_dc);
+            string target = fullMapping.GetTarget(elt);
+            string eltAtt = fullMapping.GetEltAtt(elt, tbx_dc);
 
             return (target, eltAtt);
         }
 
-        private bool isConceptGrp(string dc)
+        private bool IsConceptGrp(string dc)
         {
-            List<string> grp = mappingDict.levelMap["conceptGrp"];
-            return (Methods.inList(ref grp, dc)) ? true : false;
+            List<string> grp = mappingDict.LevelMap["conceptGrp"];
+            return (grp.Contains(dc)) ? true : false;
         }
 
-        private bool isLanguageGrp(string dc)
+        private bool IsLanguageGrp(string dc)
         {
-            List<string> grp = mappingDict.levelMap["languageGrp"];
-            return (Methods.inList(ref grp, dc)) ? true : false;
+            List<string> grp = mappingDict.LevelMap["languageGrp"];
+            return (grp.Contains(dc)) ? true : false;
         }
 
-        private bool isTermGrp(string dc)
+        private bool IsTermGrp(string dc)
         {
-            List<string> grp = mappingDict.levelMap["termGrp"];
-            return (Methods.inList(ref grp, dc)) ? true : false;   
+            List<string> grp = mappingDict.LevelMap["termGrp"];
+            return (grp.Contains(dc)) ? true : false;   
         }
     }
 }

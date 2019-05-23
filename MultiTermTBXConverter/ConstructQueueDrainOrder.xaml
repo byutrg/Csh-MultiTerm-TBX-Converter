@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MultiTermTBXMapper"
         mc:Ignorable="d"
-        Title="ExportDatCatWindow" Height="300" Width="500">
+        Title="ExportDatCatWindow" Height="300" Width="500" Closed="Window_Closed">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
@@ -18,8 +18,8 @@
             </Grid.RowDefinitions>
             <Label Content="DatCats" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="4,0,0,4"/>
             <ListBox Grid.Row="1" Name="dcs" BorderBrush="Gray" BorderThickness="1" />
-            <TextBox Name="txtbox_search" Style="{StaticResource placeHolder}" Tag="Search" HorizontalAlignment="Right" Height="23" Grid.Row="0" Margin="0,0,4,2" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="100" TextChanged="txtbox_search_TextChanged" FocusManager.FocusedElement="{Binding ElementName=txtbox_search}" />
-            <Image HorizontalAlignment="Right" Height="20" Grid.Row="0" Margin="0,0,6,3" VerticalAlignment="Bottom" Width="20" Source="Resources/magnifying_glass.png">
+            <TextBox Name="txtbox_search" Style="{StaticResource placeHolder}" Tag="Search" HorizontalAlignment="Right" Height="23" Grid.Row="0" Margin="0,0,4,2" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="100" TextChanged="Txtbox_search_TextChanged" FocusManager.FocusedElement="{Binding ElementName=txtbox_search}" />
+            <Image HorizontalAlignment="Right" Height="20" Grid.Row="0" Margin="0,0,6,3" VerticalAlignment="Bottom" Width="20" Source="/MultiTermTBXConverter;component/Resources/magnifying_glass.png">
                 <Image.Resources>
                     <Style TargetType="Image">
                         <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />
@@ -34,9 +34,9 @@
             </Grid.RowDefinitions>
             <TextBlock HorizontalAlignment="Center" Margin="0,15,0,0" TextWrapping="Wrap" Text="Double click on a data category from the list to select. Remove with [x] if the wrong DC was chosen." VerticalAlignment="Top"/>
             <TextBox Name="mainDC" IsReadOnly="True" Tag="Main Element (such as Definition)" Width="180" Height="24" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,60,0,0"/>
-            <Button Name="mainDCRemove" Width="24" Height="24" HorizontalAlignment="Right" Content="[x]" VerticalAlignment="Top" Margin="0,60,40,0" Click="mainDCRemove_Click"/>
+            <Button Name="mainDCRemove" Width="24" Height="24" HorizontalAlignment="Right" Content="[x]" VerticalAlignment="Top" Margin="0,60,40,0" Click="MainDCRemove_Click"/>
             <TextBox Name="subDC" IsReadOnly="True" Tag="Sub Element (such as Definition Source)" Width="180" Height="24" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,100,0,0"/>
-            <Button Name="subDCRemove" Width="24" Height="24" HorizontalAlignment="Right" Content="[x]" VerticalAlignment="Top" Margin="0,100,40,0" Click="subDCRemove_Click"/>
+            <Button Name="subDCRemove" Width="24" Height="24" HorizontalAlignment="Right" Content="[x]" VerticalAlignment="Top" Margin="0,100,40,0" Click="SubDCRemove_Click"/>
             <ComboBox Name="classificationElement" Tag="Class Element (Such as AuxInfo)" Width="180" Height="24" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,140,0,0" SelectedIndex="0">
                 <ComboBoxItem Content="auxInfo"/>
                 <ComboBoxItem Content="termComp"/>

@@ -8,7 +8,7 @@ namespace MultiTermTBXMapper.Menu
     /// </summary>
     public partial class PickListMapControl : UserControl
     {
-        public Action<string[]> select;
+        public Action<string[]> Selected { get; set; }
 
         public PickListMapControl(string pl_content)
         {
@@ -23,7 +23,7 @@ namespace MultiTermTBXMapper.Menu
 
         private void Item_Selected(object sender, RoutedEventArgs e)
         {
-            select(new string[2] { label_picklist_item.Content.ToString(), ((sender as ComboBox).SelectedItem as ComboBoxItem).Content.ToString() });
+            Selected(new string[2] { label_picklist_item.Content.ToString(), ((sender as ComboBox).SelectedItem as ComboBoxItem).Content.ToString() });
         }
     }
 }

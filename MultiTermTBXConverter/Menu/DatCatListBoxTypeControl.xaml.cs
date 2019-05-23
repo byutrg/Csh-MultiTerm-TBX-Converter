@@ -15,31 +15,49 @@ namespace MultiTermTBXMapper.Menu
     {
         public Action<TBXMappingList> ListBoxItems;
 
+        private TBXDatCatWindow tbxDatCatWindow = new TBXDatCatWindow();
+
+        public TBXDatCatWindow TBXDatCatWindow
+        {
+            get
+            {
+                if (!tbxDatCatWindow.IsClosed)
+                {
+                    return tbxDatCatWindow;
+                }
+                else
+                {
+                    TBXDatCatWindow = new TBXDatCatWindow();
+                    return tbxDatCatWindow;
+                }
+            }
+            set => tbxDatCatWindow = value;
+        }
+
         public DatCatListBoxTypeControl()
         {
             InitializeComponent();
         }
 
-        public void clear()
+        public void Clear()
         {
             Methods.RemoveListBoxItems(ref lb_tbx_dcs);
         }
 
-        public void fillItems(List<string> tbx_dcs)
+        public void FillItems(List<string> tbx_dcs)
         {
             if (tbx_dcs != null)
             {
                 for (int i = 0; i < tbx_dcs.Count; i++)
                 {
-                    ListBoxItem item = new ListBoxItem();
-                    item.Content = tbx_dcs[i];
+                    ListBoxItem item = new ListBoxItem{ Content = tbx_dcs[i] };
 
                     lb_tbx_dcs.Items.Add(item);
                 }
             }
         }
 
-        public void findBest(string dc)
+        public void FindBest(string dc)
         {
             List<string[]> datcats = TBXDatabase.GetNames();
             int bestDistance = 99999;
@@ -58,39 +76,38 @@ namespace MultiTermTBXMapper.Menu
 
             if (bestDistance < dc.ToCharArray().Count() / 2)
             {
-                ListBoxItem tbx = new ListBoxItem();
+                ListBoxItem tbx = new ListBoxItem
+                {
 
-                tbx.Content = datcats[bestIndex][0];
+                    Content = datcats[bestIndex][0]
+                };
 
                 lb_tbx_dcs.Items.Add(tbx);
             }
             else
             {
-                findBest("note");
+                FindBest("note");
             }
 
-            updateItems();
+            UpdateItems();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            TBXDatCatWindow tbxWindow = new TBXDatCatWindow();
+            TBXDatCatWindow.Show();
 
-            tbxWindow.Show();
-
-            tbxWindow.selected += value =>
+            TBXDatCatWindow.Selected += value =>
             {
                 ItemCollection itemCol = lb_tbx_dcs.Items;
                 
                 if (!itemCol.Contains(value))
                 {
 
-                    ListBoxItem item = new ListBoxItem();
-                    item.Content = value;
+                    ListBoxItem item = new ListBoxItem { Content = value };
 
                     lb_tbx_dcs.Items.Add(item);
 
-                    updateItems();
+                    UpdateItems();
                 }
             };
         }
@@ -101,11 +118,11 @@ namespace MultiTermTBXMapper.Menu
             {
                 lb_tbx_dcs.Items.Remove(lb_tbx_dcs.SelectedItem);
 
-                updateItems();
+                UpdateItems();
             }
         }
 
-        private void updateItems()
+        private void UpdateItems()
         {
             TBXMappingList items = new TBXMappingList();
             for (int i = 0; i < lb_tbx_dcs.Items.Count; i++)
@@ -116,7 +133,7 @@ namespace MultiTermTBXMapper.Menu
             ListBoxItems(items);
         }
 
-        private void lb_tbx_dcs_KeyDown(object sender, KeyEventArgs e)
+        private void Lb_tbx_dcs_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Delete)
             {
@@ -124,7 +141,7 @@ namespace MultiTermTBXMapper.Menu
                 {
                     (sender as ListBox).Items.Remove((sender as ListBox).SelectedItem);
 
-                    updateItems();
+                    UpdateItems();
                 }
             }
         }

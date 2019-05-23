@@ -31,7 +31,7 @@
                 <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
             <Label Content="TBX Data Categories" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="4,0,0,4"/>
-            <ListBox Grid.Row="1" Name="dcs_tbx" BorderBrush="Gray" BorderThickness="1" SelectionChanged="dcs_tbx_SelectionChanged">
+            <ListBox Grid.Row="1" Name="dcs_tbx" BorderBrush="Gray" BorderThickness="1" SelectionChanged="Dcs_tbx_SelectionChanged">
                 <ListBoxItem Content="None: Do Not Map" MouseDoubleClick="ListBoxItem_MouseDoubleClick"/>
                 <!--<ListBoxItem Content="Varies By Content" MouseDoubleClick="ListBoxItem_MouseDoubleClick" />-->
             </ListBox>

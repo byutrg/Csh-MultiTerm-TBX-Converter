@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+using CefSharp;
 using CefSharp.Wpf;
 
 namespace MultiTermTBXMapper
@@ -38,6 +38,7 @@ namespace MultiTermTBXMapper
         public QueueBundlingHelpWindow()
         {
             InitializeComponent();
+            ChromeBrowser.Address = "https://www.tbxinfo.net/queue-bundling-orders/";
         }
 
         private void Window_Closed(object sender, EventArgs e)

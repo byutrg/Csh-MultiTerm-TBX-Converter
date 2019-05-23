@@ -310,6 +310,7 @@
     </Resource>
     <Resource Include="Resources\arrow_skinny.png" />
     <Resource Include="Resources\tbxLogo_asymmetricX_blue.png" />
+    <Content Include="Resources\QueueBundlingHelp.html" />
     <Content Include="Resources\tbx_data_categories_with_definitions_picklists.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

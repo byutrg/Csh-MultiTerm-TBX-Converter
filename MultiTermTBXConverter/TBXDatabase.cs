@@ -35,7 +35,7 @@ namespace MultiTermTBXMapper
             {
                 SQLiteDataReader results = command.ExecuteReader();
             }
-            catch (SQLiteException e) { ret = true; }
+            catch (SQLiteException) { ret = true; }
 
 
             return ret;

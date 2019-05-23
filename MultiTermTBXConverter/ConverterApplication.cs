@@ -267,7 +267,7 @@ namespace MultiTermTBXMapper
             {
                 castTestString = (string)castTest.ToObject(typeof(string));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Handler = 0;
             }
@@ -276,7 +276,7 @@ namespace MultiTermTBXMapper
             {
                 Dictionary<string, string> castTestDictionary = (Dictionary<string, string>)castTest.ToObject(typeof(Dictionary<string, string>));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Handler = 1;
             }
@@ -346,7 +346,7 @@ namespace MultiTermTBXMapper
                 {
                     castTestString = (string)castTest.ToObject(typeof(string));
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     Handler = 0;
                 }
@@ -355,7 +355,7 @@ namespace MultiTermTBXMapper
                 {
                     Dictionary<string, string> castTestDictionary = (Dictionary<string, string>)castTest.ToObject(typeof(Dictionary<string, string>));
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     Handler = 1;
                 }

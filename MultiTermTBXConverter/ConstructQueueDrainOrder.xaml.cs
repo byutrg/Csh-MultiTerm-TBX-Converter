@@ -19,25 +19,35 @@ namespace MultiTermTBXMapper
     /// </summary>34
     public partial class ConstructQueueDrainOrder : Window
     {
-        private MappingDict mappingDict;
+        private MappingDict MappingDict { get; set; }
 
-        private string firstDC;
-        private string secondDC;
+        private string FirstDC { get; set; }
+        private string SecondDC { get; set; }
 
-        public event Action<string[]> complete;
+        public event Action<string[]> Complete;
+
+        public static ConstructQueueDrainOrder Instance
+        {
+            get;
+            private set;
+        }
+
+        public bool IsClosed { get; private set; } = false;
 
         public ConstructQueueDrainOrder(MappingDict mapping)
         {
             InitializeComponent();
 
-            mappingDict = mapping;
+            MappingDict = mapping;
 
-            populateListBox();
+            PopulateListBox();
+
+            Instance = this;
         }
 
-        private void populateListBox()
+        private void PopulateListBox()
         {
-            foreach(string dc in mappingDict.Keys)
+            foreach(string dc in MappingDict.Keys)
             {
                 ListBoxItem dcItem = new ListBoxItem();
                 dcItem.MouseDoubleClick += ListBoxItem_MouseDoubleClick;
@@ -47,16 +57,16 @@ namespace MultiTermTBXMapper
             }
         }
 
-        private void select(string dc)
+        private void Select(string dc)
         {
-            if (firstDC == null)
+            if (FirstDC == null)
             {
-                firstDC = dc;
+                FirstDC = dc;
                 mainDC.Text = dc;
             }
-            else if (secondDC == null)
+            else if (SecondDC == null)
             {
-                secondDC = dc;
+                SecondDC = dc;
                 subDC.Text = dc;
             }
         }
@@ -65,21 +75,21 @@ namespace MultiTermTBXMapper
         private void ListBoxItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             ListBoxItem selectedItem = (ListBoxItem)sender;
-            select(selectedItem.Content.ToString());
+            Select(selectedItem.Content.ToString());
         }
 
         private void Button_Submit_Click(object sender, RoutedEventArgs e)
         {
-            if (firstDC != null && secondDC != null)
+            if (FirstDC != null && SecondDC != null)
             {
-                string[] order = new string[] { firstDC, secondDC, classificationElement.Text, level.Text };
-                complete(order);
+                string[] order = new string[] { FirstDC, SecondDC, classificationElement.Text, level.Text };
+                Complete(order);
 
                 Close();
             }
         }
 
-        private void txtbox_search_TextChanged(object sender, TextChangedEventArgs e)
+        private void Txtbox_search_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (IsLoaded)
             {
@@ -104,22 +114,28 @@ namespace MultiTermTBXMapper
             return -1;
         }
 
-        private void mainDCRemove_Click(object sender, RoutedEventArgs e)
+        private void MainDCRemove_Click(object sender, RoutedEventArgs e)
         {
-            if (firstDC != null)
+            if (FirstDC != null)
             {
-                firstDC = null;
+                FirstDC = null;
                 mainDC.Text = null;
             }
         }
 
-        private void subDCRemove_Click(object sender, RoutedEventArgs e)
+        private void SubDCRemove_Click(object sender, RoutedEventArgs e)
         {
-            if (secondDC != null)
+            if (SecondDC != null)
             {
-                secondDC = null;
+                SecondDC = null;
                 subDC.Text = null;
             }
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            IsClosed = true;
+            Instance = null;
         }
     }
 }

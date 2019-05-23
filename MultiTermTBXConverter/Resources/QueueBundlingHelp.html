@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Queue Bundling Orders</title>
+</head>
+<body>
+    <h1>Queue Bundling Orders</h1>
+    <p>
+        Queue bundling orders for the MultiTerm XML to TBX Converter are a means of grouping 
+        related elements into the appropriate groupings for TBX, which often requires grouping
+        elements, such as descripGrp, to wrap around ordinary data categories to associate 
+        them with their subordinates.
+    </p>
+    <p>
+        For example, in MultiTerm XML:
+    </p>
+    <code>
+        <descripGrp>
+            <descrip type="Definition">A group of stars formed together in the spiral arms of a galaxy.</descrip>
+        </descripGrp>
+        <descripGrp>
+            <descrip type="D-Source">
+                <xref Tlink="SourceID:Oxford2007">Oxford2007</xref>
+            </descrip>
+        </descripGrp>
+    </code>
+    <p>In TBX, this would be:</p>
+
+    <code>
+        <descripGrp>
+            <descrip type="definition">A group of stars formed together in the spiral arms of a galaxy.</descrip>
+            <admin type="source">Oxford2007</admin>
+        </descripGrp>
+    </code>
+    <p>
+        Orders are executed in the sequence listed, so later orders can drain queues filled by earlier ones if necessary.
+        In the Converter, you select each queue bundling order by clicking “Add” on the Queue Bundling Orders window and
+        using the queue bundling tool
+    </p>
+</body>
+</html>

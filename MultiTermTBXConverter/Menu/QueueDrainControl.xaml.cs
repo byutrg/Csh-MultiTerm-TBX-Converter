@@ -20,12 +20,30 @@ namespace MultiTermTBXMapper.Menu
     /// </summary>
     public partial class QueueDrainControl : UserControl
     {
-        public MappingDict mapping;
-        public QueueDrainOrders Orders = new QueueDrainOrders();
+        public MappingDict Mapping { get; set; }
+        public QueueDrainOrders Orders { get; set; } = new QueueDrainOrders();
+        private ConstructQueueDrainOrder constructQueueDrainOrder;
+        public ConstructQueueDrainOrder ConstructQueueDrainOrder
+        {
+            get
+            {
+                if (constructQueueDrainOrder == null)
+                {
+                    ConstructQueueDrainOrder = new ConstructQueueDrainOrder(Mapping);
+                }
+                else if (constructQueueDrainOrder.IsClosed)
+                {
+                    ConstructQueueDrainOrder = new ConstructQueueDrainOrder(Mapping);
+                }
 
-        public Action submitAction;
+                return constructQueueDrainOrder;
+            }
+            private set => constructQueueDrainOrder = value;
+        }
 
-        private Dictionary<string, string[]> OrderDict = new Dictionary<string, string[]>();
+        public Action SubmitAction { get; set; }
+
+        private Dictionary<string, string[]> OrderDict { get; set; } = new Dictionary<string, string[]>();
 
         public QueueDrainControl()
         {
@@ -39,8 +57,10 @@ namespace MultiTermTBXMapper.Menu
 
         private void AddToList(string[] order)
         {
-            ListBoxItem queueOrder = new ListBoxItem();
-            queueOrder.Content = string.Format("{3}: {0} -> {1} -> {2}", order);
+            ListBoxItem queueOrder = new ListBoxItem
+            {
+                Content = string.Format("{3}: {0} -> {1} -> {2}", order)
+            };
 
             OrderDict.Add(queueOrder.Content.ToString(), order);
             lb_queue_orders.Items.Add(queueOrder);
@@ -53,9 +73,8 @@ namespace MultiTermTBXMapper.Menu
         /// <param name="e"></param>
         private void Button_Add_Click(object sender, RoutedEventArgs e)
         {
-            ConstructQueueDrainOrder constructQeueDrainOrder = new ConstructQueueDrainOrder(mapping);
-            constructQeueDrainOrder.Show();
-            constructQeueDrainOrder.complete += AddToList;
+            ConstructQueueDrainOrder.Show();
+            ConstructQueueDrainOrder.Complete += AddToList;
         }
 
         /// <summary>
@@ -84,7 +103,7 @@ namespace MultiTermTBXMapper.Menu
                 Orders.AddOrder(order);
             }
 
-            submitAction();
+            SubmitAction();
         }
     }
 }

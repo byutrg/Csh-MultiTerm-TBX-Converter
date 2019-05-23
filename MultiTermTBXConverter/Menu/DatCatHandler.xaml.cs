@@ -162,16 +162,16 @@ namespace MultiTermTBXMapper.Menu
         private void Display()
         {
             lbl_user_dc.Content = datcats[index];
-            mapControl.clear();
+            mapControl.Clear();
 
             if (mapping.GetTBXMappingList(datcats[index])?.Count > 0)
             {
-                mapControl.fillItems(mapping.GetTBXMappingList(datcats[index]));
+                mapControl.FillItems(mapping.GetTBXMappingList(datcats[index]));
             }
 
             if(!Array.Exists(indexes_visited, item => item == index.ToString()))
             {
-                mapControl.findBest(datcats[index]);
+                mapControl.FindBest(datcats[index]);
                 indexes_visited[index] = index.ToString();
             }
 

@@ -13,7 +13,7 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="Add all TBX Data Categories to which this data category maps (usually only one):" VerticalAlignment="top" />
-        <ListBox Name="lb_tbx_dcs" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,0,0,14" KeyDown="lb_tbx_dcs_KeyDown"/>
+        <ListBox Name="lb_tbx_dcs" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,0,0,14" KeyDown="Lb_tbx_dcs_KeyDown"/>
         <Button Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,0,0,0" Content="Add" Width="60" Click="Button_Click" IsDefault="True" />
         <Button Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,10,0" Content="Remove" Width="60" Click="Button_Click_1" />
     </Grid>

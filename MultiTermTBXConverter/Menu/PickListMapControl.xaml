@@ -12,7 +12,7 @@
             <ColumnDefinition Width="160*"/>
         </Grid.ColumnDefinitions>
         <Label Name="label_picklist_item" Grid.Column="0" HorizontalAlignment="Left" FontSize="14" Content="PicklistItem" VerticalAlignment="Center" Width="131" Height="30"/>
-        <Image HorizontalAlignment="Left" Grid.Column="1" VerticalAlignment="Center" Width="100" Source="/MultiTermTBXMapper;component/Resources/arrow_skinny.png" Stretch="Fill" Height="30">
+        <Image HorizontalAlignment="Left" Grid.Column="1" VerticalAlignment="Center" Width="100" Source="/MultiTermTBXConverter;component/Resources/arrow_skinny.png" Stretch="Fill" Height="30">
             <Image.Resources>
                 <Style TargetType="Image">
                     <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />

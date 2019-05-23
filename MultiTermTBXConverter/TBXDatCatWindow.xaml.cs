@@ -13,9 +13,9 @@ namespace MultiTermTBXMapper
     /// </summary>
     public partial class TBXDatCatWindow : Window
     {
-        private List<string[]> datcats = new List<string[]>();
-        private Dictionary<string,string[]> datcat_dict = new Dictionary<string, string[]>();
-        private DataRow[] sortedData;
+        private List<string[]> Datcats { get; set; } = new List<string[]>();
+        private Dictionary<string, string[]> Datcat_dict { get; set; } = new Dictionary<string, string[]>();
+        private DataRow[] SortedData { get; set; }
         private DataTable dt = new DataTable();
 
         private static TBXDatCatWindow instance;
@@ -30,65 +30,69 @@ namespace MultiTermTBXMapper
                 }
                 return instance;
             }
+            private set => instance = value;
         }
 
-        public event Action<string> selected;
+        public bool IsClosed { get; private set; } = false;
+
+        public event Action<string> Selected;
 
         public TBXDatCatWindow()
         {
             InitializeComponent();
 
-            datcats = TBXDatabase.GetAll();
-            cleanData();
+            Datcats = TBXDatabase.GetAll();
+            CleanData();
 
-            populateListBox();
+            PopulateListBox();
             //if (selected != null)
             //{
-            selectItem("None: Do Not Map");
+            SelectItem("None: Do Not Map");
             //}
         }
 
-        public void selectItem(string selected = "None: Do Not Map")
+        public void SelectItem(string selected = "None: Do Not Map")
         {
-            int index = getListItemIndex(selected);
+            int index = GetListItemIndex(selected);
             (dcs_tbx.Items[index] as ListBoxItem).IsSelected = true;
         }
 
-        private void cleanData()
+        private void CleanData()
         {
             dt.Columns.Add("Name");
             dt.Columns.Add("XML");
             dt.Columns.Add("Descrip");
 
-            for (int x = 1; x < datcats.Count(); x++)
+            for (int x = 1; x < Datcats.Count(); x++)
             {
                 DataRow row = dt.NewRow();
 
-                row["Name"] = datcats[x][0];
-                row["XML"] = datcats[x][1];
-                row["Descrip"] = datcats[x][2];
+                row["Name"] = Datcats[x][0];
+                row["XML"] = Datcats[x][1];
+                row["Descrip"] = Datcats[x][2];
 
-                datcat_dict.Add(datcats[x][0], new string[2] { datcats[x][1], datcats[x][2] } );
+                Datcat_dict.Add(Datcats[x][0], new string[2] { Datcats[x][1], Datcats[x][2] } );
 
                 dt.Rows.Add(row);
             }
 
-            sortedData = dt.Select("", "Name ASC");
+            SortedData = dt.Select("", "Name ASC");
         }
 
-        private void populateListBox()
+        private void PopulateListBox()
         {
-            for (int i = 0; i < sortedData.Count(); i++)
+            for (int i = 0; i < SortedData.Count(); i++)
             {
-                ListBoxItem dc = new ListBoxItem();
-
-                dc.Content = sortedData[i][0];
+                ListBoxItem dc = new ListBoxItem
+                {
+                    Content = SortedData[i][0]
+                };
 
                 dcs_tbx.Items.Add(dc);
             }
         }
 
-        private void dcs_tbx_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Dcs_tbx_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ListBoxItem item = ((sender as ListBox).SelectedItem as ListBoxItem);
             item.MouseDoubleClick += ListBoxItem_MouseDoubleClick;
@@ -96,8 +100,8 @@ namespace MultiTermTBXMapper
 
             if (((sender as ListBox).SelectedItem as ListBoxItem).Content.ToString() != "None: Do Not Map")
             {
-                textblock_xml.Text = datcat_dict[item.Content.ToString()][0];
-                textbox_descrip.Text = datcat_dict[item.Content.ToString()][1];
+                textblock_xml.Text = Datcat_dict[item.Content.ToString()][0];
+                textbox_descrip.Text = Datcat_dict[item.Content.ToString()][1];
             }
             else
             {
@@ -140,7 +144,7 @@ namespace MultiTermTBXMapper
             return -1;
         }
 
-        private int getListItemIndex(string item)
+        private int GetListItemIndex(string item)
         {
             for (int i = 0; i < dcs_tbx.Items.Count; i++)
             {
@@ -153,12 +157,12 @@ namespace MultiTermTBXMapper
             return 0;
         }
 
-        private void select()
+        private void Select()
         {
             if ((dcs_tbx.SelectedItem as ListBoxItem) != null)
             {
                 
-                selected((dcs_tbx.SelectedItem as ListBoxItem).Content.ToString());
+                Selected((dcs_tbx.SelectedItem as ListBoxItem).Content.ToString());
             }
 
             Close();
@@ -166,17 +170,18 @@ namespace MultiTermTBXMapper
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            select();
+            Select();
         }
 
         private void ListBoxItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            select();
+            Select();
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            instance = null;
+            Instance = null;
+            IsClosed = true;
         }
     }
 }

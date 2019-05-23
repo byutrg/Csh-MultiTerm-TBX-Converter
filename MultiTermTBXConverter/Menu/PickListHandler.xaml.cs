@@ -89,7 +89,7 @@ namespace MultiTermTBXMapper.Menu
                         {
                             mappedPicklists.Add(dc + "_" + val, false);
                         }
-                        catch (System.ArgumentException e)
+                        catch (ArgumentException)
                         {
                             continue;
                         }
@@ -123,7 +123,7 @@ namespace MultiTermTBXMapper.Menu
         {
             PickListMapControl plmc = new PickListMapControl(pl_content);
 
-            plmc.select += value => SetMapping(value[0], value[1]);
+            plmc.Selected += value => SetMapping(value[0], value[1]);
 
             string tbx_dc = mapping.GetTBXContentMap(user_dc)?.Get(pl_content);
 
@@ -134,7 +134,10 @@ namespace MultiTermTBXMapper.Menu
             }
 
             string tbx_selected = mapping.GetPicklistMapValue(user_dc, pl_content);
-
+            if (tbx_selected == null)
+            {
+                tbx_selected = pl_content;
+            }
             FillTBXComboBox(ref plmc.combo_tbx_picklist, mapping.GetTBXContentMap(user_dc)?.Get(pl_content), tbx_selected);
 
             grid.Children.Add(plmc);

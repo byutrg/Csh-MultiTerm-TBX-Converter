@@ -68,11 +68,11 @@ namespace MultiTermTBXMapper.Menu
             TBXDatCatWindow tbxWindow = TBXDatCatWindow.Instance;
             if (dc_tbx.Content.ToString() != "???")
             {
-                tbxWindow.selectItem(dc_tbx.Content.ToString());
+                tbxWindow.SelectItem(dc_tbx.Content.ToString());
             }
 
             tbxWindow.Show();
-            tbxWindow.selected += value =>
+            tbxWindow.Selected += value =>
             {
                 if(value == null)
                 {

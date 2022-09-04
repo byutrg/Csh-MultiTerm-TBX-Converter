@@ -98,9 +98,7 @@ namespace MultiTermTBXMapper.Menu
 
             TBXDatCatWindow.Selected += value =>
             {
-                ItemCollection itemCol = lb_tbx_dcs.Items;
-                
-                if (!itemCol.Contains(value))
+                if (!lb_tbx_dcs.Items.Cast<ListBoxItem>().Any(i => i.Content.Equals(value)))
                 {
 
                     ListBoxItem item = new ListBoxItem { Content = value };
@@ -108,7 +106,7 @@ namespace MultiTermTBXMapper.Menu
                     lb_tbx_dcs.Items.Add(item);
 
                     UpdateItems();
-                }
+                } else { MessageBox.Show("The chosen data category has already been added."); }
             };
         }
 

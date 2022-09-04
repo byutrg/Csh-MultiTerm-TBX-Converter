@@ -57,16 +57,56 @@ namespace MultiTermTBXMapper
         }
     }
 
-    // This is the vanilla teasp template. It takes an array of strings as its constructor and stores the appropriate values, although it currently does not account for the possibility of a 
-    // dictionary-like object for a substitution.
+    // This is the Interface for a teasp object
 
-    public class TeaspNoSubstitution
+    public interface ITeaspable
+    {
+        void HandleTeasp(XElement node);
+    }
+
+    public class TeaspObject<T> : ITeaspable
     {
         public string Target { get; set; }
         public string ElementOrAttributes { get; set; }
-        public string Substitution { get; set; }
+        public T Substitution { get; set; }
         public string Placement { get; set; }
 
+        public void HandleTeasp(XElement node)
+        {
+            _HandleTeasp(node);
+        }
+
+        virtual protected void _HandleTeasp(XElement node)
+        {
+            // Shared members between both classes
+            if (string.IsNullOrWhiteSpace(ElementOrAttributes)) return;
+
+            XElement targetElt = XElement.Parse(ElementOrAttributes);
+            string currentNodeName = node.Name.LocalName;
+            string retrievedElementName = targetElt.Name.LocalName;
+            if (currentNodeName != retrievedElementName) currentNodeName = retrievedElementName;
+
+            node.Attributes().Remove();
+            node.Add(targetElt.Attributes());
+
+            ConverterApp.RenameXElement(node, currentNodeName);
+            if (Placement == "target")
+            {
+                node.SetAttributeValue("target", node.Value);
+                node.Value = "";
+            }
+            else if (node.Name.LocalName.Equals("xref") && node.Attribute("target") == null)
+            {
+                node.SetAttributeValue("target", "");
+            }
+        }
+    }
+
+    // This is the vanilla teasp template. It takes an array of strings as its constructor and stores the appropriate values, although it currently does not account for the possibility of a 
+    // dictionary-like object for a substitution.
+
+    public class TeaspNoSubstitution : TeaspObject<string>
+    {
         public TeaspNoSubstitution(string t, string ea, string s, string p)
         {
             Target = t;
@@ -74,69 +114,25 @@ namespace MultiTermTBXMapper
             Substitution = s;
             Placement = p;
         }
-
-        public string GetTarget()
-        {
-            return Target;
-        }
-
-        public string GetElementOrAttribute()
-        {
-            return ElementOrAttributes;
-        }
-
-        public string GetSubstitution()
-        {
-            return Substitution;
-        }
-
-        public string GetPlacement()
-        {
-            return Placement;
-        }
-
     }
 
     // This holds teasps that have no value groups, but do have substitutions
 
-    public class TeaspWithSubstitution
+    public class TeaspWithSubstitution : TeaspObject<Dictionary<string,string>>
     {
-        public string Target { get; set; }
-        public string ElementOrAttributes { get; set; }
-        public Dictionary<string, string> Substitution { get; set; } = new Dictionary<string, string>();
-        public string Placement { get; set; }
-
         public TeaspWithSubstitution(string t, string ea, Dictionary<string, string> s, string p)
         {
             Target = t;
             ElementOrAttributes = ea;
-            foreach (KeyValuePair<string, string> entry in s)
-            {
-                Substitution.Add(entry.Key, entry.Value);
-            }
+            Substitution = s;
             Placement = p;
         }
 
-        public string GetTarget()
+        protected override void _HandleTeasp(XElement node)
         {
-            return Target;
+            node.SetValue(Substitution[node.Value]);
+            base._HandleTeasp(node);
         }
-
-        public string GetElementOrAttribute()
-        {
-            return ElementOrAttributes;
-        }
-
-        public Dictionary<string, string> GetSubstitution()
-        {
-            return Substitution;
-        }
-
-        public string GetPlacement()
-        {
-            return Placement;
-        }
-
     }
 
     // The template set is constructed by seperating all of the template-set jObjects from the dictionaries, and stored in individual Lists. Each list is then parsed and seperated into 
@@ -620,47 +616,30 @@ namespace MultiTermTBXMapper
             }
         }
 
-        public Dictionary<string, string[]> GetOrders()
+        public Dictionary<string, List<string[]>> GetOrders()
         {
             if (LoO == null) { return null; }
-            Dictionary<string, string[]> combinedOrders = new Dictionary<string, string[]>();
+            Dictionary<string, List<string[]>> combinedOrders = new Dictionary<string, List<string[]>>()
+            {
+                {"conceptGrp", new List<string[]>() },
+                {"languageGrp", new List<string[]>() },
+                {"termGrp", new List<string[]>() }
+            };
             List<string[]> c = LoO.GetConcept();
             List<string[]> l = LoO.GetLanguage();
             List<string[]> t = LoO.GetTerm();
 
-            for (int i = 0; i < (c.Count()); i++)
+            foreach (var bundleOrder in c)
             {
-                // for each value in a string array, there needs to be a key with that string value, and a value of the array. In an array of 3 strings, you will have 3 keys and each will have the same value
-                for (int j = 0; j < 2; j++)
-                {
-                    if (combinedOrders.ContainsKey(c[i][j]))
-                    {
-                        continue;
-                    }
-                    combinedOrders.Add(c[i][j], c[i]); // Make sure this isnt nonsense
-                }
+                combinedOrders["conceptGrp"].Add(bundleOrder);
             }
-            for (int i = 0; i < (l.Count()); i++)
+            foreach (var bundleOrder in l)
             {
-                for (int j = 0; j < 2; j++)
-                {
-                    if (combinedOrders.ContainsKey(l[i][j]))
-                    {
-                        continue;
-                    }
-                    combinedOrders.Add(l[i][j], l[i]);
-                }
+                combinedOrders["languageGrp"].Add(bundleOrder);
             }
-            for (int i = 0; i < (t.Count()); i++)
+            foreach (var bundleOrder in t)
             {
-                for (int j = 0; j < 2; j++)
-                {
-                    if (combinedOrders.ContainsKey(t[i][j]))
-                    {
-                        continue;
-                    }
-                    combinedOrders.Add(t[i][j], t[i]);
-                }
+                combinedOrders["termGrp"].Add(bundleOrder);
             }
 
             return combinedOrders;
@@ -718,7 +697,7 @@ namespace MultiTermTBXMapper
             return DictionaryStorage;
         }
 
-        public Dictionary<string, string[]> GetQueueOrders()
+        public Dictionary<string, List<string[]>> GetQueueOrders()
         {
             return QDO.GetOrders();
         }
@@ -760,36 +739,76 @@ namespace MultiTermTBXMapper
             }
         }
 
-        public void RenameXElement(XElement oldRoot, string newname)
+        public static void RenameXElement(XElement element, string newname)
         {
-            oldRoot.Name = oldRoot.GetDefaultNamespace() + newname;
+            element.Name = element.GetDefaultNamespace() + newname;
+            // Modify parent Grp if necessary
+            if (GrpableElementNames.Contains(newname)
+                && Regex.IsMatch(element.Parent.Name.LocalName, $@"^((?!{newname})Grp)$"))
+            {
+                element.Parent.Name = element.Parent.Name.Namespace + $"{newname}Grp";
+            }
+
         }
 
         // Queue-Bundling Orders
 
-        private void ExecuteQueueBundlingOrders(Dictionary<string, string[]> queueOrders)
+        private List<XElement> FilterByAncestorLevel(IEnumerable<XElement> startElt, string level)
+        {
+            if (level == "conceptGrp")
+            {
+                return startElt.Where(
+                    elt => !elt.Ancestors()
+                        .Any(anc => anc.Name.LocalName == "languageGrp" || anc.Name.LocalName == "termGrp"))
+                        .ToList();
+            } else if (level == "languageGrp")
+            {
+                return startElt.Where(
+                    elt => elt.Ancestors()
+                        .Any(anc => anc.Name.LocalName == "languageGrp")
+                        && !elt.Ancestors().Any(anc => anc.Name.LocalName == "termGrp"))
+                        .ToList();
+            } else
+            {
+                return startElt.Where(
+                    elt => elt.Ancestors()
+                    .Any(anc => anc.Name.LocalName == "termGrp"))
+                    .ToList();
+            }
+        }
+
+        private void ExecuteQueueBundlingOrders(Dictionary<string, List<string[]>> queueOrders)
         {
             if (queueOrders == null) { return; }
-            foreach (KeyValuePair<string, string[]> pair in queueOrders)
+            foreach (var levelGroup in queueOrders)
             {
-                string queryItemOne = "//descrip[@type='";
-                queryItemOne = queryItemOne + pair.Value[0] + "']";
-
-                List<XElement> pairItemOne = MultiTermDoc.XPathSelectElements(queryItemOne).ToList();
-
-                foreach (XElement tempNode in pairItemOne)
+                foreach (var bundleOrder in levelGroup.Value)
                 {
-                    XElement directParent = tempNode.Parent;
-                    XElement grandparent = directParent.Parent;
-
-                    string queryItemTwo = "//descrip[@type='";
-                    queryItemTwo = queryItemTwo + pair.Value[0] + "']";
-
-                    List<XElement> limitedScopeQuery = grandparent.XPathSelectElements(queryItemTwo).ToList();
-
-                    foreach (XElement elt in limitedScopeQuery)
+                    foreach (var level in MultiTermDoc.Descendants(levelGroup.Key))
                     {
-                        tempNode.AddAfterSelf(elt);
+                        string queryItemOne = $".//*[@type='{bundleOrder[0]}']";
+                        List<XElement> pairItemOne = FilterByAncestorLevel(level.XPathSelectElements(queryItemOne), levelGroup.Key);
+
+                        foreach (XElement tempNode in pairItemOne)
+                        {
+                            string queryItemTwo = $".//*[@type='{bundleOrder[1]}']";
+
+                            List<XElement> limitedScopeQuery = FilterByAncestorLevel(level.XPathSelectElements(queryItemTwo), levelGroup.Key);
+
+                            foreach (XElement elt in limitedScopeQuery)
+                            {
+                                if (elt.Parent.Name.LocalName.EndsWith("Grp"))
+                                {
+                                    tempNode.AddAfterSelf(elt.Parent.Nodes());
+                                    elt.Parent.Remove();
+                                }
+                                else
+                                {
+                                    tempNode.AddAfterSelf(elt);
+                                    elt.Remove();
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1069,100 +1088,18 @@ namespace MultiTermTBXMapper
             return -1; // Did not find content in Value-Groups, indicate that default must be used 
         }
 
-        private void HandleTeasp(object teasp, XElement node)
-        {
-            // Shared members between both classes
-
-            string target = "";
-            string element = "";
-            string placement = "";
-
-            if (teasp.GetType() == typeof(TeaspNoSubstitution))
-            {
-                target = ((TeaspNoSubstitution)teasp).GetTarget();
-                element = ((TeaspNoSubstitution)teasp).GetElementOrAttribute();
-                placement = ((TeaspNoSubstitution)teasp).GetPlacement();
-            }
-            else if (teasp.GetType() == typeof(TeaspWithSubstitution))
-            {
-                target = ((TeaspWithSubstitution)teasp).GetTarget();
-                element = ((TeaspWithSubstitution)teasp).GetElementOrAttribute();
-                placement = ((TeaspWithSubstitution)teasp).GetPlacement();
-            }
-
-            string currentNodeName = node.Name.LocalName;
-
-            // Select target element name
-            Match match = Regex.Match(element, @"<\w([^\s]+)");
-            string retirevedElementName = match.Groups[0].Value;
-            retirevedElementName = retirevedElementName.Substring(1);
-
-            if (currentNodeName != retirevedElementName)
-            {
-                currentNodeName = retirevedElementName;
-            }
-
-            // Select the new Attribute
-            Match matchAtt = Regex.Match(element, @"'([^']*)");
-            string attribute = matchAtt.Groups[1].Value;
-
-            if ((!node.Attributes().Any() || !node.Attributes("type").Any()) && attribute != "")
-            {
-                XAttribute type = new XAttribute("type", attribute);
-                node.Add(type);
-            }
-            else
-            {
-                if (attribute != "")
-                {
-                    node.SetAttributeValue("type", attribute);
-                }
-                else
-                {
-                    node.Attributes().Remove();
-                }
-            }
-
-            RenameXElement(node, currentNodeName);
-            if (node.Name.LocalName.Equals("xref") && node.Attribute("target") == null)
-            {
-                node.SetAttributeValue("target", "");
-            }
-        }
-
-        private void HandleTeaspNoSubstitution(TeaspNoSubstitution teasp, XElement node)
-        {
-            HandleTeasp(teasp, node);
-        }
-
-        private void HandleTeaspWithSubstitution(TeaspWithSubstitution teasp, XElement node)
-        {
-            // Replace Substitution String
-            Dictionary<string, string> substitution = teasp.GetSubstitution();
-            node.SetValue(substitution[node.Value]);
-
-            HandleTeasp(teasp, node);
-        }
+        readonly static HashSet<string> GrpableElementNames = new HashSet<string>() { "admin", "descrip", "transac", "termNote" };
 
         private void HandleIndexedTeasp(ExtendedTeaspStorageManager teasp, XElement node, List<object> valueGroupCorrespondingTeasps, int index)
         {
-            object neutralTeasp = valueGroupCorrespondingTeasps[index];
-            if (neutralTeasp is TeaspNoSubstitution)
-            {
-                TeaspNoSubstitution castedTeasp = (TeaspNoSubstitution)neutralTeasp;
-                HandleTeaspNoSubstitution(castedTeasp, node);
-            }
-            else if (neutralTeasp is TeaspWithSubstitution)
-            {
-                TeaspWithSubstitution castedTeasp = (TeaspWithSubstitution)neutralTeasp;
-                HandleTeaspWithSubstitution(castedTeasp, node);
-            }
+            var neutralTeasp = valueGroupCorrespondingTeasps[index] as ITeaspable;
+            neutralTeasp.HandleTeasp(node);
         }
 
         private void HandleDefaultTeasp(ExtendedTeaspStorageManager teasp, XElement node)
         {
             TeaspNoSubstitution defaultTeasp = teasp.GetDefaultTeaspSub();
-            HandleTeasp(defaultTeasp, node);
+            defaultTeasp.HandleTeasp(node);
         }
 
         private void HandleExtendedTeaspStorageManager(ExtendedTeaspStorageManager teasp, XElement node)
@@ -1189,19 +1126,12 @@ namespace MultiTermTBXMapper
                 string currentAttributeValue = node.Attribute("type").Value;
                 if (highLevelDictionaryStorage.ContainsKey(currentAttributeValue))
                 {
-                    Object teaspObj = highLevelDictionaryStorage[currentAttributeValue];
-                    if (teaspObj.GetType() == typeof(TeaspNoSubstitution))
-                    {
-                        HandleTeaspNoSubstitution((TeaspNoSubstitution)teaspObj, node);
-                    }
-                    else if (teaspObj.GetType() == typeof(TeaspWithSubstitution))
-                    {
-                        HandleTeaspWithSubstitution((TeaspWithSubstitution)teaspObj, node);
-                    }
-                    else if (teaspObj.GetType() == typeof(ExtendedTeaspStorageManager))
+                    var teaspObj = highLevelDictionaryStorage[currentAttributeValue];
+                    
+                    if (teaspObj.GetType() == typeof(ExtendedTeaspStorageManager))
                     {
                         HandleExtendedTeaspStorageManager((ExtendedTeaspStorageManager)teaspObj, node);
-                    }
+                    } else (teaspObj as ITeaspable).HandleTeasp(node);
                 }
             }
         }
@@ -1555,13 +1485,13 @@ namespace MultiTermTBXMapper
         private void CleanGrps(XElement root)
         {
             List<XElement> grps = root.Descendants().Where(elt => elt.Name.LocalName.EndsWith("Grp")).ToList();
-            foreach (XElement grp in grps)
-            {
-                string prefix = grp.Name.LocalName.Substring(0, grp.Name.LocalName.Length - 3);
-                if (grp.Element(prefix) != null) continue;
-
-                grp.ReplaceWith(grp.Nodes());
-            }
+            //foreach (XElement grp in grps)
+            //{
+            //    string prefix = grp.Name.LocalName.Substring(0, grp.Name.LocalName.Length - 3);
+            //    if (grp.Element(prefix) != null) continue;
+                
+            //    grp.ReplaceWith(grp.Nodes());
+            //}
         }
 
         private void TruncateDates()
@@ -1569,7 +1499,7 @@ namespace MultiTermTBXMapper
             List<XElement> dates = MultiTermDoc.Descendants("date").ToList();
             foreach (XElement date in dates)
             {
-                Match match = Regex.Match(date.Value, @"T[^<]*");
+                Match match = Regex.Match(date.Value, @"[T ][^<]*");
                 string truncatedDate = match.Groups[0].Value;
                 date.SetValue(date.Value.Replace(truncatedDate, ""));
             }
@@ -1682,8 +1612,7 @@ namespace MultiTermTBXMapper
             Dictionary<string, object> highLevelDictionaryStorage = new Dictionary<string, object>();
             highLevelDictionaryStorage = initialJSON.GetMasterDictionary();
 
-            Dictionary<string, string[]> queueOrders = new Dictionary<string, string[]>();
-            queueOrders = initialJSON.GetQueueOrders();
+            var queueOrders = initialJSON.GetQueueOrders();
 
             XElement root = MultiTermDoc.Root;
 
